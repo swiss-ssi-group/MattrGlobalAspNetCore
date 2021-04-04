@@ -35,9 +35,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Admin">License Administration</a>
                                 </li>
-                            }
-                            else
-                            {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/DriverLicenseCredentials"
                                        id="tooltip-car"
@@ -49,14 +46,17 @@
                                     </a>
 
                                 </li>
+                            }
+                            else
+                            {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin"
-                                       id="tooltip-demo"
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/DriverLicenseCredentials"
+                                       id="tooltip-car"
                                        data-toggle="tooltip"
                                        data-placement="bottom"
-                                       title="MFA is NOT enabled. This is required for the Admin Page. If you have activated MFA, then logout, login again.">
-                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                        License Administration
+                                       title="View you actual drivers license and view, get credentials">
+                                        <i class="fa fa-car" aria-hidden="true"></i>
+                                        View Driver License
                                     </a>
 
                                 </li>
