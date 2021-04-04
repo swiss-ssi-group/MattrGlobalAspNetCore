@@ -1,8 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @inject IAuthorizationService AuthorizationService
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,9 +36,6 @@
                             @if ((AuthorizationService.AuthorizeAsync(User, "TwoFactorEnabled")).Result.Succeeded)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin">License Administration</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/DriverLicenseCredentials"
                                        id="tooltip-car"
                                        data-toggle="tooltip"
@@ -45,6 +45,9 @@
                                         View Driver License
                                     </a>
 
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin">License Administration</a>
                                 </li>
                             }
                             else
@@ -60,6 +63,12 @@
                                     </a>
 
                                 </li>
+                                @if (Configuration["MfaRequiredForAdmin"] == "False")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Admin">License Administration</a>
+                                    </li>
+                                }
                             }
                         }
                     </ul>
