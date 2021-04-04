@@ -10,7 +10,7 @@ using static Fido2NetLib.Fido2;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Fido2Identity
+namespace NationalDrivingLicense
 {
     [Route("api/[controller]")]
     public class PwFido2RegisterController : Controller

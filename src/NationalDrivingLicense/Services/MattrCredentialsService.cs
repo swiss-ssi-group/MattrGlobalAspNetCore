@@ -39,7 +39,7 @@ namespace NationalDrivingLicense
                 {"License Type", driverLicense.LicenseType}
             };
 
-           // create vc
+            // create vc
 
             driverLicense.DriverLicenseCredentials = string.Empty;
             await _driverLicenseService.UpdateDriverLicense(driverLicense);

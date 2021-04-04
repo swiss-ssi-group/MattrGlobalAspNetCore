@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Fido2Identity
+namespace NationalDrivingLicense
 {
     [Route("api/[controller]")]
     public class PwFido2SignInController : Controller
