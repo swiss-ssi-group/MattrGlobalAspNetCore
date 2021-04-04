@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fido2Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,13 +13,16 @@ namespace NationalDrivingLicense.Areas.Identity.Pages.Account.Manage
     public class Disable2faModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly Fido2Storage _fido2Storage;
         private readonly ILogger<Disable2faModel> _logger;
 
         public Disable2faModel(
             UserManager<IdentityUser> userManager,
-            ILogger<Disable2faModel> logger)
+            ILogger<Disable2faModel> logger,
+            Fido2Storage fido2Storage)
         {
             _userManager = userManager;
+            _fido2Storage = fido2Storage;
             _logger = logger;
         }
 
@@ -48,6 +52,9 @@ namespace NationalDrivingLicense.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+            // remove Fido2 MFA if it exists
+            await _fido2Storage.RemoveCredentialsByUsername(user.UserName);
 
             var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
             if (!disable2faResult.Succeeded)
