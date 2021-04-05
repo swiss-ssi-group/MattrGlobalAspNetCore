@@ -54,12 +54,18 @@ namespace NationalDrivingLicense
         {
             HttpClient client = _clientFactory.CreateClient();
             CreateMattrDid(client);
+
             // create vc, post to credentials api
+            // https://learn.mattr.global/api-ref/#operation/createCredential
+            // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
         }
 
         private void CreateMattrDid(HttpClient client)
         {
             // create did , post to dids 
+            // https://learn.mattr.global/api-ref/#operation/createDid
+            // https://learn.mattr.global/tutorials/dids/use-did/
+
         }
 
     }
