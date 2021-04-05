@@ -24,6 +24,8 @@ namespace NationalDrivingLicense
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
             services.AddScoped<MattrCredentialsService>();
             services.AddScoped<DriverLicenseService>();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace NationalDrivingLicense
@@ -9,13 +10,15 @@ namespace NationalDrivingLicense
     {
         private readonly IConfiguration _configuration;
         private readonly DriverLicenseService _driverLicenseService;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public MattrCredentialsService(
-            IConfiguration configuration,
-            DriverLicenseService driverLicenseService)
+        public MattrCredentialsService(IConfiguration configuration,
+            DriverLicenseService driverLicenseService,
+            IHttpClientFactory clientFactory)
         {
             _configuration = configuration;
             _driverLicenseService = driverLicenseService;
+            _clientFactory = clientFactory;
         }
 
         public async Task<string> GetDriverLicenseCredential(string username)
@@ -39,12 +42,25 @@ namespace NationalDrivingLicense
                 {"License Type", driverLicense.LicenseType}
             };
 
-            // create vc
+            CreateMattrVc(credentialValues);
 
             driverLicense.DriverLicenseCredentials = string.Empty;
             await _driverLicenseService.UpdateDriverLicense(driverLicense);
 
             return "https://damienbod.com";
         }
+
+        private void CreateMattrVc(IDictionary<string, string> credentialValues)
+        {
+            HttpClient client = _clientFactory.CreateClient();
+            CreateMattrDid(client);
+            // create vc, post to credentials api
+        }
+
+        private void CreateMattrDid(HttpClient client)
+        {
+            // create did , post to dids 
+        }
+
     }
 }
