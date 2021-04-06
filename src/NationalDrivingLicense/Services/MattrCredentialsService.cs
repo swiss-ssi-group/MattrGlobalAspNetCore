@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using NationalDrivingLicense.Services;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,14 +13,17 @@ namespace NationalDrivingLicense
         private readonly IConfiguration _configuration;
         private readonly DriverLicenseService _driverLicenseService;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly MattrConfiguration _mattrConfiguration;
 
         public MattrCredentialsService(IConfiguration configuration,
             DriverLicenseService driverLicenseService,
-            IHttpClientFactory clientFactory)
+            IHttpClientFactory clientFactory,
+            IOptions<MattrConfiguration> optionsMattrConfiguration)
         {
             _configuration = configuration;
             _driverLicenseService = driverLicenseService;
             _clientFactory = clientFactory;
+            _mattrConfiguration = optionsMattrConfiguration.Value;
         }
 
         public async Task<string> GetDriverLicenseCredential(string username)

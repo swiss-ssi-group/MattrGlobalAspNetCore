@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Fido2NetLib;
 using System;
+using NationalDrivingLicense.Services;
 
 namespace NationalDrivingLicense
 {
@@ -26,6 +27,7 @@ namespace NationalDrivingLicense
         {
             services.AddHttpClient();
 
+            services.Configure<MattrConfiguration>(Configuration.GetSection("MattrConfiguration"));
             services.AddScoped<MattrCredentialsService>();
             services.AddScoped<DriverLicenseService>();
 
