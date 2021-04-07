@@ -14,3 +14,5 @@ https://keybase.io/
 https://www.youtube.com/watch?v=2_TDN-81ytM
 
 https://learn.mattr.global/tutorials/dids/did-key
+
+https://gunnarpeipman.com/httpclient-remove-charset/

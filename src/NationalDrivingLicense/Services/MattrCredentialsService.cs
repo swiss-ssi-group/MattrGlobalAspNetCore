@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace NationalDrivingLicense
@@ -50,7 +53,7 @@ namespace NationalDrivingLicense
                 {"License Type", driverLicense.LicenseType}
             };
 
-            CreateMattrVc(credentialValues);
+            await CreateMattrVc(credentialValues);
 
             driverLicense.DriverLicenseCredentials = string.Empty;
             await _driverLicenseService.UpdateDriverLicense(driverLicense);
@@ -58,24 +61,78 @@ namespace NationalDrivingLicense
             return "https://damienbod.com";
         }
 
-        private void CreateMattrVc(IDictionary<string, string> credentialValues)
+        private async Task CreateMattrVc(IDictionary<string, string> credentialValues)
         {
             HttpClient client = _clientFactory.CreateClient();
-            var accessToken = _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
-            CreateMattrDid(client);
+            var accessToken = await  _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 
+            // var did = await CreateMattrDid(client);
+            var vc = await CreateMattrCredentials(client, credentialValues);
+
+        }
+
+        private async Task<string> CreateMattrCredentials(HttpClient client, IDictionary<string, string> credentialValues)
+        {
             // create vc, post to credentials api
             // https://learn.mattr.global/api-ref/#operation/createCredential
             // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
+
+            var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
+
+            // Todo create an credential
+            var payload = new MattrCreateDid();
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createCredentialsUrl);
+
+            var result = string.Empty;
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var tokenResponse = await client.PostAsync(uri, content);
+                
+                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    result = await tokenResponse.Content.ReadAsStringAsync();
+                    return result;
+                }
+
+                var error = await tokenResponse.Content.ReadAsStringAsync();
+
+            }
+
+            return result;
         }
 
-        private void CreateMattrDid(HttpClient client)
+        private async Task<string> CreateMattrDid(HttpClient client)
         {
             // create did , post to dids 
             // https://learn.mattr.global/api-ref/#operation/createDid
             // https://learn.mattr.global/tutorials/dids/use-did/
 
-        }
+            var createDidUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/dids";
 
+            var payload = new MattrCreateDid();
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createDidUrl);
+
+            var result = string.Empty;
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var tokenResponse = await client.PostAsync(uri, content);
+
+                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    result = await tokenResponse.Content.ReadAsStringAsync();
+                    return result;
+                }
+
+                var error = await tokenResponse.Content.ReadAsStringAsync();
+
+            }
+
+            return result;
+        }
     }
 }
