@@ -14,16 +14,19 @@ namespace NationalDrivingLicense
         private readonly DriverLicenseService _driverLicenseService;
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrConfiguration _mattrConfiguration;
+        private readonly MattrTokenApiService _mattrTokenApiService;
 
         public MattrCredentialsService(IConfiguration configuration,
             DriverLicenseService driverLicenseService,
             IHttpClientFactory clientFactory,
-            IOptions<MattrConfiguration> optionsMattrConfiguration)
+            IOptions<MattrConfiguration> optionsMattrConfiguration,
+            MattrTokenApiService mattrTokenApiService)
         {
             _configuration = configuration;
             _driverLicenseService = driverLicenseService;
             _clientFactory = clientFactory;
             _mattrConfiguration = optionsMattrConfiguration.Value;
+            _mattrTokenApiService = mattrTokenApiService;
         }
 
         public async Task<string> GetDriverLicenseCredential(string username)
@@ -58,6 +61,7 @@ namespace NationalDrivingLicense
         private void CreateMattrVc(IDictionary<string, string> credentialValues)
         {
             HttpClient client = _clientFactory.CreateClient();
+            var accessToken = _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
             CreateMattrDid(client);
 
             // create vc, post to credentials api

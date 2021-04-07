@@ -28,8 +28,12 @@ namespace NationalDrivingLicense
             services.AddHttpClient();
 
             services.Configure<MattrConfiguration>(Configuration.GetSection("MattrConfiguration"));
+            services.AddScoped<MattrTokenApiService>();
             services.AddScoped<MattrCredentialsService>();
+
             services.AddScoped<DriverLicenseService>();
+
+            services.AddDistributedMemoryCache();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
