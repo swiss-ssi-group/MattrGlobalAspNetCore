@@ -15,7 +15,7 @@ namespace NationalDrivingLicense.Pages
         {
             _mattrCredentialsService = mattrCredentialsService;
         }
-        public async Task OnGetAsync()
+        public void OnGet()
         {
 
         }

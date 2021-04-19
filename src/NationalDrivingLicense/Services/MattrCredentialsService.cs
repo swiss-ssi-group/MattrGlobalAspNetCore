@@ -3,11 +3,11 @@ using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
 using NationalDrivingLicense.MattrOpenApiClient;
 using NationalDrivingLicense.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NationalDrivingLicense
@@ -57,8 +57,8 @@ namespace NationalDrivingLicense
             return new DriverLicenseCredentials
             {
                 Name = "not_named",
-                Did = JsonSerializer.Serialize(did),
-                OidcIssuer = JsonSerializer.Serialize(oidcIssuer),
+                Did = JsonConvert.SerializeObject(did),
+                OidcIssuer = JsonConvert.SerializeObject(oidcIssuer),
                 OidcIssuerId = oidcIssuer.Id
             };
         }
@@ -98,7 +98,7 @@ namespace NationalDrivingLicense
                 }
             };
 
-            var payloadJson = JsonSerializer.Serialize(payload);
+            var payloadJson = JsonConvert.SerializeObject(payload);
 
             var uri = new Uri(createCredentialsUrl);
 
@@ -109,8 +109,8 @@ namespace NationalDrivingLicense
 
                 if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    var v1CreateOidcIssuerResponse = await JsonSerializer.DeserializeAsync<V1_CreateOidcIssuerResponse>(
-                            await tokenResponse.Content.ReadAsStreamAsync());
+                    var v1CreateOidcIssuerResponse = JsonConvert.DeserializeObject<V1_CreateOidcIssuerResponse>(
+                            await tokenResponse.Content.ReadAsStringAsync());
 
                     return v1CreateOidcIssuerResponse;
                 }
@@ -135,7 +135,7 @@ namespace NationalDrivingLicense
                 Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
                 Options = new MattrOptions()
             };
-            var payloadJson = JsonSerializer.Serialize(payload);
+            var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
 
             var result = string.Empty;
@@ -145,8 +145,8 @@ namespace NationalDrivingLicense
 
                 if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    var v1CreateDidResponse = await JsonSerializer.DeserializeAsync<V1_CreateDidResponse>(
-                            await tokenResponse.Content.ReadAsStreamAsync());
+                    var v1CreateDidResponse = JsonConvert.DeserializeObject<V1_CreateDidResponse>(
+                            await tokenResponse.Content.ReadAsStringAsync());
 
                     return v1CreateDidResponse;
                 }
