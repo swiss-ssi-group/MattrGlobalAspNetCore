@@ -3,12 +3,11 @@ using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
 using NationalDrivingLicense.MattrOpenApiClient;
 using NationalDrivingLicense.Services;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NationalDrivingLicense
@@ -83,6 +82,7 @@ namespace NationalDrivingLicense
                 {
                     IssuerDid = "",
                     Name = "National Driving License",
+                    Context = new List<Uri> { new Uri("https://ndl") },
                     Type = new List<string> { "driving_license" }
                 },
                 ClaimMappings = new List<ClaimMappings>
@@ -101,7 +101,9 @@ namespace NationalDrivingLicense
                     Url = new Uri("https://dev-damienbod.eu.auth0.com")
                 }
             };
-            var payloadJson = JsonConvert.SerializeObject(payload);
+
+            var payloadJson = JsonSerializer.Serialize(payload);
+
             var uri = new Uri(createCredentialsUrl);
 
             var result = string.Empty;
@@ -111,7 +113,9 @@ namespace NationalDrivingLicense
 
                 if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    result = await tokenResponse.Content.ReadAsStringAsync();
+                    var v1CreateOidcIssuerResponse = await JsonSerializer.DeserializeAsync<V1_CreateOidcIssuerResponse>(
+                            await tokenResponse.Content.ReadAsStreamAsync());
+
                     return new DriverLicenseCredentials
                     {
                         // TODO set data
@@ -175,7 +179,7 @@ namespace NationalDrivingLicense
                 Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
                 Options = new MattrOptions()
             };
-            var payloadJson = JsonConvert.SerializeObject(payload);
+            var payloadJson = JsonSerializer.Serialize(payload);
             var uri = new Uri(createDidUrl);
 
             var result = string.Empty;
