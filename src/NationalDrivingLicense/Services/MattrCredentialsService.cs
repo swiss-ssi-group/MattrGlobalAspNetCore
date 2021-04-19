@@ -39,7 +39,7 @@ namespace NationalDrivingLicense
             driverLicenseCredentials.Name = name;
             await _driverLicenseService.CreateDriverLicense(driverLicenseCredentials);
 
-            var callback = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuer.Id}/federated/callback";
+            var callback = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
             return callback;
         }
 
@@ -57,8 +57,9 @@ namespace NationalDrivingLicense
             return new DriverLicenseCredentials
             {
                 Name = "not_named",
-                Did = did,
-                OidcIssuer = oidcIssuer
+                Did = JsonSerializer.Serialize(did),
+                OidcIssuer = JsonSerializer.Serialize(oidcIssuer),
+                OidcIssuerId = oidcIssuer.Id
             };
         }
 
