@@ -189,6 +189,9 @@ namespace NationalDrivingLicense
 
                 if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
+                    var v1CreateDidResponse = await JsonSerializer.DeserializeAsync<V1_CreateDidResponse>(
+                            await tokenResponse.Content.ReadAsStreamAsync());
+
                     result = await tokenResponse.Content.ReadAsStringAsync();
                     return result;
                 }
