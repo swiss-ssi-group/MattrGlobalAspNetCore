@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NationalDrivingLicense.Data;
 
 namespace NationalDrivingLicense.Migrations
 {
     [DbContext(typeof(NationalDrivingLicenseMattrContext))]
-    partial class NationalDrivingLicenseMattrContextModelSnapshot : ModelSnapshot
+    [Migration("20210419213450_update_mattr_vc")]
+    partial class update_mattr_vc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
