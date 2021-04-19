@@ -128,7 +128,7 @@ namespace NationalDrivingLicense
             // https://learn.mattr.global/api-ref/#operation/createDid
             // https://learn.mattr.global/tutorials/dids/use-did/
 
-            var createDidUrl = "https://{MATTR_SANDBOX}/core/v1/dids";
+            var createDidUrl = $"https://{MATTR_SANDBOX}/core/v1/dids";
 
             var payload = new MattrOpenApiClient.V1_CreateDidDocument
             {
