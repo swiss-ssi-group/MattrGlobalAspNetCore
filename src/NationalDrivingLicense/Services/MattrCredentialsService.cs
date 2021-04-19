@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using NationalDrivingLicense.Data;
 using NationalDrivingLicense.Services;
 using Newtonsoft.Json;
 using System;
@@ -13,134 +14,128 @@ namespace NationalDrivingLicense
 {
     public class MattrCredentialsService
     {
-        //private readonly IConfiguration _configuration;
-        //private readonly DriverLicenseCredentialsService _driverLicenseService;
-        //private readonly IHttpClientFactory _clientFactory;
-        //private readonly MattrConfiguration _mattrConfiguration;
-        //private readonly MattrTokenApiService _mattrTokenApiService;
+        private readonly IConfiguration _configuration;
+        private readonly DriverLicenseCredentialsService _driverLicenseService;
+        private readonly IHttpClientFactory _clientFactory;
+        private readonly MattrConfiguration _mattrConfiguration;
+        private readonly MattrTokenApiService _mattrTokenApiService;
 
-        //public MattrCredentialsService(IConfiguration configuration,
-        //    DriverLicenseCredentialsService driverLicenseService,
-        //    IHttpClientFactory clientFactory,
-        //    IOptions<MattrConfiguration> optionsMattrConfiguration,
-        //    MattrTokenApiService mattrTokenApiService)
-        //{
-        //    _configuration = configuration;
-        //    _driverLicenseService = driverLicenseService;
-        //    _clientFactory = clientFactory;
-        //    _mattrConfiguration = optionsMattrConfiguration.Value;
-        //    _mattrTokenApiService = mattrTokenApiService;
-        //}
+        public MattrCredentialsService(IConfiguration configuration,
+            DriverLicenseCredentialsService driverLicenseService,
+            IHttpClientFactory clientFactory,
+            IOptions<MattrConfiguration> optionsMattrConfiguration,
+            MattrTokenApiService mattrTokenApiService)
+        {
+            _configuration = configuration;
+            _driverLicenseService = driverLicenseService;
+            _clientFactory = clientFactory;
+            _mattrConfiguration = optionsMattrConfiguration.Value;
+            _mattrTokenApiService = mattrTokenApiService;
+        }
 
-        //public async Task<string> GetDriverLicenseCredential(string username)
-        //{
-        //    if (!await _driverLicenseService.HasIdentityDriverLicense(username))
-        //    {
-        //        throw new ArgumentException("user has no valid driver license");
-        //    }
+        public async Task<string> GetDriverLicenseCredential(string username)
+        {
+            if (!await _driverLicenseService.HasIdentityDriverLicense(username))
+            {
+                throw new ArgumentException("user has no valid driver license");
+            }
 
-        //    var driverLicense = await _driverLicenseService.GetDriverLicense(username);
+            var driverLicenseExists = await _driverLicenseService.GetDriverLicense(username);
 
-        //    if (!string.IsNullOrEmpty(driverLicense.DriverLicenseCredentials))
-        //    {
-        //        return driverLicense.DriverLicenseCredentials;
-        //    }
-        //    IDictionary<string, string> credentialValues = new Dictionary<String, String>() {
-        //        {"Issued At", driverLicense.IssuedAt.ToString()},
-        //        {"Name", driverLicense.Name},
-        //        {"First Name", driverLicense.FirstName},
-        //        {"Date of Birth", driverLicense.DateOfBirth.Date.ToString()},
-        //        {"License Type", driverLicense.LicenseType}
-        //    };
+            if (driverLicenseExists != null && !string.IsNullOrEmpty(driverLicenseExists.OfferUrl))
+            {
+                return driverLicenseExists.OfferUrl;
+            }
 
-        //    await CreateMattrVc(credentialValues);
+            // create a new one
+            var driverLicenseCredentials = await CreateMattrVc();
+            await _driverLicenseService.UpdateDriverLicense(driverLicenseCredentials);
+            return driverLicenseCredentials.OfferUrl;
+        }
 
-        //    driverLicense.DriverLicenseCredentials = string.Empty;
-        //    await _driverLicenseService.UpdateDriverLicense(driverLicense);
+        private async Task<DriverLicenseCredentials> CreateMattrVc()
+        {
+            HttpClient client = _clientFactory.CreateClient();
+            var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 
-        //    return "https://damienbod.com";
-        //}
+            // var did = await CreateMattrDid(client);
+            var vc = await CreateMattrCredentials(client);
+            return vc;
+        }
 
-        //private async Task CreateMattrVc(IDictionary<string, string> credentialValues)
-        //{
-        //    HttpClient client = _clientFactory.CreateClient();
-        //    var accessToken = await  _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
-        //    client.DefaultRequestHeaders.Authorization =
-        //        new AuthenticationHeaderValue("Bearer", accessToken);
-        //    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+        private async Task<DriverLicenseCredentials> CreateMattrCredentials(HttpClient client)
+        {
+            // create vc, post to credentials api
+            // https://learn.mattr.global/api-ref/#operation/createCredential
+            // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
 
-        //    // var did = await CreateMattrDid(client);
-        //    var vc = await CreateMattrCredentials(client, credentialValues);
+            var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
 
-        //}
+            var payload = new MattrOpenApiClient.V1_CreateDidDocument
+            {
+                Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
+                Options = new MattrOptions()
+            };
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createCredentialsUrl);
 
-        //private async Task<string> CreateMattrCredentials(HttpClient client, IDictionary<string, string> credentialValues)
-        //{
-        //    // create vc, post to credentials api
-        //    // https://learn.mattr.global/api-ref/#operation/createCredential
-        //    // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
+            var result = string.Empty;
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var tokenResponse = await client.PostAsync(uri, content);
 
-        //    var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
+                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    result = await tokenResponse.Content.ReadAsStringAsync();
+                    return new DriverLicenseCredentials
+                    {
+                        // TODO set data
+                    };
+                }
 
-        //    var payload = new MattrOpenApiClient.V1_CreateDidDocument
-        //    {
-        //        Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
-        //        Options = new MattrOptions()
-        //    };
-        //    var payloadJson = JsonConvert.SerializeObject(payload);
-        //    var uri = new Uri(createCredentialsUrl);
+                var error = await tokenResponse.Content.ReadAsStringAsync();
 
-        //    var result = string.Empty;
-        //    using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
-        //    {
-        //        var tokenResponse = await client.PostAsync(uri, content);
-                
-        //        if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
-        //        {
-        //            result = await tokenResponse.Content.ReadAsStringAsync();
-        //            return result;
-        //        }
+            }
 
-        //        var error = await tokenResponse.Content.ReadAsStringAsync();
+            return null;
+        }
 
-        //    }
+        private async Task<string> CreateMattrDid(HttpClient client)
+        {
+            // create did , post to dids 
+            // https://learn.mattr.global/api-ref/#operation/createDid
+            // https://learn.mattr.global/tutorials/dids/use-did/
 
-        //    return result;
-        //}
+            var createDidUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/dids";
 
-        //private async Task<string> CreateMattrDid(HttpClient client)
-        //{
-        //    // create did , post to dids 
-        //    // https://learn.mattr.global/api-ref/#operation/createDid
-        //    // https://learn.mattr.global/tutorials/dids/use-did/
+            var payload = new MattrOpenApiClient.V1_CreateDidDocument
+            {
+                Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
+                Options = new MattrOptions()
+            };
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createDidUrl);
 
-        //    var createDidUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/dids";
+            var result = string.Empty;
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var tokenResponse = await client.PostAsync(uri, content);
 
-        //    var payload = new MattrOpenApiClient.V1_CreateDidDocument
-        //    {
-        //        Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
-        //        Options = new MattrOptions()
-        //    };
-        //    var payloadJson = JsonConvert.SerializeObject(payload);
-        //    var uri = new Uri(createDidUrl);
+                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    result = await tokenResponse.Content.ReadAsStringAsync();
+                    return result;
+                }
 
-        //    var result = string.Empty;
-        //    using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
-        //    {
-        //        var tokenResponse = await client.PostAsync(uri, content);
+                var error = await tokenResponse.Content.ReadAsStringAsync();
 
-        //        if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
-        //        {
-        //            result = await tokenResponse.Content.ReadAsStringAsync();
-        //            return result;
-        //        }
+            }
 
-        //        var error = await tokenResponse.Content.ReadAsStringAsync();
-
-        //    }
-
-        //    return result;
-        //}
+            return result;
+        }
     }
     public class MattrOptions
     {

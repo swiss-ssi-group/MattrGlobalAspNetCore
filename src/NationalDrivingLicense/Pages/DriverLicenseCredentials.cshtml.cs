@@ -18,7 +18,7 @@ namespace NationalDrivingLicense.Pages
         {
             _mattrCredentialsService = mattrCredentialsService;
         }
-        public void OnGet()
+        public async Task OnGetAsync()
         {
             //"license_issued_at": "2021-03-02",
             //"license_type": "B1",
@@ -41,9 +41,6 @@ namespace NationalDrivingLicense.Pages
             {
                 identityHasDriverLicenseClaims = false;
             }
-            
-            // TODO get issued credential or create one
-            // DriverLicense = await _driverLicenseService.GetDriverLicense(HttpContext.User.Identity.Name);
 
             if (identityHasDriverLicenseClaims)
             {
@@ -57,8 +54,9 @@ namespace NationalDrivingLicense.Pages
                     UserName = User.Identity.Name
 
                 };
-                //var offerUrl = await _trinsicCredentialsService
-                //    .GetDriverLicenseCredential(HttpContext.User.Identity.Name);
+                var offerUrl = await _mattrCredentialsService
+                    .GetDriverLicenseCredential(HttpContext.User.Identity.Name);
+
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
                 CredentialOfferUrl = "damienbod.com";
                 HasDriverLicense = true;
