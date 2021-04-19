@@ -31,8 +31,7 @@ namespace NationalDrivingLicense
             services.Configure<MattrConfiguration>(Configuration.GetSection("MattrConfiguration"));
             services.AddScoped<MattrTokenApiService>();
             services.AddScoped<MattrCredentialsService>();
-
-            //services.AddScoped<DriverLicenseCredentialsService>();
+            services.AddScoped<DriverLicenseCredentialsService>();
 
             services.AddDbContext<NationalDrivingLicenseMattrContext>(options =>
                 options.UseSqlServer(
