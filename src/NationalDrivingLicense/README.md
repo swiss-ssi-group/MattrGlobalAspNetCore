@@ -25,7 +25,7 @@ Update-Database
 
 ###
 
-dev-damienbod.eu.auth0.com/.well-known/openid-configuration
+https://dev-damienbod.eu.auth0.com/.well-known/openid-configuration
 
 https://learn.mattr.global/tutorials/issue/oidc-bridge/setup-fed-provider
 

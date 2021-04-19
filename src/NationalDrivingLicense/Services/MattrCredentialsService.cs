@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
+using NationalDrivingLicense.MattrOpenApiClient;
 using NationalDrivingLicense.Services;
 using Newtonsoft.Json;
 using System;
@@ -66,18 +67,39 @@ namespace NationalDrivingLicense
             return vc;
         }
 
+        
         private async Task<DriverLicenseCredentials> CreateMattrCredentials(HttpClient client)
         {
             // create vc, post to credentials api
             // https://learn.mattr.global/api-ref/#operation/createCredential
             // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
 
-            var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
+            // https://tenant.vii.mattr.global/ext/oidc/v1/issuers
+            var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/ext/oidc/v1/issuers";
 
-            var payload = new MattrOpenApiClient.V1_CreateDidDocument
+            var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest 
             {
-                Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
-                Options = new MattrOptions()
+                Credential = new Credential
+                {
+                    IssuerDid = "",
+                    Name = "National Driving License",
+                    Type = new List<string> { "driving_license" }
+                },
+                ClaimMappings = new List<ClaimMappings>
+                {
+                    new ClaimMappings{ JsonLdTerm="Name", OidcClaim="https://ndl/name"},
+                    new ClaimMappings{ JsonLdTerm="First Name", OidcClaim="https://ndl/first_name"},
+                    new ClaimMappings{ JsonLdTerm="License Type", OidcClaim="https://ndl/license_type"},
+                    new ClaimMappings{ JsonLdTerm="Date of Birth", OidcClaim="https://ndl/date_of_birth"},
+                    new ClaimMappings{ JsonLdTerm="Issued At", OidcClaim="https://ndl/license_issued_at"}
+                },
+                FederatedProvider = new FederatedProvider
+                {
+                    ClientId = _configuration["Auth0:ClientId"],
+                    ClientSecret = _configuration["Auth0:ClientSecret"],
+                    Scope = new List<string> { "openid", "profile", "email"}, 
+                    Url = new Uri("https://dev-damienbod.eu.auth0.com")
+                }
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createCredentialsUrl);
@@ -102,6 +124,43 @@ namespace NationalDrivingLicense
 
             return null;
         }
+
+        //private async Task<DriverLicenseCredentials> CreateMattrCredentials(HttpClient client)
+        //{
+        //    // create vc, post to credentials api
+        //    // https://learn.mattr.global/api-ref/#operation/createCredential
+        //    // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
+
+        //    var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
+
+        //    var payload = new MattrOpenApiClient.V1_CreateDidDocument
+        //    {
+        //        Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
+        //        Options = new MattrOptions()
+        //    };
+        //    var payloadJson = JsonConvert.SerializeObject(payload);
+        //    var uri = new Uri(createCredentialsUrl);
+
+        //    var result = string.Empty;
+        //    using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+        //    {
+        //        var tokenResponse = await client.PostAsync(uri, content);
+
+        //        if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+        //        {
+        //            result = await tokenResponse.Content.ReadAsStringAsync();
+        //            return new DriverLicenseCredentials
+        //            {
+        //                // TODO set data
+        //            };
+        //        }
+
+        //        var error = await tokenResponse.Content.ReadAsStringAsync();
+
+        //    }
+
+        //    return null;
+        //}
 
         private async Task<string> CreateMattrDid(HttpClient client)
         {
