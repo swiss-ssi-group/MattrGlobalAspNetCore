@@ -1,0 +1,49 @@
+{
+    "did": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+    "registrationStatus": "COMPLETED",
+    "localMetadata": {
+        "keys": [
+            {
+                "didDocumentKeyId": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+                "kmsKeyId": "AYicMi2abmgCLyM73mR35BtyLK28eEmMbjvuySnDrMFd"
+            },
+            {
+                "didDocumentKeyId": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6LSmjjDskVYMGUWdKH8PGSHp2FCxoF1JiNwWCDr1WUNPFZ3",
+                "kmsKeyId": "B4Z4MSggFokmXvuMrcvLVS2j7ehtc7CndDWAX3pqfsnH"
+            }
+        ],
+        "registered": 1617808709035,
+        "initialDidDocument": {
+            "@context": "https://w3.org/ns/did/v1",
+            "id": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+            "publicKey": [
+                {
+                    "id": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+                    "type": "Ed25519VerificationKey2018",
+                    "controller": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+                    "publicKeyBase58": "AYicMi2abmgCLyM73mR35BtyLK28eEmMbjvuySnDrMFd"
+                }
+            ],
+            "authentication": [
+                "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31"
+            ],
+            "assertionMethod": [
+                "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31"
+            ],
+            "capabilityDelegation": [
+                "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31"
+            ],
+            "capabilityInvocation": [
+                "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31"
+            ],
+            "keyAgreement": [
+                {
+                    "id": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31#z6LSmjjDskVYMGUWdKH8PGSHp2FCxoF1JiNwWCDr1WUNPFZ3",
+                    "type": "X25519KeyAgreementKey2019",
+                    "controller": "did:key:z6MkozyewxH1wKAfTUBojLNsvHSy9tHz481iHkqqoikEma31",
+                    "publicKeyBase58": "B4Z4MSggFokmXvuMrcvLVS2j7ehtc7CndDWAX3pqfsnH"
+                }
+            ]
+        }
+    }
+}

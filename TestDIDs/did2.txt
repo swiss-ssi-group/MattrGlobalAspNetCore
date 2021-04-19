@@ -1,0 +1,49 @@
+{
+	"did": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+	"registrationStatus": "COMPLETED",
+	"localMetadata": {
+		"keys": [
+			{
+				"didDocumentKeyId": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+				"kmsKeyId": "D9XXjrxBfAyQkbSsMPudk1qaMWbgXjLYxcMVJbDqeVJG"
+			},
+			{
+				"didDocumentKeyId": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6LSeYyqXUGaQrjR7d4CZnHNoxRMJQN7i47EWG8moBnYKrfo",
+				"kmsKeyId": "3sog1ATiKQ1g2EgS38mRVNCsTFq11Sw5dHR6Jj91cUu3"
+			}
+		],
+		"registered": 1617809510111,
+		"initialDidDocument": {
+			"@context": "https://w3.org/ns/did/v1",
+			"id": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+			"publicKey": [
+				{
+					"id": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+					"type": "Ed25519VerificationKey2018",
+					"controller": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+					"publicKeyBase58": "D9XXjrxBfAyQkbSsMPudk1qaMWbgXjLYxcMVJbDqeVJG"
+				}
+			],
+			"authentication": [
+				"did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e"
+			],
+			"assertionMethod": [
+				"did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e"
+			],
+			"capabilityDelegation": [
+				"did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e"
+			],
+			"capabilityInvocation": [
+				"did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e"
+			],
+			"keyAgreement": [
+				{
+					"id": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e#z6LSeYyqXUGaQrjR7d4CZnHNoxRMJQN7i47EWG8moBnYKrfo",
+					"type": "X25519KeyAgreementKey2019",
+					"controller": "did:key:z6MkrbnaL7CcziTss6Ha2xsUb7PaB5sXwcauedGR8sBrZi5e",
+					"publicKeyBase58": "3sog1ATiKQ1g2EgS38mRVNCsTFq11Sw5dHR6Jj91cUu3"
+				}
+			]
+		}
+	}
+}

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NationalDrivingLicense.Data;
@@ -6,30 +7,60 @@ namespace NationalDrivingLicense.Pages
 {
     public class DriverLicenseCredentialsModel : PageModel
     {
-        private readonly MattrCredentialsService _trinsicCredentialsService;
-        private readonly DriverLicenseService _driverLicenseService;
+        private readonly MattrCredentialsService _mattrCredentialsService;
 
         public string DriverLicenseMessage { get; set; } = "Loading credentials";
         public bool HasDriverLicense { get; set; } = false;
         public DriverLicense DriverLicense { get; set; }
 
         public string CredentialOfferUrl { get; set; }
-        public DriverLicenseCredentialsModel(MattrCredentialsService trinsicCredentialsService,
-           DriverLicenseService driverLicenseService)
+        public DriverLicenseCredentialsModel(MattrCredentialsService mattrCredentialsService)
         {
-            _trinsicCredentialsService = trinsicCredentialsService;
-            _driverLicenseService = driverLicenseService;
+            _mattrCredentialsService = mattrCredentialsService;
         }
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            DriverLicense = await _driverLicenseService.GetDriverLicense(HttpContext.User.Identity.Name);
+            //"license_issued_at": "2021-03-02",
+            //"license_type": "B1",
+            //"name": "Bob",
+            //"first_name": "Lammy",
+            //"date_of_birth": "1953-07-21"
 
-            if (DriverLicense != null)
+            var identityHasDriverLicenseClaims = true;
+            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/name");
+            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/first_name");
+            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/license_type");
+            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/date_of_birth");
+            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/license_issued_at");
+
+            if (nameClaim == null 
+                || firstNameClaim == null 
+                || licenseTypeClaim == null 
+                || dateOfBirthClaim == null 
+                || licenseIssuedAtClaim == null)
             {
-                var offerUrl = await _trinsicCredentialsService
-                    .GetDriverLicenseCredential(HttpContext.User.Identity.Name);
+                identityHasDriverLicenseClaims = false;
+            }
+            
+            // TODO get issued credential or create one
+            // DriverLicense = await _driverLicenseService.GetDriverLicense(HttpContext.User.Identity.Name);
+
+            if (identityHasDriverLicenseClaims)
+            {
+                DriverLicense = new DriverLicense
+                {
+                    Name = nameClaim.Value,
+                    FirstName = firstNameClaim.Value,
+                    LicenseType = licenseTypeClaim.Value,
+                    DateOfBirth = dateOfBirthClaim.Value,
+                    IssuedAt = licenseIssuedAtClaim.Value,
+                    UserName = User.Identity.Name
+
+                };
+                //var offerUrl = await _trinsicCredentialsService
+                //    .GetDriverLicenseCredential(HttpContext.User.Identity.Name);
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
-                CredentialOfferUrl = offerUrl;
+                CredentialOfferUrl = "damienbod.com";
                 HasDriverLicense = true;
             }
             else
