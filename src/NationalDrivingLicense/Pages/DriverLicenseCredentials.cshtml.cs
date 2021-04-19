@@ -7,16 +7,16 @@ namespace NationalDrivingLicense.Pages
 {
     public class DriverLicenseCredentialsModel : PageModel
     {
-        private readonly MattrCredentialsService _mattrCredentialsService;
+        private readonly DriverLicenseCredentialsService _driverLicenseCredentialsService;
 
         public string DriverLicenseMessage { get; set; } = "Loading credentials";
         public bool HasDriverLicense { get; set; } = false;
         public DriverLicense DriverLicense { get; set; }
 
         public string CredentialOfferUrl { get; set; }
-        public DriverLicenseCredentialsModel(MattrCredentialsService mattrCredentialsService)
+        public DriverLicenseCredentialsModel(DriverLicenseCredentialsService driverLicenseCredentialsService)
         {
-            _mattrCredentialsService = mattrCredentialsService;
+            _driverLicenseCredentialsService = driverLicenseCredentialsService;
         }
         public async Task OnGetAsync()
         {
@@ -54,8 +54,7 @@ namespace NationalDrivingLicense.Pages
                     UserName = User.Identity.Name
 
                 };
-                var offerUrl = await _mattrCredentialsService
-                    .GetDriverLicenseCredential(HttpContext.User.Identity.Name);
+                var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndl");
 
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
                 CredentialOfferUrl = "damienbod.com";

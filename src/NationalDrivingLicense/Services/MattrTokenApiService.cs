@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http;
-using System.Text.Json;
 using System.Net.Http.Json;
 
 namespace NationalDrivingLicense.Services
@@ -13,7 +12,6 @@ namespace NationalDrivingLicense.Services
     public class MattrTokenApiService
     {
         private readonly ILogger<MattrTokenApiService> _logger;
-        private readonly HttpClient _httpClient;
         private readonly MattrConfiguration _mattrConfiguration;
 
         private static readonly Object _lock = new Object();
@@ -50,7 +48,6 @@ namespace NationalDrivingLicense.Services
                 IDistributedCache cache)
         {
             _mattrConfiguration = mattrConfiguration.Value;
-            _httpClient = httpClientFactory.CreateClient();
             _logger = loggerFactory.CreateLogger<MattrTokenApiService>();
             _cache = cache;
         }

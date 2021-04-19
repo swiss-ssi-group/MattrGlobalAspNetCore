@@ -8,7 +8,8 @@ namespace NationalDrivingLicense.Data
     {   
         [Key]
         public int Id { get; set; }
-        public V1_CreateOidcIssuerResponse V1_CreateOidcIssuerResponse { get; set; }
-        public string Did { get; set; }
+        public string Name { get; set; }
+        public V1_CreateOidcIssuerResponse OidcIssuer { get; set; }
+        public V1_CreateDidResponse Did { get; set; }
     }
 }

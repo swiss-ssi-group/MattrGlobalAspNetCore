@@ -13,35 +13,19 @@ namespace NationalDrivingLicense
             _nationalDrivingLicenseMattrContext = nationalDrivingLicenseMattrContext;
         }
 
-        public async Task<bool> HasIdentityDriverLicense(string username)
-        {
-            if (!string.IsNullOrEmpty(username))
-            {
-                var driverLicense = await _nationalDrivingLicenseMattrContext.DriverLicenseCredentials.FirstOrDefaultAsync(
-                    dl => dl.UserName == username
-                );
-
-                if (driverLicense != null)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public async Task<DriverLicenseCredentials> GetDriverLicense(string username)
+        public async Task<string> GetDriverLicenseCredentialIssuerUrl(string name)
         {
             var driverLicense = await _nationalDrivingLicenseMattrContext.DriverLicenseCredentials.FirstOrDefaultAsync(
-                    dl => dl.UserName == username
+                    dl => dl.Name == name
                 );
 
-            return driverLicense;
+            var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuer.Id}";
+            return url;
         }
 
-        public async Task UpdateDriverLicense(DriverLicenseCredentials driverLicense)
+        public async Task CreateDriverLicense(DriverLicenseCredentials driverLicense)
         {
-            _nationalDrivingLicenseMattrContext.DriverLicenseCredentials.Update(driverLicense);
+            _nationalDrivingLicenseMattrContext.DriverLicenseCredentials.Add(driverLicense);
             await _nationalDrivingLicenseMattrContext.SaveChangesAsync();
         }
     }
