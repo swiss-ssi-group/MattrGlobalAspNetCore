@@ -18,8 +18,10 @@ namespace NationalDrivingLicense
             var driverLicense = await _nationalDrivingLicenseMattrContext.DriverLicenseCredentials.FirstOrDefaultAsync(
                     dl => dl.Name == name
                 );
-
+            
             var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
+
+            //var url = $"openid://discovery?issuer=https://tenant.vii.mattr.global/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
             return url;
         }
 
