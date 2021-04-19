@@ -6,11 +6,11 @@ creates drving license credentials
 
 ### Console
 
-dotnet ef migrations add init_ndl -c ApplicationDbContext
+dotnet ef migrations add init_ndl 
 
 ### Powershell
 
-Add-Migration "init_ndl" -c ApplicationDbContext  
+Add-Migration "init_ndl" 
 
 ## Database migrations update
 

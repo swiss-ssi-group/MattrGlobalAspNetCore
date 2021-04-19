@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Threading.Tasks;
+using NationalDrivingLicense.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace NationalDrivingLicense
 {
@@ -32,9 +34,9 @@ namespace NationalDrivingLicense
 
             //services.AddScoped<DriverLicenseCredentialsService>();
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<NationalDrivingLicenseMattrContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
