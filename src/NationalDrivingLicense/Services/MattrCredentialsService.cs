@@ -72,13 +72,13 @@ namespace NationalDrivingLicense
             // https://tenant.vii.mattr.global/ext/oidc/v1/issuers
             var createCredentialsUrl = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers";
 
-            var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest 
+            var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest
             {
                 Credential = new Credential
                 {
                     IssuerDid = did.Did,
                     Name = "National Driving License",
-                    Context = new List<Uri> { new Uri("https://ndl") },
+                    Context = new List<Uri> { new Uri("https://ndl.org") },
                     Type = new List<string> { "driving_license" }
                 },
                 ClaimMappings = new List<ClaimMappings>
@@ -94,7 +94,7 @@ namespace NationalDrivingLicense
                     ClientId = _configuration["Auth0:ClientId"],
                     ClientSecret = _configuration["Auth0:ClientSecret"],
                     Scope = new List<string> { "openid", "profile", "email"}, 
-                    Url = new Uri(_configuration["Auth0:Domain"])
+                    Url = new Uri($"https://{_configuration["Auth0:Domain"]}")
                 }
             };
 

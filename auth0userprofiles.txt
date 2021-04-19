@@ -19,3 +19,5 @@ function (user, context, callback) {
     context.idToken[namespace + 'date_of_birth'] = user.user_metadata.date_of_birth;
     callback(null, user, context);
 }
+
+{e9ad9ce9-f5a8-4b91-83ef-2eecdcfc8409}
