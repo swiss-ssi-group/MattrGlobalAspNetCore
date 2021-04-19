@@ -15,5125 +15,2536 @@ namespace NationalDrivingLicense.MattrOpenApiClient
 {
     using System = global::System;
     
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.10.8.0 (NJsonSchema v10.3.11.0 (Newtonsoft.Json v12.0.0.0))")]
-    public partial class Client 
+    
+
+    /// <summary>Create a payload</summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CreatePayloadRequest 
     {
-        private string _baseUrl = "https://tenant.vii.mattr.global/core";
-        private System.Net.Http.HttpClient _httpClient;
-        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
-    
-        public Client(System.Net.Http.HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
-        }
-    
-        private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
-        {
-            var settings = new Newtonsoft.Json.JsonSerializerSettings();
-            UpdateJsonSerializerSettings(settings);
-            return settings;
-        }
+        /// <summary>DID on the tenant used in a message</summary>
+        [Newtonsoft.Json.JsonProperty("from", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string From { get; set; }
     
-        public string BaseUrl
-        {
-            get { return _baseUrl; }
-            set { _baseUrl = value; }
-        }
-    
-        protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
-    
-        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
-    
-    
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
-        partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
-        /// <summary>Well known DID configuration</summary>
-        /// <returns>List of DID Configuration entries</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetDidConfigJsonldResponse> WellKnownDidConfigAsync()
-        {
-            return WellKnownDidConfigAsync(System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Well known DID configuration</summary>
-        /// <returns>List of DID Configuration entries</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetDidConfigJsonldResponse> WellKnownDidConfigAsync(System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/.well-known/did-configuration");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetDidConfigJsonldResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Resolve a DID</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>A DID Document and meta-data</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetDidResponse> ResolveDidAsync(System.Guid id)
-        {
-            return ResolveDidAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Resolve a DID</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>A DID Document and meta-data</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetDidResponse> ResolveDidAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/dids/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetDidResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Delete a DID</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>DID successfully deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task DeleteDidAsync(System.Guid id)
-        {
-            return DeleteDidAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Delete a DID</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>DID successfully deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task DeleteDidAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/dids/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve a list of DIDs</summary>
-        /// <param name="limit">Range size of the list, default 100</param>
-        /// <param name="cursor">Starting point for the list</param>
-        /// <returns>A list of DIDs</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetDidsResponse> RetrieveListOfDidsAsync(double? limit, string cursor)
-        {
-            return RetrieveListOfDidsAsync(limit, cursor, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve a list of DIDs</summary>
-        /// <param name="limit">Range size of the list, default 100</param>
-        /// <param name="cursor">Starting point for the list</param>
-        /// <returns>A list of DIDs</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetDidsResponse> RetrieveListOfDidsAsync(double? limit, string cursor, System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/dids?");
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetDidsResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a DID</summary>
-        /// <param name="body">Options for creating the decentralized identifier</param>
-        /// <returns>DID document created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateDidResponse> CreateDidAsync(V1_CreateDidDocument body)
-        {
-            return CreateDidAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a DID</summary>
-        /// <param name="body">Options for creating the decentralized identifier</param>
-        /// <returns>DID document created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateDidResponse> CreateDidAsync(V1_CreateDidDocument body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/dids");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateDidResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a verifiable credential</summary>
-        /// <param name="body">The credential payload</param>
-        /// <returns>Credential created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateCredentialResponse> CreateCredentialAsync(V1_CreateCredentialRequest body)
-        {
-            return CreateCredentialAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a verifiable credential</summary>
-        /// <param name="body">The credential payload</param>
-        /// <returns>Credential created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateCredentialResponse> CreateCredentialAsync(V1_CreateCredentialRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateCredentialResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad request, Invalid request body", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve list of credential data</summary>
-        /// <param name="tag">The optional external reference to filter on</param>
-        /// <param name="type">The optional credential type to filter on</param>
-        /// <param name="limit">Range size of returned credential entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of credential entries</param>
-        /// <returns>Returns a page of credentials</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetCredentialsResponse> RetrieveListCredsAsync(string tag, string type, double? limit, string cursor)
-        {
-            return RetrieveListCredsAsync(tag, type, limit, cursor, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve list of credential data</summary>
-        /// <param name="tag">The optional external reference to filter on</param>
-        /// <param name="type">The optional credential type to filter on</param>
-        /// <param name="limit">Range size of returned credential entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of credential entries</param>
-        /// <returns>Returns a page of credentials</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetCredentialsResponse> RetrieveListCredsAsync(string tag, string type, double? limit, string cursor, System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials?");
-            if (tag != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("tag") + "=").Append(System.Uri.EscapeDataString(ConvertToString(tag, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (type != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("type") + "=").Append(System.Uri.EscapeDataString(ConvertToString(type, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetCredentialsResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad query parameters in request.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve credential data</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential returned</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetCredentialResponse> RetrieveCredentialAsync(string id)
-        {
-            return RetrieveCredentialAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve credential data</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential returned</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetCredentialResponse> RetrieveCredentialAsync(string id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetCredentialResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Credential ID not in a UUID format", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Remove credential data</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task RemoveCredentialAsync(string id)
-        {
-            return RemoveCredentialAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Remove credential data</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task RemoveCredentialAsync(string id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Invalid id parameter format", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Credential ID not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Verify a credential</summary>
-        /// <returns>Credential has been processed</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response> VerifyCredentialAsync(V1_VerifyCredentialRequest body)
-        {
-            return VerifyCredentialAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Verify a credential</summary>
-        /// <returns>Credential has been processed</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response> VerifyCredentialAsync(V1_VerifyCredentialRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/verify");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Set credential revocation status</summary>
-        /// <param name="body">Setting the revocation status</param>
-        /// <param name="id">Credential ID</param>
-        /// <returns>The revocation status has been set</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task SetRevocationStatusAsync(V1_SetRevocationStatus body, System.Guid id)
-        {
-            return SetRevocationStatusAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Set credential revocation status</summary>
-        /// <param name="body">Setting the revocation status</param>
-        /// <param name="id">Credential ID</param>
-        /// <returns>The revocation status has been set</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task SetRevocationStatusAsync(V1_SetRevocationStatus body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/{id}/revocation-status");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve credential revocation status</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential status</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_RevocationStatusResponse> GetRevocationStatusAsync(System.Guid id)
-        {
-            return GetRevocationStatusAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve credential revocation status</summary>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Credential status</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_RevocationStatusResponse> GetRevocationStatusAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/{id}/revocation-status");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_RevocationStatusResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve revocation list</summary>
-        /// <param name="id">Revocation list ID</param>
-        /// <returns>The revocation list</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<VerifiableCredential> RetrieveRevocationListAsync(System.Guid id)
-        {
-            return RetrieveRevocationListAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve revocation list</summary>
-        /// <param name="id">Revocation list ID</param>
-        /// <returns>The revocation list</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<VerifiableCredential> RetrieveRevocationListAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/revocation-lists/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<VerifiableCredential>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a revocation message payload</summary>
-        /// <param name="body">Create a JWM message payload</param>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response2> CreateRevNotificationAsync(CreatePayloadRequest body, System.Guid id)
-        {
-            return CreateRevNotificationAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a revocation message payload</summary>
-        /// <param name="body">Create a JWM message payload</param>
-        /// <param name="id">Credential ID</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response2> CreateRevNotificationAsync(CreatePayloadRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/credentials/{id}/revocation-status/notification");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response2>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Sign a message</summary>
-        /// <param name="body">Sign message request</param>
-        /// <returns>Message signed</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<string> SignMessageAsync(SignMessageRequest body)
-        {
-            return SignMessageAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Sign a message</summary>
-        /// <param name="body">Sign message request</param>
-        /// <returns>Message signed</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> SignMessageAsync(SignMessageRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/messaging/sign");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Error signing message", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Verify a message</summary>
-        /// <param name="body">JWS to verify</param>
-        /// <returns>Verification has been performed, see response body for result</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<VerifyMessageResponse> VerifyJwsAsync(VerifyRequest body)
-        {
-            return VerifyJwsAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Verify a message</summary>
-        /// <param name="body">JWS to verify</param>
-        /// <returns>Verification has been performed, see response body for result</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<VerifyMessageResponse> VerifyJwsAsync(VerifyRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/messaging/verify");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<VerifyMessageResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Invalid JWS", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Encrypt a message</summary>
-        /// <param name="body">Encryption params</param>
-        /// <returns>Message encrypted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response3> EncryptMessageAsync(Body body)
-        {
-            return EncryptMessageAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Encrypt a message</summary>
-        /// <param name="body">Encryption params</param>
-        /// <returns>Message encrypted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response3> EncryptMessageAsync(Body body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/messaging/encrypt");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response3>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Decrypt a message</summary>
-        /// <param name="body">Decryption params</param>
-        /// <returns>Message Decrypted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<DecryptMessageResponse> DecryptMessageAsync(Body2 body)
-        {
-            return DecryptMessageAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Decrypt a message</summary>
-        /// <param name="body">Decryption params</param>
-        /// <returns>Message Decrypted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<DecryptMessageResponse> DecryptMessageAsync(Body2 body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/messaging/decrypt");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<DecryptMessageResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Send a message</summary>
-        /// <returns>Message sent</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task SendMessageAsync(SendMessageRequest body)
-        {
-            return SendMessageAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Send a message</summary>
-        /// <returns>Message sent</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task SendMessageAsync(SendMessageRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/messaging/send");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Error sending message", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create an OIDC Issuer</summary>
-        /// <param name="body">The issuer payload</param>
-        /// <returns>Issuer created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> CreateOidcIssuerAsync(V1_CreateOidcIssuerRequest body)
-        {
-            return CreateOidcIssuerAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create an OIDC Issuer</summary>
-        /// <param name="body">The issuer payload</param>
-        /// <returns>Issuer created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> CreateOidcIssuerAsync(V1_CreateOidcIssuerRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve list of OIDC Issuers</summary>
-        /// <param name="limit">Range size of returned issuer entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of issuer entries</param>
-        /// <returns>Returns a page of issuers</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetOidcIssuersResponse> GetOidcIssuersAsync(double? limit, string cursor)
-        {
-            return GetOidcIssuersAsync(limit, cursor, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve list of OIDC Issuers</summary>
-        /// <param name="limit">Range size of returned issuer entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of issuer entries</param>
-        /// <returns>Returns a page of issuers</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetOidcIssuersResponse> GetOidcIssuersAsync(double? limit, string cursor, System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers?");
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetOidcIssuersResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve an OIDC Issuer</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Retrieved Issuer</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> GetOidcIssuerAsync(System.Guid id)
-        {
-            return GetOidcIssuerAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve an OIDC Issuer</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Retrieved Issuer</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> GetOidcIssuerAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Issuer is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Update an OIDC Issuer</summary>
-        /// <param name="body">Update an Issuer</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Successfully updated the Issuer</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> UpdateOidcIssuerAsync(V1_CreateOidcIssuerRequest body, System.Guid id)
-        {
-            return UpdateOidcIssuerAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Update an OIDC Issuer</summary>
-        /// <param name="body">Update an Issuer</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Successfully updated the Issuer</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerResponse> UpdateOidcIssuerAsync(V1_CreateOidcIssuerRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Issuer is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Remove an OIDC Issuer</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Issuer deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task DeleteOidcIssuerAsync(System.Guid id)
-        {
-            return DeleteOidcIssuerAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Remove an OIDC Issuer</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Issuer deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task DeleteOidcIssuerAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Issuer is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a Client</summary>
-        /// <param name="body">The client payload</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Client created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> CreateOidcIssuerClientAsync(V1_CreateOidcIssuerClientRequest body, System.Guid id)
-        {
-            return CreateOidcIssuerClientAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a Client</summary>
-        /// <param name="body">The client payload</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Client created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> CreateOidcIssuerClientAsync(V1_CreateOidcIssuerClientRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/clients");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve list of Clients</summary>
-        /// <param name="limit">Range size of returned client entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of client entries</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Returns a page of clients</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetOidcIssuerClientsResponse> GetOidcIssuerClientsAsync(double? limit, string cursor, System.Guid id)
-        {
-            return GetOidcIssuerClientsAsync(limit, cursor, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve list of Clients</summary>
-        /// <param name="limit">Range size of returned client entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of client entries</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Returns a page of clients</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetOidcIssuerClientsResponse> GetOidcIssuerClientsAsync(double? limit, string cursor, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/clients?");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetOidcIssuerClientsResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve a Client</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Retrieved Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> GetOidcIssuerClientAsync(System.Guid id, System.Guid clientId)
-        {
-            return GetOidcIssuerClientAsync(id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve a Client</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Retrieved Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> GetOidcIssuerClientAsync(System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Update a Client</summary>
-        /// <param name="body">Update a client</param>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Successfully updated a Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> UpdateOidcIssuerClientAsync(V1_CreateOidcIssuerClientRequest body, System.Guid id, System.Guid clientId)
-        {
-            return UpdateOidcIssuerClientAsync(body, id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Update a Client</summary>
-        /// <param name="body">Update a client</param>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Successfully updated a Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcIssuerClientResponse> UpdateOidcIssuerClientAsync(V1_CreateOidcIssuerClientRequest body, System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcIssuerClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Remove a Client</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Client deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task DeleteOidcIssuerClientAsync(System.Guid id, System.Guid clientId)
-        {
-            return DeleteOidcIssuerClientAsync(id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Remove a Client</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Client deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task DeleteOidcIssuerClientAsync(System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Well Known OpenId Configuration</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Returns OpenID configuration</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_OpenIdConfiguration> IssuerWellKnownOidcConfigAsync(System.Guid id)
-        {
-            return IssuerWellKnownOidcConfigAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Well Known OpenId Configuration</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Returns OpenID configuration</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_OpenIdConfiguration> IssuerWellKnownOidcConfigAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/.well-known/openid-configuration");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_OpenIdConfiguration>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>IssuerToken</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response4> IssuertokenAsync(System.Guid id)
-        {
-            return IssuertokenAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>IssuerToken</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response4> IssuertokenAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/token");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response4>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>IssuerAuth</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task IssuerAuthAsync(System.Guid id)
-        {
-            return IssuerAuthAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>IssuerAuth</summary>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task IssuerAuthAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/authorize");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create an OpenId credential offer payload</summary>
-        /// <param name="body">Create a message payload for an Offer</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response5> CreateOidcOfferPayloadAsync(CreatePayloadRequest body, System.Guid id)
-        {
-            return CreateOidcOfferPayloadAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create an OpenId credential offer payload</summary>
-        /// <param name="body">Create a message payload for an Offer</param>
-        /// <param name="id">Issuer ID</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response5> CreateOidcOfferPayloadAsync(CreatePayloadRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/issuers/{id}/offers");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response5>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create an OIDC Verifier</summary>
-        /// <param name="body">The verifier payload</param>
-        /// <returns>Verifier created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> CreateOidcVerifierAsync(V1_CreateOidcVerifierRequest body)
-        {
-            return CreateOidcVerifierAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create an OIDC Verifier</summary>
-        /// <param name="body">The verifier payload</param>
-        /// <returns>Verifier created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> CreateOidcVerifierAsync(V1_CreateOidcVerifierRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve list of OIDC Verifiers</summary>
-        /// <param name="limit">Range size of returned verifier entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of verifier entries</param>
-        /// <returns>Returns a page of Verifiers</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetOidcVerifiersResponse> GetOidcVerifiersAsync(double? limit, string cursor)
-        {
-            return GetOidcVerifiersAsync(limit, cursor, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve list of OIDC Verifiers</summary>
-        /// <param name="limit">Range size of returned verifier entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of verifier entries</param>
-        /// <returns>Returns a page of Verifiers</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetOidcVerifiersResponse> GetOidcVerifiersAsync(double? limit, string cursor, System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers?");
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetOidcVerifiersResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve an OIDC Verifier</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Retrieved Verifier</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> GetOidcVerifierAsync(System.Guid id)
-        {
-            return GetOidcVerifierAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve an OIDC Verifier</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Retrieved Verifier</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> GetOidcVerifierAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Verifier is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Update an OIDC Verifier</summary>
-        /// <param name="body">Update a verifier</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Successfully updated a Verifier</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> UpdateOidcVerifierAsync(V1_CreateOidcVerifierRequest body, System.Guid id)
-        {
-            return UpdateOidcVerifierAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Update an OIDC Verifier</summary>
-        /// <param name="body">Update a verifier</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Successfully updated a Verifier</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierResponse> UpdateOidcVerifierAsync(V1_CreateOidcVerifierRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Verifier is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Remove an OIDC Verifier</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Verifier deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task DeleteOidcVerifierAsync(System.Guid id)
-        {
-            return DeleteOidcVerifierAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Remove an OIDC Verifier</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Verifier deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task DeleteOidcVerifierAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Verifier is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a Client</summary>
-        /// <param name="body">The client payload</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Client created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> CreateOidcVerifierClientAsync(V1_CreateOidcVerifierClientRequest body, System.Guid id)
-        {
-            return CreateOidcVerifierClientAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a Client</summary>
-        /// <param name="body">The client payload</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Client created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> CreateOidcVerifierClientAsync(V1_CreateOidcVerifierClientRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/clients");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve list of Clients</summary>
-        /// <param name="limit">Range size of returned client entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of client entries</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Returns a page of clients</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_GetOidcVerifierClientsResponse> GetOidcVerifierClientsAsync(double? limit, string cursor, System.Guid id)
-        {
-            return GetOidcVerifierClientsAsync(limit, cursor, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve list of Clients</summary>
-        /// <param name="limit">Range size of returned client entries, default 100</param>
-        /// <param name="cursor">Starting point for the range of client entries</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Returns a page of clients</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_GetOidcVerifierClientsResponse> GetOidcVerifierClientsAsync(double? limit, string cursor, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/clients?");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_GetOidcVerifierClientsResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve a Client</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Retrieved Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> GetOidcVerifierClientAsync(System.Guid id, System.Guid clientId)
-        {
-            return GetOidcVerifierClientAsync(id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve a Client</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Retrieved Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> GetOidcVerifierClientAsync(System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Update a Client</summary>
-        /// <param name="body">Update a client</param>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Successfully updated a Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> UpdateOidcVerifierClientAsync(V1_CreateOidcVerifierClientRequest body, System.Guid id, System.Guid clientId)
-        {
-            return UpdateOidcVerifierClientAsync(body, id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Update a Client</summary>
-        /// <param name="body">Update a client</param>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Successfully updated a Client</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreateOidcVerifierClientResponse> UpdateOidcVerifierClientAsync(V1_CreateOidcVerifierClientRequest body, System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreateOidcVerifierClientResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Remove a Client</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Client deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task DeleteOidcVerifierClientAsync(System.Guid id, System.Guid clientId)
-        {
-            return DeleteOidcVerifierClientAsync(id, clientId, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Remove a Client</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <param name="clientId">Client ID</param>
-        /// <returns>Client deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task DeleteOidcVerifierClientAsync(System.Guid id, System.Guid clientId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (clientId == null)
-                throw new System.ArgumentNullException("clientId");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/clients/{clientId}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{clientId}", System.Uri.EscapeDataString(ConvertToString(clientId, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("The Client is not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Well Known OpenId Configuration</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Returns OpenID configuration</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<OpenIdConfiguration> VerifierWellKnownOidcConfigAsync(System.Guid id)
-        {
-            return VerifierWellKnownOidcConfigAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Well Known OpenId Configuration</summary>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>Returns OpenID configuration</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<OpenIdConfiguration> VerifierWellKnownOidcConfigAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/.well-known/openid-configuration");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<OpenIdConfiguration>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve Token</summary>
-        /// <param name="body">Token endpoint request</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<TokenResponse> VerifierRetrieveTokenAsync(InitialTokenRequest body, System.Guid id)
-        {
-            return VerifierRetrieveTokenAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve Token</summary>
-        /// <param name="body">Token endpoint request</param>
-        /// <param name="id">Verifier ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<TokenResponse> VerifierRetrieveTokenAsync(InitialTokenRequest body, System.Guid id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oidc/v1/verifiers/{id}/token");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<TokenResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response6>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<Response6>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a presentation template</summary>
-        /// <param name="body">The template</param>
-        /// <returns>Template created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_PresentationTemplateResponse> CreatePresTemplateAsync(V1_CreatePresentationTemplate body)
-        {
-            return CreatePresTemplateAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a presentation template</summary>
-        /// <param name="body">The template</param>
-        /// <returns>Template created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_PresentationTemplateResponse> CreatePresTemplateAsync(V1_CreatePresentationTemplate body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/templates");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_PresentationTemplateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad request, Invalid request body", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve a list of presentation templates</summary>
-        /// <param name="limit">Range size of the list, default 100</param>
-        /// <param name="cursor">Starting point for the list</param>
-        /// <returns>All templates</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_PresentationTemplateArrayResponse> RetrievePresTemplatesAsync(double? limit, string cursor)
-        {
-            return RetrievePresTemplatesAsync(limit, cursor, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve a list of presentation templates</summary>
-        /// <param name="limit">Range size of the list, default 100</param>
-        /// <param name="cursor">Starting point for the list</param>
-        /// <returns>All templates</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_PresentationTemplateArrayResponse> RetrievePresTemplatesAsync(double? limit, string cursor, System.Threading.CancellationToken cancellationToken)
-        {
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/templates?");
-            if (limit != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("limit") + "=").Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (cursor != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("cursor") + "=").Append(System.Uri.EscapeDataString(ConvertToString(cursor, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_PresentationTemplateArrayResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Retrieve a presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>Template returned</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_PresentationTemplateResponse> RetrievePresTemplateAsync(string id)
-        {
-            return RetrievePresTemplateAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Retrieve a presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>Template returned</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_PresentationTemplateResponse> RetrievePresTemplateAsync(string id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/templates/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_PresentationTemplateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Invalid templateId parameter format", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Delete presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>Template deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task RemovePresTemplateAsync(string id)
-        {
-            return RemovePresTemplateAsync(id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Delete presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>Template deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task RemovePresTemplateAsync(string id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/templates/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 204)
-                        {
-                            return;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Invalid templateId parameter format", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 404)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Update presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_PresentationTemplateResponse> UpdatePresTemplateAsync(V1_UpdatePresentationTemplate body, string id)
-        {
-            return UpdatePresTemplateAsync(body, id, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Update presentation template</summary>
-        /// <param name="id">Presentation template ID</param>
-        /// <returns>OK</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_PresentationTemplateResponse> UpdatePresTemplateAsync(V1_UpdatePresentationTemplate body, string id, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/templates/{id}");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_PresentationTemplateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create a presentation request</summary>
-        /// <param name="body">The presentation request payload</param>
-        /// <returns>Presentation Request created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<V1_CreatePresentationRequestResponse> CreatePresRequestAsync(V1_CreatePresentationRequestRequest body)
-        {
-            return CreatePresRequestAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create a presentation request</summary>
-        /// <param name="body">The presentation request payload</param>
-        /// <returns>Presentation Request created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<V1_CreatePresentationRequestResponse> CreatePresRequestAsync(V1_CreatePresentationRequestRequest body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/v1/presentations/requests");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<V1_CreatePresentationRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        /// <summary>Create API Auth Token</summary>
-        /// <returns>Successful response</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<Response7> AuthTokenAsync(Body3 body)
-        {
-            return AuthTokenAsync(body, System.Threading.CancellationToken.None);
-        }
-    
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>Create API Auth Token</summary>
-        /// <returns>Successful response</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<Response7> AuthTokenAsync(Body3 body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
-    
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/oauth/token");
-    
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-    
-                    PrepareRequest(client_, request_, urlBuilder_);
-    
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-    
-                    PrepareRequest(client_, request_, url_);
-    
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-    
-                        ProcessResponse(client_, response_);
-    
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response7>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 401)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<Response8>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<Response8>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-    
-        protected struct ObjectResponseResult<T>
-        {
-            public ObjectResponseResult(T responseObject, string responseText)
-            {
-                this.Object = responseObject;
-                this.Text = responseText;
-            }
-    
-            public T Object { get; }
-    
-            public string Text { get; }
-        }
-    
-        public bool ReadResponseAsString { get; set; }
-        
-        protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Threading.CancellationToken cancellationToken)
-        {
-            if (response == null || response.Content == null)
-            {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
-            }
-        
-            if (ReadResponseAsString)
-            {
-                var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
-                }
-                catch (Newtonsoft.Json.JsonException exception)
-                {
-                    var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
-                }
-            }
-            else
-            {
-                try
-                {
-                    using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new System.IO.StreamReader(responseStream))
-                    using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
-                    {
-                        var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
-                        var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
-                    }
-                }
-                catch (Newtonsoft.Json.JsonException exception)
-                {
-                    var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
-                }
-            }
-        }
-    
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
-        {
-            if (value == null)
-            {
-                return "";
-            }
-        
-            if (value is System.Enum)
-            {
-                var name = System.Enum.GetName(value.GetType(), value);
-                if (name != null)
-                {
-                    var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
-                    if (field != null)
-                    {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
-                            as System.Runtime.Serialization.EnumMemberAttribute;
-                        if (attribute != null)
-                        {
-                            return attribute.Value != null ? attribute.Value : name;
-                        }
-                    }
-        
-                    var converted = System.Convert.ToString(System.Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()), cultureInfo));
-                    return converted == null ? string.Empty : converted;
-                }
-            }
-            else if (value is bool) 
-            {
-                return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
-            }
-            else if (value is byte[])
-            {
-                return System.Convert.ToBase64String((byte[]) value);
-            }
-            else if (value.GetType().IsArray)
-            {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
-                return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
-            }
-        
-            var result = System.Convert.ToString(value, cultureInfo);
-            return result == null ? "" : result;
+        /// <summary>List of SubjectDIDs</summary>
+        [Newtonsoft.Json.JsonProperty("to", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> To { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    /// <summary>Credential status location information</summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CredentialStatus 
+    {
+        /// <summary>Unique ID for the credential status</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        /// <summary>Indicates that the status contains revocation information</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Type { get; set; }
+    
+        /// <summary>The location within the revocation list for the credential</summary>
+        [Newtonsoft.Json.JsonProperty("revocationListIndex", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int RevocationListIndex { get; set; }
+    
+        /// <summary>The location of the revocation list</summary>
+        [Newtonsoft.Json.JsonProperty("revocationListCredential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RevocationListCredential { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class DecryptMessageResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Payload { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("senderDidUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SenderDidUrl { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("senderPublicJwk", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public object SenderPublicJwk { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("recipientDidUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RecipientDidUrl { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class ED25519Signature2018 
+    {
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("created", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset Created { get; set; }
+    
+        /// <summary>Compact form of JWS</summary>
+        [Newtonsoft.Json.JsonProperty("jws", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Jws { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("proofPurpose", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ProofPurpose { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("verificationMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string VerificationMethod { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class ErrorResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Code { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Message { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("details", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Details> Details { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class InitialTokenRequest 
+    {
+        [Newtonsoft.Json.JsonProperty("client_id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public object Client_id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("client_secret", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Client_secret { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("grant_type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Grant_type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Code { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("redirect_uri", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Redirect_uri { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    /// <summary>A JSON Object plaintext message</summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class JSONObjectMessage 
+    {
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class OpenIdConfiguration 
+    {
+        [Newtonsoft.Json.JsonProperty("authorization_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Authorization_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claims_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Claims_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claims_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Claims_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("code_challenge_methods_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Code_challenge_methods_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("end_session_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri End_session_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("grant_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Grant_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("id_token_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Id_token_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Issuer { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("jwks_uri", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Jwks_uri { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("registration_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Registration_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_object_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Request_object_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Request_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_uri_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Request_uri_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("require_request_uri_registration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Require_request_uri_registration { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("response_modes_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Response_modes_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("response_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Response_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("scopes_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Scopes_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("subject_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Subject_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint_auth_methods_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Token_endpoint_auth_methods_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint_auth_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Token_endpoint_auth_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Token_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("userinfo_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Userinfo_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("userinfo_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Userinfo_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claim_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Claim_types_supported { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class RefreshTokenRequest 
+    {
+        [Newtonsoft.Json.JsonProperty("client_id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Client_id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("client_secret", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Client_secret { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("grant_type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Grant_type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("refresh_token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Refresh_token { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("redirect_uri", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Redirect_uri { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class SendMessageRequest 
+    {
+        /// <summary>recipient DID</summary>
+        [Newtonsoft.Json.JsonProperty("to", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string To { get; set; }
+    
+        /// <summary>JWE message</summary>
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Message { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class SignMessageRequest 
+    {
+        /// <summary>The did keyId that will be used to sign the message with.</summary>
+        [Newtonsoft.Json.JsonProperty("didUrl", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string DidUrl { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public JSONObjectMessage Payload { get; set; } = new JSONObjectMessage();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class TokenResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("access_token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Access_token { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public TokenResponseToken_type Token_type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("refresh_token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Refresh_token { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("expires_in", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Expires_in { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("id_token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id_token { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class VerifiableCredential 
+    {
+        [Newtonsoft.Json.JsonProperty("@context", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Context { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Type { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        /// <summary>Includes issuer id (did) and its domain (inside name parameter)</summary>
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Issuer Issuer { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuanceDate", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset IssuanceDate { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public CredentialStatus CredentialStatus { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialSubject", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public CredentialSubject CredentialSubject { get; set; } = new CredentialSubject();
+    
+        [Newtonsoft.Json.JsonProperty("proof", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public ED25519Signature2018 Proof { get; set; } = new ED25519Signature2018();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class VerifyMessageResponse 
+    {
+        /// <summary>The didUrl included on the jws object</summary>
+        [Newtonsoft.Json.JsonProperty("didUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DidUrl { get; set; }
+    
+        /// <summary>The did parsed from the didUrl</summary>
+        [Newtonsoft.Json.JsonProperty("did", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Did { get; set; }
+    
+        /// <summary>Result of jws verification</summary>
+        [Newtonsoft.Json.JsonProperty("verified", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Verified { get; set; }
+    
+        /// <summary>The payload of the verified message</summary>
+        [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Payload { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class VerifyRequest 
+    {
+        /// <summary>Compact form of JWS</summary>
+        [Newtonsoft.Json.JsonProperty("jws", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Jws { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateCredentialRequest 
+    {
+        /// <summary>Additional to any JSON-LD contexts 'https://www.w3.org/2018/credentials/v1' is always required.</summary>
+        [Newtonsoft.Json.JsonProperty("@context", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Context { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        /// <summary>Generally a DID, identifier of who/what the subject is</summary>
+        [Newtonsoft.Json.JsonProperty("subjectId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
+        public string SubjectId { get; set; }
+    
+        /// <summary>An optional tag to filter by, will not be part of the issued credential</summary>
+        [Newtonsoft.Json.JsonProperty("tag", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(1024, MinimumLength = 1)]
+        public string Tag { get; set; }
+    
+        /// <summary>Types for the Credential, VerifiableCredential must be the first value</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Type { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        /// <summary>Each value is a claim that is defined by one of the JSON-LD schemas.</summary>
+        [Newtonsoft.Json.JsonProperty("claims", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public object Claims { get; set; } = new object();
+    
+        /// <summary>Includes Issuer id (DID) and domain name</summary>
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Issuer2 Issuer { get; set; } = new Issuer2();
+    
+        /// <summary>Flag to indicate whether the full credential should be stored in platform</summary>
+        [Newtonsoft.Json.JsonProperty("persist", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Persist { get; set; }
+    
+        /// <summary>Flag to indicate if the credential needs to support revocation</summary>
+        [Newtonsoft.Json.JsonProperty("revocable", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Revocable { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateCredentialResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credential", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public VerifiableCredential Credential { get; set; } = new VerifiableCredential();
+    
+        [Newtonsoft.Json.JsonProperty("tag", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Tag { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CredentialStatus CredentialStatus { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuanceDate", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string IssuanceDate { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    /// <summary>Credential status location information</summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CredentialStatus 
+    {
+        /// <summary>Unique ID for the credential status</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        /// <summary>Indicates that the status contains revocation information</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Type { get; set; }
+    
+        /// <summary>The location within the revocation list for the credential</summary>
+        [Newtonsoft.Json.JsonProperty("revocationListIndex", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int RevocationListIndex { get; set; }
+    
+        /// <summary>The location of the revocation list</summary>
+        [Newtonsoft.Json.JsonProperty("revocationListCredential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RevocationListCredential { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetCredentialResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public VerifiableCredential Credential { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("tag", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Tag { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CredentialStatus CredentialStatus { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuanceDate", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string IssuanceDate { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetCredentialsResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<V1_GetCredentialResponse> Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_RevocationStatusResponse 
+    {
+        /// <summary>true if the credential is revoked, false otherwise</summary>
+        [Newtonsoft.Json.JsonProperty("isRevoked", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsRevoked { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_SetRevocationStatus 
+    {
+        /// <summary>true if the credential is revoked, false otherwise</summary>
+        [Newtonsoft.Json.JsonProperty("isRevoked", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsRevoked { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_VerifyCredentialRequest 
+    {
+        [Newtonsoft.Json.JsonProperty("credential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public VerifiableCredential Credential { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateDidDocument 
+    {
+        [Newtonsoft.Json.JsonProperty("method", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public V1_CreateDidDocumentMethod Method { get; set; }
+    
+        /// <summary>To define a key type for a did:key or to define a domain for did:web</summary>
+        [Newtonsoft.Json.JsonProperty("options", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public object Options { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateDidResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("registrationStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RegistrationStatus { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("did", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Did { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("metadata", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_DidMetadata Metadata { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_DidDocument 
+    {
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_DidMetadata 
+    {
+        /// <summary>Timestamp of when the DID was registered</summary>
+        [Newtonsoft.Json.JsonProperty("registered", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Registered { get; set; }
+    
+        /// <summary>An array of keys that describe the relationship between keys listed in the DID document and keys that exist in a connected KMS.</summary>
+        [Newtonsoft.Json.JsonProperty("keys", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<V1_DidMetadataKey> Keys { get; set; } = new System.Collections.ObjectModel.Collection<V1_DidMetadataKey>();
+    
+        /// <summary>The DID document that was created for the DID</summary>
+        [Newtonsoft.Json.JsonProperty("initialDidDocument", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public object InitialDidDocument { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_DidMetadataKey 
+    {
+        [Newtonsoft.Json.JsonProperty("kmsKeyId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string KmsKeyId { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("didDocumentKeyId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DidDocumentKeyId { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetDidConfigJsonldResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("entries", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<VerifiableCredential> Entries { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetDidResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("didDocument", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_DidDocument DidDocument { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("registrationStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RegistrationStatus { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("localMetadata", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_DidMetadata LocalMetadata { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetDidsResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Data> Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcIssuerClientRequest 
+    {
+        /// <summary>Meaningful name for this Client</summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        /// <summary>Redirection URI to which the response will be sent</summary>
+        [Newtonsoft.Json.JsonProperty("redirectUris", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<System.Uri> RedirectUris { get; set; } = new System.Collections.ObjectModel.Collection<System.Uri>();
+    
+        /// <summary>Determines the authorization processing flow</summary>
+        [Newtonsoft.Json.JsonProperty("responseTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ResponseTypes { get; set; }
+    
+        /// <summary>OAuth Grant Type</summary>
+        [Newtonsoft.Json.JsonProperty("grantTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> GrantTypes { get; set; }
+    
+        /// <summary>OAuth Token Endpoint Authentication Method</summary>
+        [Newtonsoft.Json.JsonProperty("tokenEndpointAuthMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string TokenEndpointAuthMethod { get; set; }
+    
+        /// <summary>Algorithm must match configured jwks, defaults to RS256</summary>
+        [Newtonsoft.Json.JsonProperty("idTokenSignedResponseAlg", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string IdTokenSignedResponseAlg { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("applicationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ApplicationType { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcIssuerClientResponse : V1_CreateOidcIssuerClientRequest
+    {
+        /// <summary>Client id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        /// <summary>Client secret</summary>
+        [Newtonsoft.Json.JsonProperty("secret", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Secret { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcIssuerRequest 
+    {
+        /// <summary>Credential information</summary>
+        [Newtonsoft.Json.JsonProperty("credential", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Credential Credential { get; set; } = new Credential();
+    
+        /// <summary>Federated OIDC Provider details</summary>
+        [Newtonsoft.Json.JsonProperty("federatedProvider", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public FederatedProvider FederatedProvider { get; set; } = new FederatedProvider();
+    
+        /// <summary>Map OpenID Connect terms to JSON-LD terms</summary>
+        [Newtonsoft.Json.JsonProperty("claimMappings", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<ClaimMappings> ClaimMappings { get; set; } = new System.Collections.ObjectModel.Collection<ClaimMappings>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcIssuerResponse : V1_CreateOidcIssuerRequest
+    {
+        /// <summary>Issuer id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("federatedProvider", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public FederatedProvider2 FederatedProvider { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetOidcIssuerClientsResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CreateOidcIssuerClientResponse Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetOidcIssuersResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CreateOidcIssuerResponse Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_OpenIdConfiguration 
+    {
+        [Newtonsoft.Json.JsonProperty("authorization_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Authorization_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claims_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Claims_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claims_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Claims_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("code_challenge_methods_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Code_challenge_methods_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("end_session_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri End_session_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("grant_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Grant_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("id_token_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Id_token_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Issuer { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("jwks_uri", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Jwks_uri { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("registration_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Registration_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_object_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Request_object_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Request_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("request_uri_parameter_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Request_uri_parameter_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("require_request_uri_registration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Require_request_uri_registration { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("response_modes_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Response_modes_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("response_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Response_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("scopes_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Scopes_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("subject_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Subject_types_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint_auth_methods_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Token_endpoint_auth_methods_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint_auth_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Token_endpoint_auth_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("token_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Token_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("userinfo_endpoint", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Userinfo_endpoint { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("userinfo_signing_alg_values_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Userinfo_signing_alg_values_supported { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("claim_types_supported", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Claim_types_supported { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcVerifierClientRequest 
+    {
+        /// <summary>Meaningful name for this Client</summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        /// <summary>Redirection URI to which the response will be sent</summary>
+        [Newtonsoft.Json.JsonProperty("redirectUris", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<System.Uri> RedirectUris { get; set; } = new System.Collections.ObjectModel.Collection<System.Uri>();
+    
+        /// <summary>Determines the authorization processing flow</summary>
+        [Newtonsoft.Json.JsonProperty("responseTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ResponseTypes { get; set; }
+    
+        /// <summary>OAuth Grant Type</summary>
+        [Newtonsoft.Json.JsonProperty("grantTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> GrantTypes { get; set; }
+    
+        /// <summary>OAuth Token Endpoint Authentication Method</summary>
+        [Newtonsoft.Json.JsonProperty("tokenEndpointAuthMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string TokenEndpointAuthMethod { get; set; }
+    
+        /// <summary>Algorithm must match configured jwks, defaults to RS256</summary>
+        [Newtonsoft.Json.JsonProperty("idTokenSignedResponseAlg", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string IdTokenSignedResponseAlg { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("applicationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ApplicationType { get; set; }
+    
+        /// <summary>The logo to display above the QR code</summary>
+        [Newtonsoft.Json.JsonProperty("logoUri", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri LogoUri { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcVerifierClientResponse : V1_CreateOidcVerifierClientRequest
+    {
+        /// <summary>Client id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        /// <summary>Client secret</summary>
+        [Newtonsoft.Json.JsonProperty("secret", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Secret { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcVerifierRequest 
+    {
+        /// <summary>The Verifier DID</summary>
+        [Newtonsoft.Json.JsonProperty("verifierDid", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string VerifierDid { get; set; }
+    
+        /// <summary>Presentation Template ID used to request certain credentials</summary>
+        [Newtonsoft.Json.JsonProperty("presentationTemplateId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Guid PresentationTemplateId { get; set; }
+    
+        /// <summary>Map OpenID Connect terms to JSON-LD terms</summary>
+        [Newtonsoft.Json.JsonProperty("claimMappings", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<ClaimMappings2> ClaimMappings { get; set; } = new System.Collections.ObjectModel.Collection<ClaimMappings2>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreateOidcVerifierResponse : V1_CreateOidcVerifierRequest
+    {
+        /// <summary>Verifier id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetOidcVerifierClientsResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CreateOidcVerifierClientResponse Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_GetOidcVerifiersResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public V1_CreateOidcVerifierResponse Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationDidAuthTemplate 
+    {
+        /// <summary>DIDAuth</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Type { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationQueryByExample 
+    {
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialQuery", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<CredentialQuery> CredentialQuery { get; set; } = new System.Collections.ObjectModel.Collection<CredentialQuery>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationQueryByFrame 
+    {
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialQuery", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<CredentialQuery2> CredentialQuery { get; set; } = new System.Collections.ObjectModel.Collection<CredentialQuery2>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationRequestRequest 
+    {
+        /// <summary>Challenge can be used to match the response to a request</summary>
+        [Newtonsoft.Json.JsonProperty("challenge", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Challenge { get; set; }
+    
+        /// <summary>DID of the Verifier</summary>
+        [Newtonsoft.Json.JsonProperty("did", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Did { get; set; }
+    
+        /// <summary>Presentation Request Template id</summary>
+        [Newtonsoft.Json.JsonProperty("templateId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string TemplateId { get; set; }
+    
+        /// <summary>Unix timestamp in ms after which the request will be expired</summary>
+        [Newtonsoft.Json.JsonProperty("expiresTime", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double ExpiresTime { get; set; }
+    
+        /// <summary>Endpoint that will receive the Verifiable Presentation</summary>
+        [Newtonsoft.Json.JsonProperty("callbackUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri CallbackUrl { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationRequestResponse 
+    {
+        /// <summary>Presentation Request id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        /// <summary>Endpoint that will receive the Verifiable Presentation</summary>
+        [Newtonsoft.Json.JsonProperty("callbackUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri CallbackUrl { get; set; }
+    
+        /// <summary>Presentation Request Details</summary>
+        [Newtonsoft.Json.JsonProperty("request", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Request Request { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_CreatePresentationTemplate 
+    {
+        /// <summary>Must match domain of the tenant</summary>
+        [Newtonsoft.Json.JsonProperty("domain", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Domain { get; set; }
+    
+        /// <summary>Internal descriptor only</summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("query", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Query> Query { get; set; } = new System.Collections.ObjectModel.Collection<Query>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_PresentationTemplateArrayResponse 
+    {
+        /// <summary>Starting point for next cursor to use in a page</summary>
+        [Newtonsoft.Json.JsonProperty("nextCursor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NextCursor { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<V1_PresentationTemplateResponse> Data { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_PresentationTemplateResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("domain", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Domain { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("query", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Query2> Query { get; set; } = new System.Collections.ObjectModel.Collection<Query2>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class V1_UpdatePresentationTemplate : V1_CreatePresentationTemplate
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body 
+    {
+        [Newtonsoft.Json.JsonProperty("senderDidUrl", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SenderDidUrl { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("recipientDidUrls", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> RecipientDidUrls { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public object Payload { get; set; } = new object();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body2 
+    {
+        [Newtonsoft.Json.JsonProperty("jwe", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Jwe { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body3 
+    {
+        /// <summary>Client ID for your tenant</summary>
+        [Newtonsoft.Json.JsonProperty("client_id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Client_id { get; set; }
+    
+        /// <summary>Client seceret for your tenant</summary>
+        [Newtonsoft.Json.JsonProperty("client_secret", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Client_secret { get; set; }
+    
+        /// <summary>Use provided value</summary>
+        [Newtonsoft.Json.JsonProperty("audience", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Audience { get; set; }
+    
+        /// <summary>Use provided value</summary>
+        [Newtonsoft.Json.JsonProperty("grant_type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Grant_type { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response 
+    {
+        [Newtonsoft.Json.JsonProperty("verified", Required = Newtonsoft.Json.Required.Always)]
+        public bool Verified { get; set; }
+    
+        /// <summary>Reason for verification failure</summary>
+        [Newtonsoft.Json.JsonProperty("reason", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
+        public string Reason { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response2 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("to", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<object> To { get; set; } = new System.Collections.ObjectModel.Collection<object>();
+    
+        [Newtonsoft.Json.JsonProperty("from", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string From { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("created_time", Required = Newtonsoft.Json.Required.Always)]
+        public double Created_time { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("body", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Body4 Body { get; set; } = new Body4();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response3 
+    {
+        [Newtonsoft.Json.JsonProperty("jwe", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Jwe Jwe { get; set; } = new Jwe();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response4 
+    {
+        [Newtonsoft.Json.JsonProperty("token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Token { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response5 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("to", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<object> To { get; set; } = new System.Collections.ObjectModel.Collection<object>();
+    
+        [Newtonsoft.Json.JsonProperty("from", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string From { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("created_time", Required = Newtonsoft.Json.Required.Always)]
+        public double Created_time { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("body", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Body5 Body { get; set; } = new Body5();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response6 
+    {
+        [Newtonsoft.Json.JsonProperty("error", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Error { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response7 
+    {
+        /// <summary>JWT used for access to APIs requiring bearer token auth</summary>
+        [Newtonsoft.Json.JsonProperty("access_token", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Access_token { get; set; }
+    
+        /// <summary>Time in ms to expiry</summary>
+        [Newtonsoft.Json.JsonProperty("expires_in", Required = Newtonsoft.Json.Required.Always)]
+        public double Expires_in { get; set; }
+    
+        /// <summary>Denotes token type</summary>
+        [Newtonsoft.Json.JsonProperty("token_type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Token_type { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Response8 
+    {
+        [Newtonsoft.Json.JsonProperty("error", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Error { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("error_description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Error_description { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Details 
+    {
+        /// <summary>The value that was provided</summary>
+        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Value { get; set; }
+    
+        /// <summary>Description of why the request is invalid</summary>
+        [Newtonsoft.Json.JsonProperty("msg", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Msg { get; set; }
+    
+        /// <summary>The parameter that is invalid</summary>
+        [Newtonsoft.Json.JsonProperty("param", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Param { get; set; }
+    
+        /// <summary>The location in either body, query, path or params</summary>
+        [Newtonsoft.Json.JsonProperty("location", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Location { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public enum TokenResponseToken_type
+    {
+        [System.Runtime.Serialization.EnumMember(Value = @"bearer")]
+        Bearer = 0,
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Issuer 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CredentialSubject 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("givenName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string GivenName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("familyName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FamilyName { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("alumniOf", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AlumniOf { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Issuer2 
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public enum V1_CreateDidDocumentMethod
+    {
+        [System.Runtime.Serialization.EnumMember(Value = @"key")]
+        Key = 0,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"web")]
+        Web = 1,
+    
+        [System.Runtime.Serialization.EnumMember(Value = @"sov")]
+        Sov = 2,
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Data 
+    {
+        [Newtonsoft.Json.JsonProperty("did", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Did { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("localMetadata", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public V1_DidMetadata LocalMetadata { get; set; } = new V1_DidMetadata();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Credential 
+    {
+        /// <summary>The Issuer DID</summary>
+        [Newtonsoft.Json.JsonProperty("issuerDid", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string IssuerDid { get; set; }
+    
+        /// <summary>Meaningful name for the Credential</summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+    
+        /// <summary>JSON-LD schema where the term is referenced</summary>
+        [Newtonsoft.Json.JsonProperty("context", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<System.Uri> Context { get; set; } = new System.Collections.ObjectModel.Collection<System.Uri>();
+    
+        /// <summary>The Credential Type</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Type { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class FederatedProvider 
+    {
+        /// <summary>Base url for provider well-known endpoint</summary>
+        [Newtonsoft.Json.JsonProperty("url", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Url { get; set; }
+    
+        /// <summary>OIDC scope associated with claims in the provider</summary>
+        [Newtonsoft.Json.JsonProperty("scope", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Scope { get; set; }
+    
+        /// <summary>Client ID configured in the provider</summary>
+        [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string ClientId { get; set; }
+    
+        /// <summary>Client secret configured in the provider</summary>
+        [Newtonsoft.Json.JsonProperty("clientSecret", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string ClientSecret { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class ClaimMappings 
+    {
+        /// <summary>The credential claim name in JSON-LD terms</summary>
+        [Newtonsoft.Json.JsonProperty("jsonLdTerm", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string JsonLdTerm { get; set; }
+    
+        /// <summary>The credential claim name in OIDC terms</summary>
+        [Newtonsoft.Json.JsonProperty("oidcClaim", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string OidcClaim { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class FederatedProvider2 
+    {
+        /// <summary>URL where the authorization code gets sent</summary>
+        [Newtonsoft.Json.JsonProperty("callbackUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri CallbackUrl { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class ClaimMappings2 
+    {
+        /// <summary>Fully qualified JSON-LD term</summary>
+        [Newtonsoft.Json.JsonProperty("jsonLdFqn", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string JsonLdFqn { get; set; }
+    
+        /// <summary>The credential claim name in OIDC terms</summary>
+        [Newtonsoft.Json.JsonProperty("oidcClaim", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string OidcClaim { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CredentialQuery 
+    {
+        [Newtonsoft.Json.JsonProperty("required", Required = Newtonsoft.Json.Required.Always)]
+        public bool Required { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("reason", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Reason { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("example", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Example> Example { get; set; } = new System.Collections.ObjectModel.Collection<Example>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CredentialQuery2 
+    {
+        [Newtonsoft.Json.JsonProperty("reason", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Reason { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("frame", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Frame Frame { get; set; } = new Frame();
+    
+        [Newtonsoft.Json.JsonProperty("trustedIssuer", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<TrustedIssuer> TrustedIssuer { get; set; } = new System.Collections.ObjectModel.Collection<TrustedIssuer>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Request 
+    {
+        /// <summary>Presentation Request id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+    
+        /// <summary>Presentation Request schema</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Type { get; set; }
+    
+        /// <summary>Verifier DID</summary>
+        [Newtonsoft.Json.JsonProperty("from", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string From { get; set; }
+    
+        /// <summary>Creation time</summary>
+        [Newtonsoft.Json.JsonProperty("created_time", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Created_time { get; set; }
+    
+        /// <summary>Expiry time</summary>
+        [Newtonsoft.Json.JsonProperty("expires_time", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Expires_time { get; set; }
+    
+        /// <summary>Endpoint that will receive the Verifiable Presentation</summary>
+        [Newtonsoft.Json.JsonProperty("reply_url", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Reply_url { get; set; }
+    
+        /// <summary>Verifier DID</summary>
+        [Newtonsoft.Json.JsonProperty("reply_to", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Reply_to { get; set; }
+    
+        /// <summary>Definition of what type of Credential is being requested</summary>
+        [Newtonsoft.Json.JsonProperty("body", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Body6 Body { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Query 
+    {
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Query2 
+    {
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body4 
+    {
+        [Newtonsoft.Json.JsonProperty("revocationListCredential", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string RevocationListCredential { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("revocationListIndex", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string RevocationListIndex { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("isRevoked", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsRevoked { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Jwe 
+    {
+        [Newtonsoft.Json.JsonProperty("protected", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Protected { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("recipients", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<Recipients> Recipients { get; set; } = new System.Collections.ObjectModel.Collection<Recipients>();
+    
+        [Newtonsoft.Json.JsonProperty("ciphertext", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Ciphertext { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("iv", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Iv { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("tag", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Tag { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body5 
+    {
+        [Newtonsoft.Json.JsonProperty("uri", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Uri { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Example 
+    {
+        /// <summary>array of contexts</summary>
+        [Newtonsoft.Json.JsonProperty("@context", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<object> Context { get; set; } = new System.Collections.ObjectModel.Collection<object>();
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Type { get; set; }
+    
+        /// <summary>array of trusted issuers</summary>
+        [Newtonsoft.Json.JsonProperty("trustedIssuer", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<TrustedIssuer2> TrustedIssuer { get; set; } = new System.Collections.ObjectModel.Collection<TrustedIssuer2>();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Frame 
+    {
+        [Newtonsoft.Json.JsonProperty("@context", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<object> Context { get; set; } = new System.Collections.ObjectModel.Collection<object>();
+    
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Type { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("credentialSubject", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public CredentialSubject2 CredentialSubject { get; set; } = new CredentialSubject2();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class TrustedIssuer 
+    {
+        [Newtonsoft.Json.JsonProperty("required", Required = Newtonsoft.Json.Required.Always)]
+        public bool Required { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Issuer { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Body6 : V1_PresentationTemplateResponse
+    {
+        /// <summary>Challenge to match the response to a request</summary>
+        [Newtonsoft.Json.JsonProperty("challenge", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Challenge { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Recipients 
+    {
+        [Newtonsoft.Json.JsonProperty("header", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Header Header { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("encryption_key", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Encryption_key { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class TrustedIssuer2 
+    {
+        [Newtonsoft.Json.JsonProperty("required", Required = Newtonsoft.Json.Required.Always)]
+        public bool Required { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Issuer { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CredentialSubject2 
+    {
+        [Newtonsoft.Json.JsonProperty("@explicit", Required = Newtonsoft.Json.Required.Always)]
+        public bool Explicit { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("educationalCredentialAwarded", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public object EducationalCredentialAwarded { get; set; } = new object();
+    
+        [Newtonsoft.Json.JsonProperty("familyName", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public object FamilyName { get; set; } = new object();
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Header 
+    {
+        [Newtonsoft.Json.JsonProperty("alg", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Alg { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("kid", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Kid { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("epk", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Epk Epk { get; set; } = new Epk();
+    
+        [Newtonsoft.Json.JsonProperty("skid", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Skid { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class Epk 
+    {
+        [Newtonsoft.Json.JsonProperty("kty", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Kty { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("crv", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Crv { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("x", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string X { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
         }
+    
+    
     }
 
 }

@@ -82,8 +82,11 @@ namespace NationalDrivingLicense
 
             var createCredentialsUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/credentials";
 
-            // Todo create an credential
-            var payload = new MattrCreateDid();
+            var payload = new MattrOpenApiClient.V1_CreateDidDocument
+            {
+                Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
+                Options = new MattrOptions()
+            };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createCredentialsUrl);
 
@@ -113,7 +116,11 @@ namespace NationalDrivingLicense
 
             var createDidUrl = "https://damianbod-sandbox.vii.mattr.global/core/v1/dids";
 
-            var payload = new MattrCreateDid();
+            var payload = new MattrOpenApiClient.V1_CreateDidDocument
+            {
+                Method = MattrOpenApiClient.V1_CreateDidDocumentMethod.Key,
+                Options = new MattrOptions()
+            };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
 
@@ -134,5 +141,16 @@ namespace NationalDrivingLicense
 
             return result;
         }
+    }
+    public class MattrOptions
+    {
+        /// <summary>
+        /// The supported key types for the DIDs are ed25519 and bls12381g2. 
+        /// If the keyType is omitted, the default key type that will be used is ed25519.
+        /// 
+        /// If the keyType in options is set to bls12381g2 a DID will be created with 
+        /// a BLS key type which supports BBS+ signatures for issuing ZKP-enabled credentials.
+        /// </summary>
+        public string keyType { get; set; } = "ed25519";
     }
 }
