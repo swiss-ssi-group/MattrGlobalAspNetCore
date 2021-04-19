@@ -20,6 +20,14 @@ namespace NationalDrivingLicense
         private readonly MattrConfiguration _mattrConfiguration;
         private readonly MattrTokenApiService _mattrTokenApiService;
 
+        public async Task<string> CreateCredentialsAndCallback()
+        {
+            // create a new one
+            var driverLicenseCredentials = await CreateMattrVc();
+            await _driverLicenseService.UpdateDriverLicense(driverLicenseCredentials);
+            return driverLicenseCredentials.OfferUrl;
+        }
+
         public MattrCredentialsService(IConfiguration configuration,
             DriverLicenseCredentialsService driverLicenseService,
             IHttpClientFactory clientFactory,
@@ -33,7 +41,7 @@ namespace NationalDrivingLicense
             _mattrTokenApiService = mattrTokenApiService;
         }
 
-        public async Task<string> GetDriverLicenseCredential(string username)
+        public async Task<string> GetDriverLicenseCredentialIssuerUrl(string username)
         {
             if (!await _driverLicenseService.HasIdentityDriverLicense(username))
             {
@@ -42,18 +50,15 @@ namespace NationalDrivingLicense
 
             var driverLicenseExists = await _driverLicenseService.GetDriverLicense(username);
 
-            if (driverLicenseExists != null && !string.IsNullOrEmpty(driverLicenseExists.OfferUrl))
+            if (driverLicenseExists != null)
             {
-                return driverLicenseExists.OfferUrl;
+                return driverLicenseExists.V1_CreateOidcIssuerResponse.Id;
             }
 
-            // create a new one
-            var driverLicenseCredentials = await CreateMattrVc();
-            await _driverLicenseService.UpdateDriverLicense(driverLicenseCredentials);
-            return driverLicenseCredentials.OfferUrl;
+            throw new Exception("whoops something went wrong!");
         }
 
-        private async Task<DriverLicenseCredentials> CreateMattrVc()
+        private async Task<string> CreateMattrVc()
         {
             HttpClient client = _clientFactory.CreateClient();
             var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
@@ -61,13 +66,15 @@ namespace NationalDrivingLicense
                 new AuthenticationHeaderValue("Bearer", accessToken);
             client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 
-            // var did = await CreateMattrDid(client);
-            var vc = await CreateMattrCredentials(client);
-            return vc;
+            var did = await CreateMattrDid(client);
+            var vc = await CreateMattrCredentialIssuer(client, did);
+
+            // TODO persist to the database
+            var callback = $"https://damianbod-sandbox.vii.mattr.global/ext/oidc/v1/issuers/{vc.Id}/federated/callback";
+            return callback;
         }
 
-        
-        private async Task<DriverLicenseCredentials> CreateMattrCredentials(HttpClient client)
+        private async Task<V1_CreateOidcIssuerResponse> CreateMattrCredentialIssuer(HttpClient client, V1_CreateDidResponse did)
         {
             // create vc, post to credentials api
             // https://learn.mattr.global/api-ref/#operation/createCredential
@@ -80,7 +87,7 @@ namespace NationalDrivingLicense
             {
                 Credential = new Credential
                 {
-                    IssuerDid = "",
+                    IssuerDid = did.Did,
                     Name = "National Driving License",
                     Context = new List<Uri> { new Uri("https://ndl") },
                     Type = new List<string> { "driving_license" }
@@ -116,17 +123,14 @@ namespace NationalDrivingLicense
                     var v1CreateOidcIssuerResponse = await JsonSerializer.DeserializeAsync<V1_CreateOidcIssuerResponse>(
                             await tokenResponse.Content.ReadAsStreamAsync());
 
-                    return new DriverLicenseCredentials
-                    {
-                        // TODO set data
-                    };
+                    return v1CreateOidcIssuerResponse;
                 }
 
                 var error = await tokenResponse.Content.ReadAsStringAsync();
 
             }
 
-            return null;
+            throw new Exception("whoops something went wrong");
         }
 
         //private async Task<DriverLicenseCredentials> CreateMattrCredentials(HttpClient client)
@@ -166,7 +170,7 @@ namespace NationalDrivingLicense
         //    return null;
         //}
 
-        private async Task<string> CreateMattrDid(HttpClient client)
+        private async Task<V1_CreateDidResponse> CreateMattrDid(HttpClient client)
         {
             // create did , post to dids 
             // https://learn.mattr.global/api-ref/#operation/createDid
@@ -192,15 +196,13 @@ namespace NationalDrivingLicense
                     var v1CreateDidResponse = await JsonSerializer.DeserializeAsync<V1_CreateDidResponse>(
                             await tokenResponse.Content.ReadAsStreamAsync());
 
-                    result = await tokenResponse.Content.ReadAsStringAsync();
-                    return result;
+                    return v1CreateDidResponse;
                 }
 
                 var error = await tokenResponse.Content.ReadAsStringAsync();
-
             }
 
-            return result;
+            return null;
         }
     }
     public class MattrOptions

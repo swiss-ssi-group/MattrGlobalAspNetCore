@@ -1,0 +1,33 @@
+﻿@page
+@model NationalDrivingLicense.Pages.AdminModel
+@{
+}
+
+<h3>@Model.DriverLicenseMessage</h3>
+<br />
+<br />
+
+ <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <div class="qr" id="qrCode"></div>
+        </div>
+        <div class="col-sm">
+            <div>
+                <img src="~/ndl_car_01.png" width="200" alt="Driver License">
+                <div>
+                    <b>Driver Licence Callback Credentials</b>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Callback</dt>
+                        <dd class="col-sm-8">
+                            @Model.Callback
+                        </dd>                          
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
