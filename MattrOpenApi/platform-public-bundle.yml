@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: Platform Core API
-  version: v1
+  version: v1.0.1
   description: |
     # Introduction
     The Platform Core API defines a set of capabilities that can be used to manage a tenant of the MATTR Platform.
@@ -97,66 +97,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  '@context':
-                    type: array
-                    items:
-                      properties: {}
-                  type:
-                    type: array
-                    items:
-                      properties: {}
-                  issuer:
-                    type: string
-                    minLength: 1
-                  issuanceDate:
-                    type: string
-                    minLength: 1
-                  credentialSubject:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        minLength: 1
-                      origin:
-                        type: string
-                        minLength: 1
-                    required:
-                      - id
-                      - origin
-                  proof:
-                    type: object
-                    properties:
-                      jws:
-                        type: string
-                        minLength: 1
-                      type:
-                        type: string
-                        minLength: 1
-                      created:
-                        type: string
-                        minLength: 1
-                      proofPurpose:
-                        type: string
-                        minLength: 1
-                      verificationMethod:
-                        type: string
-                        minLength: 1
-                    required:
-                      - jws
-                      - type
-                      - created
-                      - proofPurpose
-                      - verificationMethod
-                required:
-                  - '@context'
-                  - type
-                  - issuer
-                  - issuanceDate
-                  - credentialSubject
-                  - proof
+                $ref: '#/components/schemas/Dids.v1_GetDidConfigJsonldResponse'
               examples:
                 Example:
                   value:
@@ -228,14 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  didDocument:
-                    type: object
-                  registrationStatus:
-                    $ref: '#/paths/~1v1~1dids/post/responses/201/content/application~1json/schema/properties/registrationStatus'
-                  localMetadata:
-                    $ref: '#/paths/~1v1~1dids/post/responses/201/content/application~1json/schema/properties/metadata'
+                $ref: '#/components/schemas/Dids.v1_GetDidResponse'
               examples:
                 'Example did:key':
                   value:
@@ -271,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 '404':
                   value:
@@ -286,6 +220,7 @@ paths:
               --header 'Accept: application/json' \
               --header 'Authorization: Bearer REPLACE_ACCESS_TOKEN'
     delete:
+      description: Delete a DID
       tags:
         - DIDs
       summary: Delete a DID
@@ -297,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 '404':
                   value:
@@ -312,35 +247,15 @@ paths:
               --header 'Accept: application/json' \
               --header 'Authorization: Bearer REPLACE_ACCESS_TOKEN'
     parameters:
-      - name: id
-        in: path
-        description: Issuer ID
-        schema:
-          type: string
-          format: uuid
-          example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
-        required: true
+      - $ref: '#/components/parameters/Did'
   /v1/dids:
     get:
       tags:
         - DIDs
       summary: Retrieve a list of DIDs
       parameters:
-        - schema:
-            type: number
-            example: 2
-            maximum: 1000
-            minimum: 1
-            default: 100
-          in: query
-          name: limit
-          description: 'Range size of the list, default 100'
-        - schema:
-            type: string
-            example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1h
-          in: query
-          name: cursor
-          description: Starting point for the list
+        - $ref: '#/components/parameters/Common_Limit'
+        - $ref: '#/components/parameters/Common_Cursor'
       description: |
         Returns a list of all DIDs (Decentralized Identifiers) managed by the tenant and their associated meta-data.
       responses:
@@ -349,25 +264,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                        - did
-                        - localMetadata
-                      properties:
-                        did:
-                          type: string
-                          example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
-                        localMetadata:
-                          $ref: '#/paths/~1v1~1dids/post/responses/201/content/application~1json/schema/properties/metadata'
+                $ref: '#/components/schemas/Dids.v1_GetDidsResponse'
               examples:
                 Example:
                   value:
@@ -449,24 +346,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                method:
-                  type: string
-                  enum:
-                    - key
-                    - web
-                    - sov
-                options:
-                  type: object
-                  description: 'To define a key type for a did:key or to define a domain for did:web'
-                  minItems: 1
-                  example:
-                    keyType: bls12381g2
-              required:
-                - method
-              description: ''
-              title: ''
+              $ref: '#/components/schemas/Dids.v1_CreateDidDocument'
             examples:
               'Create did:key':
                 value:
@@ -479,42 +359,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  registrationStatus:
-                    type: string
-                    enum:
-                      - COMPLETED
-                      - PROCESSING
-                  did:
-                    type: string
-                    example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
-                  metadata:
-                    type: object
-                    required:
-                      - keys
-                    properties:
-                      registered:
-                        type: number
-                        description: Timestamp of when the DID was registered
-                        example: 1583233799656
-                      keys:
-                        type: array
-                        description: An array of keys that describe the relationship between keys listed in the DID document and keys that exist in a connected KMS.
-                        items:
-                          type: object
-                          properties:
-                            kmsKeyId:
-                              type: string
-                              example: ad8facc7-e7f6-4af6-9baa-2f7abd71c928
-                            didDocumentKeyId:
-                              type: string
-                              example: 'did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH#z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH'
-                      initialDidDocument:
-                        type: object
-                        description: The DID document that was created for the DID
-                        items:
-                          $ref: '#/paths/~1v1~1dids~1%7Bid%7D/get/responses/200/content/application~1json/schema/properties/didDocument'
+                $ref: '#/components/schemas/Dids.v1_CreateDidResponse'
               examples:
                 'did:key':
                   value:
@@ -551,35 +396,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - message
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                  details:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          description: The value that was provided
-                        msg:
-                          type: string
-                          example: Invalid value
-                          description: Description of why the request is invalid
-                        param:
-                          type: string
-                          example: id
-                          description: The parameter that is invalid
-                        location:
-                          type: string
-                          example: body
-                          description: 'The location in either body, query, path or params'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Unsupported method:
                   value:
@@ -615,67 +432,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                '@context':
-                  type: array
-                  description: 'Additional to any JSON-LD contexts ''https://www.w3.org/2018/credentials/v1'' is always required.'
-                  minLength: 1
-                  example:
-                    - 'https://www.w3.org/2018/credentials/v1'
-                    - 'https://schema.org'
-                  items:
-                    type: string
-                subjectId:
-                  type: string
-                  description: 'Generally a DID, identifier of who/what the subject is'
-                  example: 'did:example:abcdb1f712ebc6f1c276e12ec21'
-                  minLength: 1
-                tag:
-                  type: string
-                  description: 'An optional tag to filter by, will not be part of the issued credential'
-                  example: identifier123
-                  minLength: 1
-                  maxLength: 1024
-                type:
-                  type: array
-                  example: '[VerifiableCredential, AlumniCredential]'
-                  description: 'Types for the Credential, VerifiableCredential must be the first value'
-                  items:
-                    type: string
-                    description: 'Describes the additional specific types of the claimed data, must be within the scope of @context, resulting credential will always includes VerifiableCredential'
-                claims:
-                  type: object
-                  description: Each value is a claim that is defined by one of the JSON-LD schemas.
-                  minItems: 1
-                  example:
-                    givenName: Jamie
-                    familyName: Doe
-                    alumniOf: <span lang="en">Example University</span>
-                issuer:
-                  type: object
-                  description: Includes Issuer id (DID) and domain name
-                  required:
-                    - id
-                    - name
-                  properties:
-                    id:
-                      type: string
-                      example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
-                    name:
-                      type: string
-                      example: 'https://example.edu/issuers/565049'
-                persist:
-                  type: boolean
-                  description: Flag to indicate whether the full credential should be stored in platform
-                revocable:
-                  type: boolean
-                  description: Flag to indicate if the credential needs to support revocation
-              required:
-                - '@context'
-                - type
-                - claims
-                - issuer
+              $ref: '#/components/schemas/Credentials.v1_CreateCredentialRequest'
             examples:
               Create a Credential:
                 value:
@@ -702,51 +459,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                x-examples: {}
-                title: ''
-                properties:
-                  id:
-                    type: string
-                    example: 873277c0-a162-11ea-8a1d-a111119347e6
-                  credential:
-                    $ref: '#/paths/~1v1~1revocation-lists~1%7Bid%7D/get/responses/200/content/application~1json/schema'
-                  tag:
-                    type: string
-                    example: identifier123
-                  credentialStatus:
-                    type: object
-                    description: Credential status location information
-                    properties:
-                      id:
-                        type: string
-                        description: Unique ID for the credential status
-                        example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3#1'
-                      type:
-                        type: string
-                        description: Indicates that the status contains revocation information
-                        example: RevocationList2020Status
-                      revocationListIndex:
-                        type: integer
-                        example: 1
-                        description: The location within the revocation list for the credential
-                      revocationListCredential:
-                        type: string
-                        description: The location of the revocation list
-                        example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3'
-                  issuanceDate:
-                    type: string
-                    example: '2020-05-02T12:06:29.156Z'
-                required:
-                  - id
-                  - credential
-                  - issuanceDate
+                $ref: '#/components/schemas/Credentials.v1_CreateCredentialResponse'
         '400':
           description: 'Bad request, Invalid request body'
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       description: |
         Creates a Verifiable Credential (VC or just Credential) in a JSON-LD format adhering to the [W3C VC Data Model spec]( https://www.w3.org/TR/vc-data-model/).
 
@@ -842,16 +561,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/paths/~1v1~1credentials~1%7Bid%7D/get/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/Credentials.v1_GetCredentialsResponse'
               examples:
                 List of credential data:
                   value:
@@ -894,7 +604,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Cursor not found:
                   value:
@@ -956,26 +666,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                x-examples: {}
-                title: ''
-                properties:
-                  id:
-                    type: string
-                    example: 873277c0-a162-11ea-8a1d-a111119347e6
-                  credential:
-                    $ref: '#/paths/~1v1~1revocation-lists~1%7Bid%7D/get/responses/200/content/application~1json/schema'
-                  tag:
-                    type: string
-                    example: identifier123
-                  credentialStatus:
-                    $ref: '#/paths/~1v1~1credentials/post/responses/201/content/application~1json/schema/properties/credentialStatus'
-                  issuanceDate:
-                    type: string
-                    example: '2020-05-02T12:06:29.156Z'
-                required:
-                  - id
-                  - issuanceDate
+                $ref: '#/components/schemas/Credentials.v1_GetCredentialResponse'
               examples:
                 With persisted credential:
                   value:
@@ -1023,13 +714,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: retrieveCredential
       x-codeSamples:
         - lang: curl
@@ -1056,13 +747,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Credential ID not found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: removeCredential
       x-codeSamples:
         - lang: curl
@@ -1092,11 +783,7 @@ paths:
         content:
           application/json:
             schema:
-              title: VerifyCredentialRequest
-              type: object
-              properties:
-                credential:
-                  $ref: '#/paths/~1v1~1revocation-lists~1%7Bid%7D/get/responses/200/content/application~1json/schema'
+              $ref: '#/components/schemas/Credentials.v1_VerifyCredentialRequest'
       responses:
         '200':
           description: Credential has been processed
@@ -1174,16 +861,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                isRevoked:
-                  type: boolean
-                  description: 'true if the credential is revoked, false otherwise'
-                  example: false
-              required:
-                - isRevoked
-              description: ''
-              title: ''
+              $ref: '#/components/schemas/Credentials.v1_SetRevocationStatus'
             examples:
               Example:
                 value:
@@ -1196,7 +874,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Credential not revocable:
                   value:
@@ -1220,7 +898,8 @@ paths:
                   value:
                     code: string
                     message: string
-                    details: {}
+                    details:
+                      - {}
       operationId: setRevocationStatus
       x-codeSamples:
         - lang: curl
@@ -1249,16 +928,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  isRevoked:
-                    type: boolean
-                    description: 'true if the credential is revoked, false otherwise'
-                    example: false
-                required:
-                  - isRevoked
-                description: ''
-                title: ''
+                $ref: '#/components/schemas/Credentials.v1_RevocationStatusResponse'
               examples:
                 Revocation Status:
                   value:
@@ -1268,7 +938,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Credential not revocable:
                   value:
@@ -1292,7 +962,8 @@ paths:
                   value:
                     code: string
                     message: string
-                    details: {}
+                    details:
+                      - {}
       operationId: getRevocationStatus
       x-codeSamples:
         - lang: curl
@@ -1318,87 +989,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  '@context':
-                    type: array
-                    example:
-                      - 'https://www.w3.org/2018/credentials/v1'
-                      - 'https://www.w3.org/2018/credentials/examples/v1'
-                    items:
-                      type: string
-                      minLength: 1
-                      example: '"https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"'
-                  type:
-                    type: array
-                    example:
-                      - VerifiableCredential
-                      - AlumniCredential
-                    items:
-                      type: string
-                      minLength: 1
-                      example: '"AlumniCredential", "VerifiableCredential"'
-                  issuer:
-                    type: object
-                    description: Includes issuer id (did) and its domain (inside name parameter)
-                    properties:
-                      id:
-                        type: string
-                        example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
-                      name:
-                        type: string
-                        example: Example University
-                  issuanceDate:
-                    type: string
-                    format: date-time
-                    example: '2020-05-02T12:06:29.156Z'
-                  credentialStatus:
-                    $ref: '#/paths/~1v1~1credentials/post/responses/201/content/application~1json/schema/properties/credentialStatus'
-                  credentialSubject:
-                    type: object
-                    example:
-                      id: 'did:example:abcdb1f712ebc6f1c276e12ec21'
-                      givenName: Jamie
-                      familyName: Doe
-                    properties:
-                      id:
-                        type: string
-                        example: 'did:key:z6MkoPL5UbUcmKstxgftmFQfy246ocJ3YpJntgRM9f9eAWNY'
-                      givenName:
-                        type: string
-                        example: Jamie
-                      familyName:
-                        type: string
-                        example: Doe
-                      alumniOf:
-                        type: string
-                        example: Example University
-                  proof:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        example: Ed25519Signature2018
-                      created:
-                        type: string
-                        format: date-time
-                        example: '2020-05-02T12:06:29Z'
-                      jws:
-                        type: string
-                        description: Compact form of JWS
-                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-                      proofPurpose:
-                        type: string
-                        example: assertionMethod
-                      verificationMethod:
-                        type: string
-                        example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
-                required:
-                  - '@context'
-                  - type
-                  - issuanceDate
-                  - credentialSubject
-                  - proof
+                $ref: '#/components/schemas/VerifiableCredential'
               examples:
                 Revocation List:
                   value:
@@ -1425,7 +1016,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Revocation list is not found:
                   value:
@@ -1457,14 +1048,7 @@ paths:
         description: Revocation list ID
   '/v1/credentials/{id}/revocation-status/notification':
     parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: 873277c0-a162-11ea-8a1d-a111119347e6
-        description: Credential ID
+      - $ref: '#/components/parameters/Id'
     post:
       summary: Create a revocation message payload
       operationId: createRevNotification
@@ -1486,7 +1070,8 @@ paths:
                   to:
                     type: array
                     items:
-                      required: []
+                      required:
+                        - string
                       properties: {}
                   from:
                     type: string
@@ -1527,7 +1112,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1offers/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/CreatePayloadRequest'
         description: Create a JWM message payload
       tags:
         - Revocation
@@ -1542,38 +1127,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - didUrl
-                - payload
-              properties:
-                didUrl:
-                  type: string
-                  description: The did keyId that will be used to sign the message with.
-                  example: 'did:example:abcdefghijkl#key1'
-                payload:
-                  type: object
-                  description: A JSON Object plaintext message
-                  example:
-                    msg: this is a message
+              $ref: '#/components/schemas/SignMessageRequest'
       responses:
         '200':
           description: Message signed
           content:
             application/json:
               schema:
-                title: SignMessageResponse
-                type: string
-                description: Signed message in a response
-                example: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa21mazNtMldIQlVxVm94SlZ3R1NQejVrYmFKNnpBMXRwN1JRWUJiUUdtczNoI3o2TWttZmszbTJXSEJVcVZveEpWd0dTUHo1a2JhSjZ6QTF0cDdSUVlCYlFHbXMzaCJ9.eyJtc2ciOiJUaGlzIGlzIGEgcGF5bG9hZCJ9.5E9qEmmSOMHLABAr4A9VzuNKFaO4EDo2GSCMoxQm9zsE7eCmEEuaAxtNhOUdd-Wvj64vqBBVl84XB1Yg7X9wBg
-                required:
-                  - ciphertext
+                $ref: '#/components/schemas/SignMessageResponse'
         '400':
           description: Error signing message
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       description: |-
         Creates a signed message in the form of a JWS (JSON Web Signature) using the a specific Key from the DID (Decentralized Identifier) supplied in the request.
 
@@ -1615,12 +1182,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                jws:
-                  type: string
-                  description: Compact form of JWS
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+              $ref: '#/components/schemas/VerifyRequest'
             examples:
               Request:
                 value:
@@ -1631,25 +1193,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  didUrl:
-                    type: string
-                    description: The didUrl included on the jws object
-                    example: 'did:key:z6MkqesDwy7M5wPEoodrMSwgQFFWwEDtmx8X4V1zF7zho3ri#z6MkiKdPk7cYsCySi8BgPnjsZpUkb3aoHsBN4NQKQCSDKEdU'
-                  did:
-                    type: string
-                    description: The did parsed from the didUrl
-                    example: 'did:key:z6MkqesDwy7M5wPEoodrMSwgQFFWwEDtmx8X4V1zF7zho3ri'
-                  verified:
-                    type: boolean
-                    description: Result of jws verification
-                    example: true
-                  payload:
-                    oneOf:
-                      - type: string
-                      - type: object
-                    description: The payload of the verified message
+                $ref: '#/components/schemas/VerifyMessageResponse'
               examples:
                 Verified:
                   value:
@@ -1668,7 +1212,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Verification failed:
                   value:
@@ -1841,7 +1385,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Sender DID not found:
                   value:
@@ -1894,24 +1438,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  payload:
-                    oneOf:
-                      - type: string
-                      - type: object
-                  senderDidUrl:
-                    type: string
-                  senderPublicJwk:
-                    type: object
-                  recipientDidUrl:
-                    type: string
+                $ref: '#/components/schemas/DecryptMessageResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Recipient DID not found:
                   value:
@@ -1935,16 +1468,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                to:
-                  type: string
-                  description: recipient DID
-                message:
-                  oneOf:
-                    - type: string
-                    - type: object
-                  description: JWE message
+              $ref: '#/components/schemas/SendMessageRequest'
             examples:
               Send message:
                 value:
@@ -1982,7 +1506,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
   /oidc/v1/issuers:
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
@@ -2012,120 +1536,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                credential:
-                  type: object
-                  required:
-                    - issuerDid
-                    - name
-                    - context
-                    - type
-                  description: Credential information
-                  properties:
-                    issuerDid:
-                      type: string
-                      description: The Issuer DID
-                      example: 'did:key:z6MkjBWPPa1njEKygyr3LR3pRKkqv714vyTkfnUdP6ToFSH5'
-                    name:
-                      type: string
-                      description: Meaningful name for the Credential
-                      example: University Attendance Credential
-                    context:
-                      type: array
-                      description: JSON-LD schema where the term is referenced
-                      example:
-                        - 'https://schema.org'
-                      items:
-                        type: string
-                        format: uri
-                    type:
-                      type: array
-                      description: The Credential Type
-                      example:
-                        - AlumniCredential
-                      items:
-                        type: string
-                federatedProvider:
-                  type: object
-                  required:
-                    - url
-                    - clientId
-                    - clientSecret
-                  description: Federated OIDC Provider details
-                  properties:
-                    url:
-                      type: string
-                      format: uri
-                      description: Base url for provider well-known endpoint
-                      example: 'https://example-university.au.auth0.com'
-                    scope:
-                      type: array
-                      description: OIDC scope associated with claims in the provider
-                      example:
-                        - openid
-                        - profile
-                        - email
-                      items:
-                        type: string
-                    clientId:
-                      type: string
-                      description: Client ID configured in the provider
-                      example: vJ0SCKchr4XjC0xHNE8DkH6Pmlg2lkCN
-                    clientSecret:
-                      type: string
-                      description: Client secret configured in the provider
-                      example: QNwfa4Yi4Im9zy1u_15n7SzWKt-9G5cdH0r1bONRpUPfN-UIRaaXv_90z8V6-OjH
-                claimMappings:
-                  type: array
-                  description: Map OpenID Connect terms to JSON-LD terms
-                  items:
-                    type: object
-                    required:
-                      - jsonLdTerm
-                      - oidcClaim
-                    properties:
-                      jsonLdTerm:
-                        type: string
-                        description: The credential claim name in JSON-LD terms
-                        example: alumniOf
-                      oidcClaim:
-                        type: string
-                        description: The credential claim name in OIDC terms
-                        example: alumni_of
-              required:
-                - credential
-                - federatedProvider
-                - claimMappings
+              $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerRequest'
       responses:
         '201':
           description: Issuer created
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        description: Issuer id
-                        example: 983c0a86-204f-4431-9371-f5a22e506599
-                      federatedProvider:
-                        type: object
-                        properties:
-                          callbackUrl:
-                            type: string
-                            format: uri
-                            description: URL where the authorization code gets sent
-                            example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/federated/callback'
-                  - $ref: '#/paths/~1oidc~1v1~1issuers/post/requestBody/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2166,20 +1590,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    $ref: '#/paths/~1oidc~1v1~1issuers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_GetOidcIssuersResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2201,14 +1618,7 @@ paths:
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - name: id
-        in: path
-        description: Issuer ID
-        schema:
-          type: string
-          format: uuid
-          example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
-        required: true
+      - $ref: '#/components/parameters/IssuerId'
     get:
       operationId: getOidcIssuer
       tags:
@@ -2221,13 +1631,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1issuers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2243,7 +1653,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Issuer not found:
                   value:
@@ -2288,7 +1698,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1oidc~1v1~1issuers/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerRequest'
         description: Update an Issuer
       responses:
         '200':
@@ -2296,13 +1706,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1issuers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2317,7 +1727,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Issuer not found:
                   value:
@@ -2346,7 +1756,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2362,7 +1772,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Issuer not found:
                   value:
@@ -2384,7 +1794,7 @@ paths:
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/IssuerId'
     post:
       operationId: createOidcIssuerClient
       tags:
@@ -2402,73 +1812,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Meaningful name for this Client
-                  example: OIDC Client for Wallet
-                redirectUris:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: Redirection URI to which the response will be sent
-                  example:
-                    - 'https://example.com/callback'
-                responseTypes:
-                  type: array
-                  items:
-                    type: string
-                  description: Determines the authorization processing flow
-                  example:
-                    - code
-                grantTypes:
-                  type: array
-                  items:
-                    type: string
-                  description: OAuth Grant Type
-                  example:
-                    - authorization_code
-                tokenEndpointAuthMethod:
-                  type: string
-                  description: OAuth Token Endpoint Authentication Method
-                  example: client_secret_post
-                idTokenSignedResponseAlg:
-                  type: string
-                  description: 'Algorithm must match configured jwks, defaults to RS256'
-                  example: ES256
-                applicationType:
-                  type: string
-                  example: web
-              required:
-                - name
-                - redirectUris
+              $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientRequest'
       responses:
         '201':
           description: Client created
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        description: Client id
-                        example: 6a860559-21a3-4b57-9a2b-aaea3ba4683d
-                      secret:
-                        type: string
-                        description: Client secret
-                        example: PiMkTfrEmPTKRFiPzjMFvYkYu.FwR.iZGFnC
-                  - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1clients/post/requestBody/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2528,20 +1885,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_GetOidcIssuerClientsResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2559,11 +1909,11 @@ paths:
               --url https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/clients \
               --header 'Accept: application/json' \
               --header 'Authorization: Bearer REPLACE_ACCESS_TOKEN'
-  '/oidc/v1/issuers/{id}/clients/{id}':
+  '/oidc/v1/issuers/{id}/clients/{clientId}':
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/IssuerId'
       - schema:
           type: string
           format: uuid
@@ -2584,13 +1934,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2606,7 +1956,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -2640,7 +1990,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1clients/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientRequest'
         description: Update a client
       responses:
         '200':
@@ -2648,13 +1998,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2669,7 +2019,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -2717,7 +2067,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -2733,7 +2083,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -2779,151 +2129,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  authorization_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/authorize'
-                  claims_parameter_supported:
-                    type: boolean
-                    example: true
-                  claims_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - sub
-                      - sid
-                      - auth_time
-                      - iss
-                  code_challenge_methods_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - S256
-                  end_session_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/session/end'
-                  grant_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - implicit
-                      - authorization_code
-                      - refresh_token
-                  id_token_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - ES256
-                  issuer:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global'
-                  jwks_uri:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/jwks'
-                  registration_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/clients'
-                  request_object_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - RS256
-                      - PS256
-                      - ES256
-                      - EdDSA
-                  request_parameter_supported:
-                    type: boolean
-                    example: true
-                  request_uri_parameter_supported:
-                    type: boolean
-                    example: true
-                  require_request_uri_registration:
-                    type: boolean
-                    example: true
-                  response_modes_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - form_post
-                      - fragment
-                      - query
-                  response_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - code id_token
-                      - code
-                      - id_token
-                      - none
-                  scopes_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - openid
-                      - offline_access
-                  subject_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - public
-                  token_endpoint_auth_methods_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - none
-                      - client_secret_basic
-                      - client_secret_jwt
-                      - client_secret_post
-                      - private_key_jwt
-                  token_endpoint_auth_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - RS256
-                      - PS256
-                      - ES256
-                      - EdDSA
-                  token_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/token'
-                  userinfo_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/me'
-                  userinfo_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - ES256
-                  claim_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - normal
+                $ref: '#/components/schemas/Oidc-issuer.v1_OpenIdConfiguration'
       x-codeSamples:
         - lang: curl
           source: |
@@ -2935,6 +2141,8 @@ paths:
       summary: IssuerToken
       operationId: issuertoken
       description: Internal only
+      tags:
+        - Issuer Token
       responses:
         '200':
           description: OK
@@ -2946,22 +2154,24 @@ paths:
                   token:
                     type: string
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/IssuerId'
   '/oidc/v1/issuers/{id}/authorize':
     get:
       summary: IssuerAuth
       operationId: issuerAuth
       description: Internal only
+      tags:
+        - Issuer Auth
       responses:
         '200':
           description: OK
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/IssuerId'
   '/oidc/v1/issuers/{id}/offers':
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1issuers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/IssuerId'
     post:
       summary: Create an OpenId credential offer payload
       operationId: CreateOidcOfferPayload
@@ -2985,7 +2195,8 @@ paths:
                   to:
                     type: array
                     items:
-                      required: []
+                      required:
+                        - string
                       properties: {}
                   from:
                     type: string
@@ -3022,21 +2233,7 @@ paths:
         content:
           application/json:
             schema:
-              description: Create a payload
-              type: object
-              properties:
-                from:
-                  type: string
-                  minLength: 1
-                  description: DID on the tenant used in a message
-                to:
-                  type: array
-                  description: List of SubjectDIDs
-                  items:
-                    type: string
-              required:
-                - from
-                - to
+              $ref: '#/components/schemas/CreatePayloadRequest'
             examples:
               Create payload:
                 value:
@@ -3073,59 +2270,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                verifierDid:
-                  type: string
-                  description: The Verifier DID
-                  example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
-                presentationTemplateId:
-                  type: string
-                  format: uuid
-                  description: Presentation Template ID used to request certain credentials
-                  example: 364b6a1b-3600-4927-a6ac-4d66aa6bbac3
-                claimMappings:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - jsonLdFqn
-                      - oidcClaim
-                    properties:
-                      jsonLdFqn:
-                        type: string
-                        description: Fully qualified JSON-LD term
-                        example: 'http://schema.org/alumniOf'
-                      oidcClaim:
-                        type: string
-                        description: The credential claim name in OIDC terms
-                        example: alumni_of
-                  description: Map OpenID Connect terms to JSON-LD terms
-              required:
-                - verifierDid
-                - presentationTemplateId
-                - claimMappings
+              $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierRequest'
       responses:
         '201':
           description: Verifier created
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        description: Verifier id
-                        example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
-                  - $ref: '#/paths/~1oidc~1v1~1verifiers/post/requestBody/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3180,20 +2338,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    $ref: '#/paths/~1oidc~1v1~1verifiers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_GetOidcVerifiersResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3215,14 +2366,7 @@ paths:
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - name: id
-        in: path
-        required: true
-        description: Verifier ID
-        schema:
-          type: string
-          format: uuid
-          example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
+      - $ref: '#/components/parameters/VerifierId'
     get:
       operationId: getOidcVerifier
       tags:
@@ -3235,13 +2379,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1verifiers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3257,7 +2401,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Verifier not found:
                   value:
@@ -3293,7 +2437,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1oidc~1v1~1verifiers/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierRequest'
         description: Update a verifier
       responses:
         '200':
@@ -3301,13 +2445,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1verifiers/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3322,7 +2466,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Verifier not found:
                   value:
@@ -3365,7 +2509,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3381,7 +2525,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Verifier not found:
                   value:
@@ -3428,78 +2572,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Meaningful name for this Client
-                  example: OIDC Client for the verifier
-                redirectUris:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: Redirection URI to which the response will be sent
-                  example:
-                    - 'https://example.com/callback'
-                responseTypes:
-                  type: array
-                  items:
-                    type: string
-                  description: Determines the authorization processing flow
-                  example:
-                    - code
-                grantTypes:
-                  type: array
-                  items:
-                    type: string
-                  description: OAuth Grant Type
-                  example:
-                    - authorization_code
-                tokenEndpointAuthMethod:
-                  type: string
-                  description: OAuth Token Endpoint Authentication Method
-                  example: client_secret_post
-                idTokenSignedResponseAlg:
-                  type: string
-                  description: 'Algorithm must match configured jwks, defaults to RS256'
-                  example: ES256
-                applicationType:
-                  type: string
-                  example: web
-                logoUri:
-                  type: string
-                  format: uri
-                  description: The logo to display above the QR code
-                  example: 'https://example.com/logo.png'
-              required:
-                - name
-                - redirectUris
+              $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientRequest'
       responses:
         '201':
           description: Client created
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        description: Client id
-                        example: da9bb6e4-c9ae-4468-b6ac-72b90d6efd5d
-                      secret:
-                        type: string
-                        description: Client secret
-                        example: H2epdcmNJ46hXJo5opdzvhbZK9W2ZGPkQh.E
-                  - $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D~1clients/post/requestBody/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3560,20 +2646,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_GetOidcVerifierClientsResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3591,11 +2670,11 @@ paths:
               --url https://tenant.vii.mattr.global/ext/oidc/v1/verifiers/41458e5a-9092-40b7-9a26-d4eb43c5792f/clients \
               --header 'Accept: application/json' \
               --header 'Authorization: Bearer REPLACE_ACCESS_TOKEN'
-  '/oidc/v1/verifiers/{id}/clients/{id}':
+  '/oidc/v1/verifiers/{id}/clients/{clientId}':
     servers:
       - url: 'https://tenant.vii.mattr.global/ext'
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/VerifierId'
       - schema:
           type: string
           format: uuid
@@ -3616,13 +2695,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3638,7 +2717,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -3672,7 +2751,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D~1clients/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientRequest'
         description: Update a client
       responses:
         '200':
@@ -3680,13 +2759,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D~1clients/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3701,7 +2780,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -3750,7 +2829,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -3766,7 +2845,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Client not found:
                   value:
@@ -3812,151 +2891,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  authorization_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/authorize'
-                  claims_parameter_supported:
-                    type: boolean
-                    example: true
-                  claims_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - sub
-                      - sid
-                      - auth_time
-                      - iss
-                  code_challenge_methods_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - S256
-                  end_session_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/session/end'
-                  grant_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - implicit
-                      - authorization_code
-                      - refresh_token
-                  id_token_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - ES256
-                  issuer:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global'
-                  jwks_uri:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/jwks'
-                  registration_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/clients'
-                  request_object_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - RS256
-                      - PS256
-                      - ES256
-                      - EdDSA
-                  request_parameter_supported:
-                    type: boolean
-                    example: true
-                  request_uri_parameter_supported:
-                    type: boolean
-                    example: true
-                  require_request_uri_registration:
-                    type: boolean
-                    example: true
-                  response_modes_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - form_post
-                      - fragment
-                      - query
-                  response_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - code id_token
-                      - code
-                      - id_token
-                      - none
-                  scopes_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - openid
-                      - offline_access
-                  subject_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - public
-                  token_endpoint_auth_methods_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - none
-                      - client_secret_basic
-                      - client_secret_jwt
-                      - client_secret_post
-                      - private_key_jwt
-                  token_endpoint_auth_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - RS256
-                      - PS256
-                      - ES256
-                      - EdDSA
-                  token_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/token'
-                  userinfo_endpoint:
-                    type: string
-                    format: uri
-                    example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/me'
-                  userinfo_signing_alg_values_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - HS256
-                      - ES256
-                  claim_types_supported:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - normal
+                $ref: '#/components/schemas/OpenIdConfiguration'
       x-codeSamples:
         - lang: curl
           source: |
@@ -3979,40 +2914,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              oneOf:
-                - type: object
-                  properties:
-                    client_id:
-                      oneOf:
-                        - example: G1s1EPMml4L0zFd63R1YP
-                      type: string
-                    client_secret:
-                      type: string
-                      example: aYzQUXD0VtlNHhTnxt6cyJeMgLczIBm-AA87STG0narCG8P0iL78fAO7TcWjPBYKwpoZY7Sw8MWNwvqf5VVqFw
-                    grant_type:
-                      type: string
-                      example: authorization_code
-                    code:
-                      type: string
-                      example: shdT2ks5tg9b
-                    redirect_uri:
-                      type: string
-                      format: uri
-                      example: 'https://my-client-rp.example.com'
-                - type: object
-                  properties:
-                    client_id:
-                      type: string
-                    client_secret:
-                      type: string
-                    grant_type:
-                      type: string
-                      example: authorization_code
-                    refresh_token:
-                      type: string
-                    redirect_uri:
-                      type: string
-                      format: uri
+              $ref: '#/components/schemas/TokenRequest'
         description: Token endpoint request
       responses:
         '200':
@@ -4020,20 +2922,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                  token_type:
-                    type: string
-                    enum:
-                      - bearer
-                  refresh_token:
-                    type: string
-                  expires_in:
-                    type: integer
-                  id_token:
-                    type: string
+                $ref: '#/components/schemas/TokenResponse'
         '400':
           description: Bad Request
           content:
@@ -4056,14 +2945,7 @@ paths:
               --data 'code=REPLACE_CODE' \
               --data 'redirect_uri=https://example.com'
     parameters:
-      - $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D/parameters/0'
-  '/oidc/v1/verifiers/{id}/authorize':
-    get:
-      summary: Authorize
-      operationId: auth
-      description: Internal only
-    parameters:
-      - $ref: '#/paths/~1oidc~1v1~1verifiers~1%7Bid%7D/parameters/0'
+      - $ref: '#/components/parameters/VerifierId'
   /v1/presentations/templates:
     post:
       operationId: createPresTemplate
@@ -4111,148 +2993,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              title: PresentationTemplate
-              description: ''
-              properties:
-                domain:
-                  type: string
-                  description: Must match domain of the tenant
-                name:
-                  type: string
-                  description: Internal descriptor only
-                query:
-                  type: array
-                  items:
-                    anyOf:
-                      - type: object
-                        x-examples: {}
-                        title: QueryByExample
-                        properties:
-                          type:
-                            type: string
-                            example: QueryByExample
-                          credentialQuery:
-                            type: array
-                            uniqueItems: true
-                            minItems: 1
-                            items:
-                              type: object
-                              minProperties: 1
-                              properties:
-                                required:
-                                  type: boolean
-                                reason:
-                                  type: string
-                                example:
-                                  type: array
-                                  items:
-                                    type: object
-                                    properties:
-                                      '@context':
-                                        type: array
-                                        description: array of contexts
-                                        items: {}
-                                      type:
-                                        type: string
-                                      trustedIssuer:
-                                        type: array
-                                        description: array of trusted issuers
-                                        items:
-                                          type: object
-                                          properties:
-                                            required:
-                                              type: boolean
-                                            issuer:
-                                              type: string
-                                          required:
-                                            - required
-                                            - issuer
-                                    required:
-                                      - '@context'
-                                      - type
-                                      - trustedIssuer
-                              required:
-                                - required
-                                - example
-                        required:
-                          - type
-                          - credentialQuery
-                      - type: object
-                        title: QueryByFrame
-                        properties:
-                          type:
-                            type: string
-                          credentialQuery:
-                            type: array
-                            uniqueItems: true
-                            minItems: 1
-                            items:
-                              type: object
-                              properties:
-                                reason:
-                                  type: string
-                                frame:
-                                  type: object
-                                  required:
-                                    - '@context'
-                                    - type
-                                    - credentialSubject
-                                  properties:
-                                    '@context':
-                                      type: array
-                                      items:
-                                        type: object
-                                    type:
-                                      type: string
-                                      example: VerifiableCredential
-                                    credentialSubject:
-                                      type: object
-                                      required:
-                                        - '@explicit'
-                                        - educationalCredentialAwarded
-                                        - familyName
-                                      properties:
-                                        '@explicit':
-                                          type: boolean
-                                        educationalCredentialAwarded:
-                                          type: object
-                                        familyName:
-                                          type: object
-                                trustedIssuer:
-                                  type: array
-                                  uniqueItems: true
-                                  minItems: 0
-                                  items:
-                                    type: object
-                                    properties:
-                                      required:
-                                        type: boolean
-                                      issuer:
-                                        type: string
-                                    required:
-                                      - required
-                                      - issuer
-                              required:
-                                - reason
-                                - frame
-                                - trustedIssuer
-                        required:
-                          - type
-                          - credentialQuery
-                      - type: object
-                        title: DIDAuth
-                        properties:
-                          type:
-                            type: string
-                            description: DIDAuth
-                            example: DIDAuth
-                        required:
-                          - type
-              required:
-                - domain
-                - name
-                - query
+              $ref: '#/components/schemas/Presentations.v1_CreatePresentationTemplate'
             examples:
               Query by Example:
                 value:
@@ -4306,29 +3047,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: 64e45290-9980-11ea-b872-f1bee5fb328f
-                  domain:
-                    type: string
-                    example: tenant.vii.mattr.global
-                  name:
-                    type: string
-                    example: alumni_credential_request
-                  query:
-                    type: array
-                    items:
-                      anyOf:
-                        - $ref: '#/paths/~1v1~1presentations~1templates/post/requestBody/content/application~1json/schema/properties/query/items/anyOf/0'
-                        - $ref: '#/paths/~1v1~1presentations~1templates/post/requestBody/content/application~1json/schema/properties/query/items/anyOf/1'
-                        - $ref: '#/paths/~1v1~1presentations~1templates/post/requestBody/content/application~1json/schema/properties/query/items/anyOf/2'
-                required:
-                  - id
-                  - domain
-                  - name
-                  - query
+                $ref: '#/components/schemas/Presentations.v1_PresentationTemplateResponse'
               examples:
                 Created:
                   value:
@@ -4352,7 +3071,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       x-codeSamples:
         - lang: curl
           source: |
@@ -4402,19 +3121,10 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextCursor:
-                    type: string
-                    example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
-                    description: Starting point for next cursor to use in a page
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/paths/~1v1~1presentations~1templates/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Presentations.v1_PresentationTemplateArrayResponse'
       parameters:
-        - $ref: '#/paths/~1v1~1dids/get/parameters/0'
-        - $ref: '#/paths/~1v1~1dids/get/parameters/1'
+        - $ref: '#/components/parameters/Common_Limit'
+        - $ref: '#/components/parameters/Common_Cursor'
       x-codeSamples:
         - lang: curl
           source: |
@@ -4442,19 +3152,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1presentations~1templates/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Presentations.v1_PresentationTemplateResponse'
         '400':
           description: Invalid templateId parameter format
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       x-codeSamples:
         - lang: curl
           source: |
@@ -4476,13 +3186,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
       x-codeSamples:
         - lang: curl
           source: |
@@ -4501,7 +3211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1presentations~1templates/post/responses/201/content/application~1json/schema'
+                $ref: '#/components/schemas/Presentations.v1_PresentationTemplateResponse'
       description: |-
         Update a Presentation Template using the template `id`.
 
@@ -4510,13 +3220,7 @@ paths:
         content:
           application/json:
             schema:
-              title: UpdatePresentationTemplate
-              allOf:
-                - type: object
-                  properties:
-                    id:
-                      type: string
-                - $ref: '#/paths/~1v1~1presentations~1templates/post/requestBody/content/application~1json/schema'
+              $ref: '#/components/schemas/Presentations.v1_UpdatePresentationTemplate'
         description: ''
   /v1/presentations/requests:
     post:
@@ -4543,102 +3247,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - templateId
-                - did
-              properties:
-                challenge:
-                  type: string
-                  description: Challenge can be used to match the response to a request
-                  example: 64e45290-9980-11ea-b872-f1bee5fb328f
-                did:
-                  type: string
-                  description: DID of the Verifier
-                  example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
-                templateId:
-                  type: string
-                  description: Presentation Request Template id
-                  example: 64e45290-9980-11ea-b872-f1bee5fb328f
-                expiresTime:
-                  type: number
-                  description: Unix timestamp in ms after which the request will be expired
-                  example: 1592955632103
-                callbackUrl:
-                  type: string
-                  format: uri
-                  description: Endpoint that will receive the Verifiable Presentation
-                  example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
+              $ref: '#/components/schemas/Presentations.v1_CreatePresentationRequestRequest'
       responses:
         '201':
           description: Presentation Request created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: Presentation Request id
-                    example: c74128a0-9949-11ea-9554-b5a630b3c119
-                  callbackUrl:
-                    type: string
-                    format: uri
-                    description: Endpoint that will receive the Verifiable Presentation
-                    example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
-                  request:
-                    type: object
-                    description: Presentation Request Details
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        description: Presentation Request id
-                        example: c74128a0-9949-11ea-9554-b5a630b3c119
-                      type:
-                        type: string
-                        format: uri
-                        description: Presentation Request schema
-                        example: 'https://mattr.global/schemas/verifiable-presentation/request/QueryByExample'
-                      from:
-                        type: string
-                        description: Verifier DID
-                        example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
-                      created_time:
-                        type: number
-                        description: Creation time
-                        example: 1606709582907
-                      expires_time:
-                        type: number
-                        description: Expiry time
-                        example: 2594859115000
-                      reply_url:
-                        type: string
-                        description: Endpoint that will receive the Verifiable Presentation
-                        example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
-                      reply_to:
-                        type: array
-                        description: Verifier DID
-                        items:
-                          type: string
-                          example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
-                      body:
-                        description: Definition of what type of Credential is being requested
-                        allOf:
-                          - $ref: '#/paths/~1v1~1presentations~1templates/post/responses/201/content/application~1json/schema'
-                          - type: object
-                            properties:
-                              challenge:
-                                type: string
-                                format: uuid
-                                description: Challenge to match the response to a request
-                                example: e1b35ae0-9e0e-11ea-9bbf-a387b27c9e60
+                $ref: '#/components/schemas/Presentations.v1_CreatePresentationRequestResponse'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1v1~1dids/post/responses/400/content/application~1json/schema'
+                $ref: '#/components/schemas/ErrorResponse'
               examples:
                 Bad Request:
                   value:
@@ -4759,7 +3381,1474 @@ components:
       type: http
       scheme: bearer
       bearerFormat: Client registration_access_token
-  schemas: {}
+  schemas:
+    CreatePayloadRequest:
+      description: Create a payload
+      type: object
+      properties:
+        from:
+          type: string
+          minLength: 1
+          description: DID on the tenant used in a message
+        to:
+          type: array
+          description: List of SubjectDIDs
+          items:
+            type: string
+      required:
+        - from
+        - to
+    CredentialStatus:
+      type: object
+      description: Credential status location information
+      properties:
+        id:
+          type: string
+          description: Unique ID for the credential status
+          example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3#1'
+        type:
+          type: string
+          description: Indicates that the status contains revocation information
+          example: RevocationList2020Status
+        revocationListIndex:
+          type: integer
+          example: 1
+          description: The location within the revocation list for the credential
+        revocationListCredential:
+          type: string
+          description: The location of the revocation list
+          example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3'
+    DecryptMessageResponse:
+      type: object
+      properties:
+        payload:
+          oneOf:
+            - type: string
+            - type: object
+        senderDidUrl:
+          type: string
+        senderPublicJwk:
+          type: object
+        recipientDidUrl:
+          type: string
+    ED25519Signature2018:
+      type: object
+      properties:
+        type:
+          type: string
+          example: Ed25519Signature2018
+        created:
+          type: string
+          format: date-time
+          example: '2020-05-02T12:06:29Z'
+        jws:
+          type: string
+          description: Compact form of JWS
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        proofPurpose:
+          type: string
+          example: assertionMethod
+        verificationMethod:
+          type: string
+          example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                description: The value that was provided
+              msg:
+                type: string
+                example: Invalid value
+                description: Description of why the request is invalid
+              param:
+                type: string
+                example: id
+                description: The parameter that is invalid
+              location:
+                type: string
+                example: body
+                description: 'The location in either body, query, path or params'
+    InitialTokenRequest:
+      type: object
+      properties:
+        client_id:
+          oneOf:
+            - example: G1s1EPMml4L0zFd63R1YP
+          type: string
+        client_secret:
+          type: string
+          example: aYzQUXD0VtlNHhTnxt6cyJeMgLczIBm-AA87STG0narCG8P0iL78fAO7TcWjPBYKwpoZY7Sw8MWNwvqf5VVqFw
+        grant_type:
+          type: string
+          example: authorization_code
+        code:
+          type: string
+          example: shdT2ks5tg9b
+        redirect_uri:
+          type: string
+          format: uri
+          example: 'https://my-client-rp.example.com'
+    JSONObjectMessage:
+      type: object
+      description: A JSON Object plaintext message
+      example:
+        msg: this is a message
+    OpenIdConfiguration:
+      type: object
+      properties:
+        authorization_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/authorize'
+        claims_parameter_supported:
+          type: boolean
+          example: true
+        claims_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - sub
+            - sid
+            - auth_time
+            - iss
+        code_challenge_methods_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - S256
+        end_session_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/session/end'
+        grant_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - implicit
+            - authorization_code
+            - refresh_token
+        id_token_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - ES256
+        issuer:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global'
+        jwks_uri:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/jwks'
+        registration_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/clients'
+        request_object_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - RS256
+            - PS256
+            - ES256
+            - EdDSA
+        request_parameter_supported:
+          type: boolean
+          example: true
+        request_uri_parameter_supported:
+          type: boolean
+          example: true
+        require_request_uri_registration:
+          type: boolean
+          example: true
+        response_modes_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - form_post
+            - fragment
+            - query
+        response_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - code id_token
+            - code
+            - id_token
+            - none
+        scopes_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - openid
+            - offline_access
+        subject_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - public
+        token_endpoint_auth_methods_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - none
+            - client_secret_basic
+            - client_secret_jwt
+            - client_secret_post
+            - private_key_jwt
+        token_endpoint_auth_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - RS256
+            - PS256
+            - ES256
+            - EdDSA
+        token_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/token'
+        userinfo_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/me'
+        userinfo_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - ES256
+        claim_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - normal
+    RefreshTokenRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        grant_type:
+          type: string
+          example: authorization_code
+        refresh_token:
+          type: string
+        redirect_uri:
+          type: string
+          format: uri
+    SendMessageRequest:
+      type: object
+      properties:
+        to:
+          type: string
+          description: recipient DID
+        message:
+          oneOf:
+            - type: string
+            - type: object
+          description: JWE message
+    SignMessageRequest:
+      type: object
+      required:
+        - didUrl
+        - payload
+      properties:
+        didUrl:
+          type: string
+          description: The did keyId that will be used to sign the message with.
+          example: 'did:example:abcdefghijkl#key1'
+        payload:
+          $ref: '#/components/schemas/JSONObjectMessage'
+    SignMessageResponse:
+      title: SignMessageResponse
+      type: string
+      description: Signed message in a response
+      example: eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa21mazNtMldIQlVxVm94SlZ3R1NQejVrYmFKNnpBMXRwN1JRWUJiUUdtczNoI3o2TWttZmszbTJXSEJVcVZveEpWd0dTUHo1a2JhSjZ6QTF0cDdSUVlCYlFHbXMzaCJ9.eyJtc2ciOiJUaGlzIGlzIGEgcGF5bG9hZCJ9.5E9qEmmSOMHLABAr4A9VzuNKFaO4EDo2GSCMoxQm9zsE7eCmEEuaAxtNhOUdd-Wvj64vqBBVl84XB1Yg7X9wBg
+      required:
+        - ciphertext
+    TokenRequest:
+      oneOf:
+        - $ref: '#/components/schemas/InitialTokenRequest'
+        - $ref: '#/components/schemas/RefreshTokenRequest'
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          enum:
+            - bearer
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+        id_token:
+          type: string
+    VerifiableCredential:
+      type: object
+      properties:
+        '@context':
+          type: array
+          example:
+            - 'https://www.w3.org/2018/credentials/v1'
+            - 'https://www.w3.org/2018/credentials/examples/v1'
+          items:
+            type: string
+            minLength: 1
+            example: '"https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"'
+        type:
+          type: array
+          example:
+            - VerifiableCredential
+            - AlumniCredential
+          items:
+            type: string
+            minLength: 1
+            example: '"AlumniCredential", "VerifiableCredential"'
+        issuer:
+          description: Includes issuer id (did) and its domain (inside name parameter)
+          oneOf:
+            - type: object
+              properties:
+                id:
+                  type: string
+                  example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
+                name:
+                  type: string
+                  example: Example University
+            - type: string
+              properties: {}
+        issuanceDate:
+          type: string
+          format: date-time
+          example: '2020-05-02T12:06:29.156Z'
+        credentialStatus:
+          $ref: '#/components/schemas/CredentialStatus'
+        credentialSubject:
+          type: object
+          example:
+            id: 'did:example:abcdb1f712ebc6f1c276e12ec21'
+            givenName: Jamie
+            familyName: Doe
+          properties:
+            id:
+              type: string
+              example: 'did:key:z6MkoPL5UbUcmKstxgftmFQfy246ocJ3YpJntgRM9f9eAWNY'
+            givenName:
+              type: string
+              example: Jamie
+            familyName:
+              type: string
+              example: Doe
+            alumniOf:
+              type: string
+              example: Example University
+        proof:
+          $ref: '#/components/schemas/ED25519Signature2018'
+      required:
+        - '@context'
+        - type
+        - issuanceDate
+        - credentialSubject
+        - proof
+    VerifyMessageResponse:
+      type: object
+      properties:
+        didUrl:
+          type: string
+          description: The didUrl included on the jws object
+          example: 'did:key:z6MkqesDwy7M5wPEoodrMSwgQFFWwEDtmx8X4V1zF7zho3ri#z6MkiKdPk7cYsCySi8BgPnjsZpUkb3aoHsBN4NQKQCSDKEdU'
+        did:
+          type: string
+          description: The did parsed from the didUrl
+          example: 'did:key:z6MkqesDwy7M5wPEoodrMSwgQFFWwEDtmx8X4V1zF7zho3ri'
+        verified:
+          type: boolean
+          description: Result of jws verification
+          example: true
+        payload:
+          oneOf:
+            - type: string
+            - type: object
+          description: The payload of the verified message
+    VerifyRequest:
+      type: object
+      properties:
+        jws:
+          type: string
+          description: Compact form of JWS
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    Credentials.v1_CreateCredentialRequest:
+      type: object
+      properties:
+        '@context':
+          type: array
+          description: 'Additional to any JSON-LD contexts ''https://www.w3.org/2018/credentials/v1'' is always required.'
+          minLength: 1
+          example:
+            - 'https://www.w3.org/2018/credentials/v1'
+            - 'https://schema.org'
+          items:
+            type: string
+        subjectId:
+          type: string
+          description: 'Generally a DID, identifier of who/what the subject is'
+          example: 'did:example:abcdb1f712ebc6f1c276e12ec21'
+          minLength: 1
+        tag:
+          type: string
+          description: 'An optional tag to filter by, will not be part of the issued credential'
+          example: identifier123
+          minLength: 1
+          maxLength: 1024
+        type:
+          type: array
+          example: '[VerifiableCredential, AlumniCredential]'
+          description: 'Types for the Credential, VerifiableCredential must be the first value'
+          items:
+            type: string
+            description: 'Describes the additional specific types of the claimed data, must be within the scope of @context, resulting credential will always includes VerifiableCredential'
+        claims:
+          type: object
+          description: Each value is a claim that is defined by one of the JSON-LD schemas.
+          minItems: 1
+          example:
+            givenName: Jamie
+            familyName: Doe
+            alumniOf: <span lang="en">Example University</span>
+        issuer:
+          type: object
+          description: Includes Issuer id (DID) and domain name
+          required:
+            - id
+            - name
+          properties:
+            id:
+              type: string
+              example: 'did:issuer:abcdb1f712ebc6f1c276e12ec21'
+            name:
+              type: string
+              example: 'https://example.edu/issuers/565049'
+        persist:
+          type: boolean
+          description: Flag to indicate whether the full credential should be stored in platform
+        revocable:
+          type: boolean
+          description: Flag to indicate if the credential needs to support revocation
+      required:
+        - '@context'
+        - type
+        - claims
+        - issuer
+    Credentials.v1_CreateCredentialResponse:
+      type: object
+      x-examples: {}
+      title: ''
+      properties:
+        id:
+          type: string
+          example: 873277c0-a162-11ea-8a1d-a111119347e6
+        credential:
+          $ref: '#/components/schemas/VerifiableCredential'
+        tag:
+          type: string
+          example: identifier123
+        credentialStatus:
+          $ref: '#/components/schemas/Credentials.v1_CredentialStatus'
+        issuanceDate:
+          type: string
+          example: '2020-05-02T12:06:29.156Z'
+      required:
+        - id
+        - credential
+        - issuanceDate
+    Credentials.v1_CredentialStatus:
+      type: object
+      description: Credential status location information
+      properties:
+        id:
+          type: string
+          description: Unique ID for the credential status
+          example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3#1'
+        type:
+          type: string
+          description: Indicates that the status contains revocation information
+          example: RevocationList2020Status
+        revocationListIndex:
+          type: integer
+          example: 1
+          description: The location within the revocation list for the credential
+        revocationListCredential:
+          type: string
+          description: The location of the revocation list
+          example: 'https://tenant.vii.mattr.global/core/v1/revocation-lists/cc641396-3750-43c8-b8b8-f30d74eb3fb3'
+    Credentials.v1_GetCredentialResponse:
+      type: object
+      x-examples: {}
+      title: ''
+      properties:
+        id:
+          type: string
+          example: 873277c0-a162-11ea-8a1d-a111119347e6
+        credential:
+          $ref: '#/components/schemas/VerifiableCredential'
+        tag:
+          type: string
+          example: identifier123
+        credentialStatus:
+          $ref: '#/components/schemas/Credentials.v1_CredentialStatus'
+        issuanceDate:
+          type: string
+          example: '2020-05-02T12:06:29.156Z'
+      required:
+        - id
+        - issuanceDate
+    Credentials.v1_GetCredentialsResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Credentials.v1_GetCredentialResponse'
+    Credentials.v1_RevocationStatusResponse:
+      type: object
+      properties:
+        isRevoked:
+          type: boolean
+          description: 'true if the credential is revoked, false otherwise'
+          example: false
+      required:
+        - isRevoked
+      description: ''
+      title: ''
+    Credentials.v1_SetRevocationStatus:
+      type: object
+      properties:
+        isRevoked:
+          type: boolean
+          description: 'true if the credential is revoked, false otherwise'
+          example: false
+      required:
+        - isRevoked
+      description: ''
+      title: ''
+    Credentials.v1_VerifyCredentialRequest:
+      title: VerifyCredentialRequest
+      type: object
+      properties:
+        credential:
+          $ref: '#/components/schemas/VerifiableCredential'
+    Dids.v1_CreateDidDocument:
+      type: object
+      properties:
+        method:
+          type: string
+          enum:
+            - key
+            - web
+            - sov
+        options:
+          type: object
+          description: 'To define a key type for a did:key or to define a domain for did:web'
+          minItems: 1
+          example:
+            keyType: bls12381g2
+      required:
+        - method
+      description: ''
+      title: ''
+    Dids.v1_CreateDidResponse:
+      type: object
+      properties:
+        registrationStatus:
+          type: string
+        did:
+          type: string
+          example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
+        metadata:
+          $ref: '#/components/schemas/Dids.v1_DidMetadata'
+    Dids.v1_DidDocument:
+      type: object
+    Dids.v1_DidMetadata:
+      type: object
+      required:
+        - keys
+      properties:
+        registered:
+          type: number
+          description: Timestamp of when the DID was registered
+          example: 1583233799656
+        keys:
+          type: array
+          description: An array of keys that describe the relationship between keys listed in the DID document and keys that exist in a connected KMS.
+          items:
+            $ref: '#/components/schemas/Dids.v1_DidMetadataKey'
+        initialDidDocument:
+          type: object
+          description: The DID document that was created for the DID
+          items:
+            $ref: '#/components/schemas/Dids.v1_DidDocument'
+    Dids.v1_DidMetadataKey:
+      type: object
+      properties:
+        kmsKeyId:
+          type: string
+          example: ad8facc7-e7f6-4af6-9baa-2f7abd71c928
+        didDocumentKeyId:
+          type: string
+          example: 'did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH#z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH'
+    Dids.v1_GetDidConfigJsonldResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerifiableCredential'
+    Dids.v1_GetDidResponse:
+      type: object
+      properties:
+        didDocument:
+          $ref: '#/components/schemas/Dids.v1_DidDocument'
+        registrationStatus:
+          type: string
+        localMetadata:
+          $ref: '#/components/schemas/Dids.v1_DidMetadata'
+    Dids.v1_GetDidsResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - did
+              - localMetadata
+            properties:
+              did:
+                type: string
+                example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
+              localMetadata:
+                $ref: '#/components/schemas/Dids.v1_DidMetadata'
+    Oidc-issuer.v1_CreateOidcIssuerClientRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Meaningful name for this Client
+          example: OIDC Client for Wallet
+        redirectUris:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Redirection URI to which the response will be sent
+          example:
+            - 'https://example.com/callback'
+        responseTypes:
+          type: array
+          items:
+            type: string
+          description: Determines the authorization processing flow
+          example:
+            - code
+        grantTypes:
+          type: array
+          items:
+            type: string
+          description: OAuth Grant Type
+          example:
+            - authorization_code
+        tokenEndpointAuthMethod:
+          type: string
+          description: OAuth Token Endpoint Authentication Method
+          example: client_secret_post
+        idTokenSignedResponseAlg:
+          type: string
+          description: 'Algorithm must match configured jwks, defaults to RS256'
+          example: ES256
+        applicationType:
+          type: string
+          example: web
+      required:
+        - name
+        - redirectUris
+    Oidc-issuer.v1_CreateOidcIssuerClientResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Client id
+              example: 6a860559-21a3-4b57-9a2b-aaea3ba4683d
+            secret:
+              type: string
+              description: Client secret
+              example: PiMkTfrEmPTKRFiPzjMFvYkYu.FwR.iZGFnC
+        - $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientRequest'
+    Oidc-issuer.v1_CreateOidcIssuerRequest:
+      type: object
+      properties:
+        credential:
+          type: object
+          required:
+            - issuerDid
+            - name
+            - context
+            - type
+          description: Credential information
+          properties:
+            issuerDid:
+              type: string
+              description: The Issuer DID
+              example: 'did:key:z6MkjBWPPa1njEKygyr3LR3pRKkqv714vyTkfnUdP6ToFSH5'
+            name:
+              type: string
+              description: Meaningful name for the Credential
+              example: University Attendance Credential
+            context:
+              type: array
+              description: JSON-LD schema where the term is referenced
+              example:
+                - 'https://schema.org'
+              items:
+                type: string
+                format: uri
+            type:
+              type: array
+              description: The Credential Type
+              example:
+                - AlumniCredential
+              items:
+                type: string
+        federatedProvider:
+          type: object
+          required:
+            - url
+            - clientId
+            - clientSecret
+          description: Federated OIDC Provider details
+          properties:
+            url:
+              type: string
+              format: uri
+              description: Base url for provider well-known endpoint
+              example: 'https://example-university.au.auth0.com'
+            scope:
+              type: array
+              description: OIDC scope associated with claims in the provider
+              example:
+                - openid
+                - profile
+                - email
+              items:
+                type: string
+            clientId:
+              type: string
+              description: Client ID configured in the provider
+              example: vJ0SCKchr4XjC0xHNE8DkH6Pmlg2lkCN
+            clientSecret:
+              type: string
+              description: Client secret configured in the provider
+              example: QNwfa4Yi4Im9zy1u_15n7SzWKt-9G5cdH0r1bONRpUPfN-UIRaaXv_90z8V6-OjH
+        claimMappings:
+          type: array
+          description: Map OpenID Connect terms to JSON-LD terms
+          items:
+            type: object
+            required:
+              - jsonLdTerm
+              - oidcClaim
+            properties:
+              jsonLdTerm:
+                type: string
+                description: The credential claim name in JSON-LD terms
+                example: alumniOf
+              oidcClaim:
+                type: string
+                description: The credential claim name in OIDC terms
+                example: alumni_of
+      required:
+        - credential
+        - federatedProvider
+        - claimMappings
+    Oidc-issuer.v1_CreateOidcIssuerResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Issuer id
+              example: 983c0a86-204f-4431-9371-f5a22e506599
+            federatedProvider:
+              type: object
+              properties:
+                callbackUrl:
+                  type: string
+                  format: uri
+                  description: URL where the authorization code gets sent
+                  example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/federated/callback'
+        - $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerRequest'
+    Oidc-issuer.v1_GetOidcIssuerClientsResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerClientResponse'
+    Oidc-issuer.v1_GetOidcIssuersResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          $ref: '#/components/schemas/Oidc-issuer.v1_CreateOidcIssuerResponse'
+    Oidc-issuer.v1_OpenIdConfiguration:
+      type: object
+      properties:
+        authorization_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/authorize'
+        claims_parameter_supported:
+          type: boolean
+          example: true
+        claims_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - sub
+            - sid
+            - auth_time
+            - iss
+        code_challenge_methods_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - S256
+        end_session_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/session/end'
+        grant_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - implicit
+            - authorization_code
+            - refresh_token
+        id_token_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - ES256
+        issuer:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global'
+        jwks_uri:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/jwks'
+        registration_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/clients'
+        request_object_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - RS256
+            - PS256
+            - ES256
+            - EdDSA
+        request_parameter_supported:
+          type: boolean
+          example: true
+        request_uri_parameter_supported:
+          type: boolean
+          example: true
+        require_request_uri_registration:
+          type: boolean
+          example: true
+        response_modes_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - form_post
+            - fragment
+            - query
+        response_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - code id_token
+            - code
+            - id_token
+            - none
+        scopes_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - openid
+            - offline_access
+        subject_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - public
+        token_endpoint_auth_methods_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - none
+            - client_secret_basic
+            - client_secret_jwt
+            - client_secret_post
+            - private_key_jwt
+        token_endpoint_auth_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - RS256
+            - PS256
+            - ES256
+            - EdDSA
+        token_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/token'
+        userinfo_endpoint:
+          type: string
+          format: uri
+          example: 'https://tenant.vii.mattr.global/ext/oidc/v1/issuers/983c0a86-204f-4431-9371-f5a22e506599/me'
+        userinfo_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - HS256
+            - ES256
+        claim_types_supported:
+          type: array
+          items:
+            type: string
+          example:
+            - normal
+    Oidc-verifier.v1_CreateOidcVerifierClientRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Meaningful name for this Client
+          example: OIDC Client for the verifier
+        redirectUris:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Redirection URI to which the response will be sent
+          example:
+            - 'https://example.com/callback'
+        responseTypes:
+          type: array
+          items:
+            type: string
+          description: Determines the authorization processing flow
+          example:
+            - code
+        grantTypes:
+          type: array
+          items:
+            type: string
+          description: OAuth Grant Type
+          example:
+            - authorization_code
+        tokenEndpointAuthMethod:
+          type: string
+          description: OAuth Token Endpoint Authentication Method
+          example: client_secret_post
+        idTokenSignedResponseAlg:
+          type: string
+          description: 'Algorithm must match configured jwks, defaults to RS256'
+          example: ES256
+        applicationType:
+          type: string
+          example: web
+        logoUri:
+          type: string
+          format: uri
+          description: The logo to display above the QR code
+          example: 'https://example.com/logo.png'
+      required:
+        - name
+        - redirectUris
+    Oidc-verifier.v1_CreateOidcVerifierClientResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Client id
+              example: da9bb6e4-c9ae-4468-b6ac-72b90d6efd5d
+            secret:
+              type: string
+              description: Client secret
+              example: H2epdcmNJ46hXJo5opdzvhbZK9W2ZGPkQh.E
+        - $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientRequest'
+    Oidc-verifier.v1_CreateOidcVerifierRequest:
+      type: object
+      properties:
+        verifierDid:
+          type: string
+          description: The Verifier DID
+          example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
+        presentationTemplateId:
+          type: string
+          format: uuid
+          description: Presentation Template ID used to request certain credentials
+          example: 364b6a1b-3600-4927-a6ac-4d66aa6bbac3
+        claimMappings:
+          type: array
+          items:
+            type: object
+            required:
+              - jsonLdFqn
+              - oidcClaim
+            properties:
+              jsonLdFqn:
+                type: string
+                description: Fully qualified JSON-LD term
+                example: 'http://schema.org/alumniOf'
+              oidcClaim:
+                type: string
+                description: The credential claim name in OIDC terms
+                example: alumni_of
+          description: Map OpenID Connect terms to JSON-LD terms
+      required:
+        - verifierDid
+        - presentationTemplateId
+        - claimMappings
+    Oidc-verifier.v1_CreateOidcVerifierResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Verifier id
+              example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
+        - $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierRequest'
+    Oidc-verifier.v1_GetOidcVerifierClientsResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierClientResponse'
+    Oidc-verifier.v1_GetOidcVerifiersResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          $ref: '#/components/schemas/Oidc-verifier.v1_CreateOidcVerifierResponse'
+    Presentations.v1_CreatePresentationDidAuthTemplate:
+      type: object
+      title: DIDAuth
+      properties:
+        type:
+          type: string
+          description: DIDAuth
+          example: DIDAuth
+      required:
+        - type
+    Presentations.v1_CreatePresentationQueryByExample:
+      type: object
+      x-examples: {}
+      title: QueryByExample
+      properties:
+        type:
+          type: string
+          example: QueryByExample
+        credentialQuery:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            minProperties: 1
+            properties:
+              required:
+                type: boolean
+              reason:
+                type: string
+              example:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@context':
+                      type: array
+                      description: array of contexts
+                      items: {}
+                    type:
+                      type: string
+                    trustedIssuer:
+                      type: array
+                      description: array of trusted issuers
+                      items:
+                        type: object
+                        properties:
+                          required:
+                            type: boolean
+                          issuer:
+                            type: string
+                        required:
+                          - required
+                          - issuer
+                  required:
+                    - '@context'
+                    - type
+                    - trustedIssuer
+            required:
+              - required
+              - example
+      required:
+        - type
+        - credentialQuery
+    Presentations.v1_CreatePresentationQueryByFrame:
+      type: object
+      title: QueryByFrame
+      properties:
+        type:
+          type: string
+        credentialQuery:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              reason:
+                type: string
+              frame:
+                type: object
+                required:
+                  - '@context'
+                  - type
+                  - credentialSubject
+                properties:
+                  '@context':
+                    type: array
+                    items:
+                      type: object
+                  type:
+                    type: string
+                    example: VerifiableCredential
+                  credentialSubject:
+                    type: object
+                    required:
+                      - '@explicit'
+                      - educationalCredentialAwarded
+                      - familyName
+                    properties:
+                      '@explicit':
+                        type: boolean
+                      educationalCredentialAwarded:
+                        type: object
+                      familyName:
+                        type: object
+              trustedIssuer:
+                type: array
+                uniqueItems: true
+                minItems: 0
+                items:
+                  type: object
+                  properties:
+                    required:
+                      type: boolean
+                    issuer:
+                      type: string
+                  required:
+                    - required
+                    - issuer
+            required:
+              - reason
+              - frame
+              - trustedIssuer
+      required:
+        - type
+        - credentialQuery
+    Presentations.v1_CreatePresentationRequestRequest:
+      type: object
+      required:
+        - templateId
+        - did
+      properties:
+        challenge:
+          type: string
+          description: Challenge can be used to match the response to a request
+          example: 64e45290-9980-11ea-b872-f1bee5fb328f
+        did:
+          type: string
+          description: DID of the Verifier
+          example: 'did:key:z6Mkt7bFYc4V2HdAxwhMtaY6cgJckYXwhYdPLJCcnVqzrkpr'
+        templateId:
+          type: string
+          description: Presentation Request Template id
+          example: 64e45290-9980-11ea-b872-f1bee5fb328f
+        expiresTime:
+          type: number
+          description: Unix timestamp in ms after which the request will be expired
+          example: 1592955632103
+        callbackUrl:
+          type: string
+          format: uri
+          description: Endpoint that will receive the Verifiable Presentation
+          example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
+    Presentations.v1_CreatePresentationRequestResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Presentation Request id
+          example: c74128a0-9949-11ea-9554-b5a630b3c119
+        callbackUrl:
+          type: string
+          format: uri
+          description: Endpoint that will receive the Verifiable Presentation
+          example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
+        request:
+          type: object
+          description: Presentation Request Details
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Presentation Request id
+              example: c74128a0-9949-11ea-9554-b5a630b3c119
+            type:
+              type: string
+              format: uri
+              description: Presentation Request schema
+              example: 'https://mattr.global/schemas/verifiable-presentation/request/QueryByExample'
+            from:
+              type: string
+              description: Verifier DID
+              example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
+            created_time:
+              type: number
+              description: Creation time
+              example: 1606709582907
+            expires_time:
+              type: number
+              description: Expiry time
+              example: 2594859115000
+            reply_url:
+              type: string
+              description: Endpoint that will receive the Verifiable Presentation
+              example: 'https://tenant.vii.mattr.global/core/v1/presentations/response'
+            reply_to:
+              type: array
+              description: Verifier DID
+              items:
+                type: string
+                example: 'did:key:z6MkrYVmyqSA93o4B1GwERM8kaQDMAUKAFV2TC3weQKeg9Gq'
+            body:
+              description: Definition of what type of Credential is being requested
+              allOf:
+                - $ref: '#/components/schemas/Presentations.v1_PresentationTemplateResponse'
+                - type: object
+                  properties:
+                    challenge:
+                      type: string
+                      format: uuid
+                      description: Challenge to match the response to a request
+                      example: e1b35ae0-9e0e-11ea-9bbf-a387b27c9e60
+    Presentations.v1_CreatePresentationTemplate:
+      type: object
+      title: PresentationTemplate
+      description: ''
+      properties:
+        domain:
+          type: string
+          description: Must match domain of the tenant
+        name:
+          type: string
+          description: Internal descriptor only
+        query:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationQueryByExample'
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationQueryByFrame'
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationDidAuthTemplate'
+      required:
+        - domain
+        - name
+        - query
+    Presentations.v1_PresentationTemplateArrayResponse:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1hNjZmZmVhNS04NDhlLTQzOWQtODBhNC1kZGE1NWY1M2UzNmM
+          description: Starting point for next cursor to use in a page
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Presentations.v1_PresentationTemplateResponse'
+    Presentations.v1_PresentationTemplateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 64e45290-9980-11ea-b872-f1bee5fb328f
+        domain:
+          type: string
+          example: tenant.vii.mattr.global
+        name:
+          type: string
+          example: alumni_credential_request
+        query:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationQueryByExample'
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationQueryByFrame'
+              - $ref: '#/components/schemas/Presentations.v1_CreatePresentationDidAuthTemplate'
+      required:
+        - id
+        - domain
+        - name
+        - query
+    Presentations.v1_UpdatePresentationTemplate:
+      title: UpdatePresentationTemplate
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+        - $ref: '#/components/schemas/Presentations.v1_CreatePresentationTemplate'
+  parameters:
+    Common_Cursor:
+      schema:
+        type: string
+        example: Y3JlYXRlZEF0PTIwMjAtMDgtMjVUMDY6NDY6MDkuNTEwWiZpZD1h
+      in: query
+      name: cursor
+      description: Starting point for the list
+    Common_Limit:
+      schema:
+        type: number
+        example: 2
+        maximum: 1000
+        minimum: 1
+        default: 100
+      in: query
+      name: limit
+      description: 'Range size of the list, default 100'
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 873277c0-a162-11ea-8a1d-a111119347e6
+      description: Credential ID
+    Did:
+      name: id
+      in: path
+      description: Issuer ID
+      schema:
+        type: string
+        format: uuid
+        example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
+      required: true
+    IssuerId:
+      name: id
+      in: path
+      description: Issuer ID
+      schema:
+        type: string
+        format: uuid
+        example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
+      required: true
+    VerifierId:
+      name: id
+      in: path
+      required: true
+      description: Verifier ID
+      schema:
+        type: string
+        format: uuid
+        example: 41458e5a-9092-40b7-9a26-d4eb43c5792f
 servers:
   - url: 'https://tenant.vii.mattr.global/core'
     variables:
