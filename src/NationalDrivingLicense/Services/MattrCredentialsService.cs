@@ -76,9 +76,9 @@ namespace NationalDrivingLicense
                 Credential = new Credential
                 {
                     IssuerDid = did.Did,
-                    Name = "National Driving License",
+                    Name = "NationalDrivingLicense",
                     Context = new List<Uri> { new Uri("https://ndl.org") },
-                    Type = new List<string> { "driving_license" }
+                    Type = new List<string> { "driving_license_ns" }
                 },
                 ClaimMappings = new List<ClaimMappings>
                 {
