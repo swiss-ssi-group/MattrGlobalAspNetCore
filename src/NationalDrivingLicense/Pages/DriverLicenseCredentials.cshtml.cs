@@ -33,10 +33,10 @@ namespace NationalDrivingLicense.Pages
             var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/date_of_birth");
             var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/license_issued_at");
 
-            if (nameClaim == null 
-                || firstNameClaim == null 
-                || licenseTypeClaim == null 
-                || dateOfBirthClaim == null 
+            if (nameClaim == null
+                || firstNameClaim == null
+                || licenseTypeClaim == null
+                || dateOfBirthClaim == null
                 || licenseIssuedAtClaim == null)
             {
                 identityHasDriverLicenseClaims = false;

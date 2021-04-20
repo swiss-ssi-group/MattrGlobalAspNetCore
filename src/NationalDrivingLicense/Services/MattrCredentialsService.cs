@@ -93,7 +93,7 @@ namespace NationalDrivingLicense
                     ClientId = _configuration["Auth0Wallet:ClientId"],
                     ClientSecret = _configuration["Auth0Wallet:ClientSecret"],
                     Url = new Uri($"https://{_configuration["Auth0Wallet:Domain"]}"),
-                    Scope = new List<string> { "openid", "profile", "email"}
+                    Scope = new List<string> { "openid", "profile", "email" }
                 }
             };
 
