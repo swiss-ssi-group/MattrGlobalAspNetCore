@@ -21,6 +21,11 @@
     "ClientId": "--your--auth0-client-id--",
     "ClientSecret": "--your-auth0-client-secret--",
   }
+  "Auth0Wallet": {
+    "Domain": "--your-auth0-wallet-domain",
+    "ClientId": "--your--auth0-wallet-client-id--",
+    "ClientSecret": "--your-auth0-wallet-client-secret--",
+  }
 }
 ```
 

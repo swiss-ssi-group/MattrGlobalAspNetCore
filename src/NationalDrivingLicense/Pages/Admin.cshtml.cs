@@ -22,7 +22,7 @@ namespace NationalDrivingLicense.Pages
 
         public async Task OnPostAsync()
         {
-            Callback = await _mattrCredentialsService.CreateCredentialsAndCallback("ndl");
+            Callback = await _mattrCredentialsService.CreateCredentialsAndCallback("ndlthree");
         }
     }
 }

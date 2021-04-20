@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
 using NationalDrivingLicense.MattrOpenApiClient;
 using NationalDrivingLicense.Services;
@@ -84,17 +83,17 @@ namespace NationalDrivingLicense
                 ClaimMappings = new List<ClaimMappings>
                 {
                     new ClaimMappings{ JsonLdTerm="Name", OidcClaim="https://ndl/name"},
-                    new ClaimMappings{ JsonLdTerm="First Name", OidcClaim="https://ndl/first_name"},
-                    new ClaimMappings{ JsonLdTerm="License Type", OidcClaim="https://ndl/license_type"},
-                    new ClaimMappings{ JsonLdTerm="Date of Birth", OidcClaim="https://ndl/date_of_birth"},
-                    new ClaimMappings{ JsonLdTerm="Issued At", OidcClaim="https://ndl/license_issued_at"}
+                    new ClaimMappings{ JsonLdTerm="FirstName", OidcClaim="https://ndl/first_name"},
+                    new ClaimMappings{ JsonLdTerm="LicenseType", OidcClaim="https://ndl/license_type"},
+                    new ClaimMappings{ JsonLdTerm="DateOfBirth", OidcClaim="https://ndl/date_of_birth"},
+                    new ClaimMappings{ JsonLdTerm="IssuedAt", OidcClaim="https://ndl/license_issued_at"}
                 },
                 FederatedProvider = new FederatedProvider
                 {
-                    ClientId = _configuration["Auth0:ClientId"],
-                    ClientSecret = _configuration["Auth0:ClientSecret"],
-                    Scope = new List<string> { "openid", "profile", "email"}, 
-                    Url = new Uri($"https://{_configuration["Auth0:Domain"]}")
+                    ClientId = _configuration["Auth0Wallet:ClientId"],
+                    ClientSecret = _configuration["Auth0Wallet:ClientSecret"],
+                    Url = new Uri($"https://{_configuration["Auth0Wallet:Domain"]}"),
+                    Scope = new List<string> { "openid", "profile", "email"}
                 }
             };
 
