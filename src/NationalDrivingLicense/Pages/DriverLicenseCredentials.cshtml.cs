@@ -57,7 +57,7 @@ namespace NationalDrivingLicense.Pages
                 var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndl");
 
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
-                CredentialOfferUrl = "damienbod.com";
+                CredentialOfferUrl = offerUrl;
                 HasDriverLicense = true;
             }
             else
