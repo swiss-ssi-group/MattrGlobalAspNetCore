@@ -6,7 +6,7 @@
 {
   // use user secrets
   "ConnectionStrings": {
-    "DefaultConnection": "--your-connection-string"
+    "DefaultConnection": "--your-connection-string--"
   },
   "MattrConfiguration": {
     "Audience": "https://vii.mattr.global",
