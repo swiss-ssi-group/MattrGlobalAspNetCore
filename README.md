@@ -33,23 +33,31 @@
 
 ### Console
 
+```
 dotnet ef migrations add ndl_init
+```
 
 ### Powershell
 
+```
 Add-Migration "ndl_init"
+```
 
 ## Running Migrations
 
 ### Console
 
+```
 dotnet restore
 
 dotnet ef database update --context NationalDrivingLicenseMattrContext
+```
 
 ### Powershell
 
+```
 Update-Database 
+```
 
 ## Links
 
