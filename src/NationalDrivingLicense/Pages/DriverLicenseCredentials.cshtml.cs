@@ -54,7 +54,11 @@ namespace NationalDrivingLicense.Pages
                     UserName = User.Identity.Name
 
                 };
-                var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndlseven");
+                // get per name
+                //var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndlseven");
+
+                // get the last one
+                var offerUrl = await _driverLicenseCredentialsService.GetLastDriverLicenseCredentialIssuerUrl();
 
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
                 CredentialOfferUrl = offerUrl;
