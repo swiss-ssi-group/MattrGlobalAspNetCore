@@ -43,7 +43,7 @@ https://learn.mattr.global/tutorials/issue/oidc-bridge/setup-fed-provider
 
 ```javascript
 function (user, context, callback) {
-    const namespace = 'https://ndl/';
+    const namespace = 'https://ndl.com/';
     context.idToken[namespace + 'license_issued_at'] = user.user_metadata.license_issued_at;
     context.idToken[namespace + 'license_type'] = user.user_metadata.license_type;
     context.idToken[namespace + 'name'] = user.user_metadata.name;

@@ -71,22 +71,25 @@ namespace NationalDrivingLicense
             // https://tenant.vii.mattr.global/ext/oidc/v1/issuers
             var createCredentialsUrl = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers";
 
+            // this scheme MUST match the claims and the Context and be qualified.
+            var scheme = "https://ndl.com";
+
             var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest
             {
                 Credential = new Credential
                 {
                     IssuerDid = did.Did,
                     Name = "NationalDrivingLicense",
-                    Context = new List<Uri> { new Uri("https://ndl.org") },
-                    Type = new List<string> { "driving_license_ns" }
+                    Context = new List<Uri> { new Uri($"{scheme}") },
+                    Type = new List<string> { "nationaldrivinglicense" }
                 },
                 ClaimMappings = new List<ClaimMappings>
                 {
-                    new ClaimMappings{ JsonLdTerm="Name", OidcClaim="https://ndl/name"},
-                    new ClaimMappings{ JsonLdTerm="FirstName", OidcClaim="https://ndl/first_name"},
-                    new ClaimMappings{ JsonLdTerm="LicenseType", OidcClaim="https://ndl/license_type"},
-                    new ClaimMappings{ JsonLdTerm="DateOfBirth", OidcClaim="https://ndl/date_of_birth"},
-                    new ClaimMappings{ JsonLdTerm="IssuedAt", OidcClaim="https://ndl/license_issued_at"}
+                    new ClaimMappings{ JsonLdTerm="name", OidcClaim=$"{scheme}/name"},
+                    new ClaimMappings{ JsonLdTerm="firstName", OidcClaim=$"{scheme}/first_name"},
+                    new ClaimMappings{ JsonLdTerm="licenseType", OidcClaim=$"{scheme}/license_type"},
+                    new ClaimMappings{ JsonLdTerm="dateOfBirth", OidcClaim=$"{scheme}/date_of_birth"},
+                    new ClaimMappings{ JsonLdTerm="licenseIssuedAt", OidcClaim=$"{scheme}/license_issued_at"}
                 },
                 FederatedProvider = new FederatedProvider
                 {

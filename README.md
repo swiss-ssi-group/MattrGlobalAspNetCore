@@ -44,3 +44,20 @@ https://www.youtube.com/watch?v=2_TDN-81ytM
 https://learn.mattr.global/tutorials/dids/did-key
 
 https://gunnarpeipman.com/httpclient-remove-charset/
+
+# Mattr.Global instructions 
+
+In order to obtain a Credential on the mobile wallet you will need to use the OIDC Bridge, so try following this tutorial.
+
+https://learn.mattr.global/tutorials/issue/oidc-bridge/issue-oidc
+
+At the end of the tutorial you will have a client-bound Credential stored on the mobile wallet.
+You can then move to Verify a Credential tutorials, first setup a Presentation Template:
+
+https://learn.mattr.global/tutorials/verify/presentation-request-template
+
+Then you can setup your tenant to run the Verify flow, a quick way of doing that is to use a Sample App to orchestrate a number of steps: 
+
+https://learn.mattr.global/tutorials/verify/using-callback/callback-intro
+
+Note: because you just have the 1 sandbox tenant, you will be issuing credentials and verifying them through the same instance, but Issuer and Verifier could easily be separate tenants on our platform or indeed any other interoperable platform.

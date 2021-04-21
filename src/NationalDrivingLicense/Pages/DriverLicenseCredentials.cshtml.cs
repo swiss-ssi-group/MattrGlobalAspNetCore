@@ -27,11 +27,11 @@ namespace NationalDrivingLicense.Pages
             //"date_of_birth": "1953-07-21"
 
             var identityHasDriverLicenseClaims = true;
-            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/name");
-            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/first_name");
-            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/license_type");
-            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/date_of_birth");
-            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl/license_issued_at");
+            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl.com/name");
+            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl.com/first_name");
+            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl.com/license_type");
+            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl.com/date_of_birth");
+            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == "https://ndl.com/license_issued_at");
 
             if (nameClaim == null
                 || firstNameClaim == null
@@ -54,7 +54,7 @@ namespace NationalDrivingLicense.Pages
                     UserName = User.Identity.Name
 
                 };
-                var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndlfour");
+                var offerUrl = await _driverLicenseCredentialsService.GetDriverLicenseCredentialIssuerUrl("ndlseven");
 
                 DriverLicenseMessage = "Add your driver license credentials to your wallet";
                 CredentialOfferUrl = offerUrl;
