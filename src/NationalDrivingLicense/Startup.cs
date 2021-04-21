@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Threading.Tasks;
 using NationalDrivingLicense.Data;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace NationalDrivingLicense
 {
@@ -101,6 +102,9 @@ namespace NationalDrivingLicense
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // IdentityModelEventSource.ShowPII = true;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
