@@ -1,16 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NationalDrivingLicense.Data;
 
 namespace NationalDrivingLicense.Pages
 {
     public class AdminModel : PageModel
     {
         private readonly MattrCredentialsService _mattrCredentialsService;
-
         public bool CreatingDriverLicense { get; set; } = true;
         public string Callback { get; set; }
 
