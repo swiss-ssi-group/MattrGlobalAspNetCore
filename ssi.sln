@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoInsurance", "BoInsurance\BoInsurance.csproj", "{2791A7E3-27DE-42E4-BB54-AE843FC1CFEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,10 +22,10 @@ Global
 		{72380BA4-1F7B-4804-B445-ED0942071864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72380BA4-1F7B-4804-B445-ED0942071864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72380BA4-1F7B-4804-B445-ED0942071864}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A31E6EC1-70A3-4D42-8DFA-43181D9EB7D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A31E6EC1-70A3-4D42-8DFA-43181D9EB7D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A31E6EC1-70A3-4D42-8DFA-43181D9EB7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A31E6EC1-70A3-4D42-8DFA-43181D9EB7D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2791A7E3-27DE-42E4-BB54-AE843FC1CFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2791A7E3-27DE-42E4-BB54-AE843FC1CFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2791A7E3-27DE-42E4-BB54-AE843FC1CFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2791A7E3-27DE-42E4-BB54-AE843FC1CFEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
