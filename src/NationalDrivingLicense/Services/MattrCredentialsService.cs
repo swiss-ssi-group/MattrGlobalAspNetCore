@@ -19,6 +19,7 @@ namespace NationalDrivingLicense
         private readonly MattrTokenApiService _mattrTokenApiService;
 
         public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
+        public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
 
         public MattrCredentialsService(IConfiguration configuration,
             DriverLicenseCredentialsService driverLicenseService,
@@ -65,14 +66,9 @@ namespace NationalDrivingLicense
         private async Task<V1_CreateOidcIssuerResponse> CreateMattrCredentialIssuer(HttpClient client, V1_CreateDidResponse did)
         {
             // create vc, post to credentials api
-            // https://learn.mattr.global/api-ref/#operation/createCredential
-            // https://learn.mattr.global/tutorials/issue/issue-zkp-credential
+            // https://learn.mattr.global/tutorials/issue/oidc-bridge/setup-issuer
 
-            // https://tenant.vii.mattr.global/ext/oidc/v1/issuers
             var createCredentialsUrl = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers";
-
-            // this scheme MUST match the claims and the Context and be qualified.
-            var scheme = "https://ndl.com";
 
             var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest
             {
@@ -80,16 +76,18 @@ namespace NationalDrivingLicense
                 {
                     IssuerDid = did.Did,
                     Name = "NationalDrivingLicense",
-                    Context = new List<Uri> { new Uri($"{scheme}") },
+                    Context = new List<Uri> { 
+                         new Uri( "https://schema.org") // Only this is supported
+                    },
                     Type = new List<string> { "nationaldrivinglicense" }
                 },
                 ClaimMappings = new List<ClaimMappings>
                 {
-                    new ClaimMappings{ JsonLdTerm="name", OidcClaim=$"{scheme}/name"},
-                    new ClaimMappings{ JsonLdTerm="firstName", OidcClaim=$"{scheme}/first_name"},
-                    new ClaimMappings{ JsonLdTerm="licenseType", OidcClaim=$"{scheme}/license_type"},
-                    new ClaimMappings{ JsonLdTerm="dateOfBirth", OidcClaim=$"{scheme}/date_of_birth"},
-                    new ClaimMappings{ JsonLdTerm="licenseIssuedAt", OidcClaim=$"{scheme}/license_issued_at"}
+                    new ClaimMappings{ JsonLdTerm="name", OidcClaim=$"{MATTR_DOMAIN}/name"},
+                    new ClaimMappings{ JsonLdTerm="firstName", OidcClaim=$"{MATTR_DOMAIN}/first_name"},
+                    new ClaimMappings{ JsonLdTerm="licenseType", OidcClaim=$"{MATTR_DOMAIN}/license_type"},
+                    new ClaimMappings{ JsonLdTerm="dateOfBirth", OidcClaim=$"{MATTR_DOMAIN}/date_of_birth"},
+                    new ClaimMappings{ JsonLdTerm="licenseIssuedAt", OidcClaim=$"{MATTR_DOMAIN}/license_issued_at"}
                 },
                 FederatedProvider = new FederatedProvider
                 {
