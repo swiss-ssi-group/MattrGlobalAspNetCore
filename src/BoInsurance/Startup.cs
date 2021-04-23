@@ -36,6 +36,7 @@ namespace BoInsurance
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddRazorPages();
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,6 +67,7 @@ namespace BoInsurance
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }

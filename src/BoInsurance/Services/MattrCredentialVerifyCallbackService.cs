@@ -22,6 +22,7 @@ namespace BoInsurance
         private readonly BoInsuranceDbService _boInsuranceDbService;
         public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
         public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
+        public static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/DrivingLicenseCallback";
 
         public MattrCredentialVerifyCallbackService(IConfiguration configuration,
             IHttpClientFactory clientFactory,
@@ -37,10 +38,17 @@ namespace BoInsurance
         /// <summary>
         /// https://learn.mattr.global/tutorials/verify/using-callback/callback-e-to-e
         /// </summary>
-        /// <param name="callbackUrl"></param>
+        /// <param name="callbackBaseUrl"></param>
         /// <returns></returns>
-        public async Task<string> CreateVerifyCallback(string callbackUrl)
+        public async Task<string> CreateVerifyCallback(string callbackBaseUrl)
         {
+            if(!callbackBaseUrl.EndsWith('/'))
+            {
+                callbackBaseUrl = $"{callbackBaseUrl}/";
+            }
+
+            var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
+
             HttpClient client = _clientFactory.CreateClient();
             var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
 
