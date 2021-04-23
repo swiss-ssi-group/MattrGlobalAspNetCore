@@ -2123,7 +2123,7 @@ namespace BoInsurance.MattrOpenApiClient
     
         [Newtonsoft.Json.JsonProperty("example", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Example> Example { get; set; } = new System.Collections.ObjectModel.Collection<Example>();
+        public Example Example { get; set; } = new Example();
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

@@ -76,19 +76,16 @@ namespace BoInsurance
                 {
                     Reason = "Please provide your driving license",
                     Required = true,
-                    Example = new List<Example>
+                    Example = new Example
                     {
-                        new Example
+                        Context = new List<object>{ "https://schema.org" },
+                        Type = "VerifiableCredential",
+                        TrustedIssuer = new List<TrustedIssuer2>
                         {
-                            Context = new List<object>{ "https://schema.org" },
-                            Type = "VerifiableCredential",
-                            TrustedIssuer = new List<TrustedIssuer2>
+                            new TrustedIssuer2
                             {
-                                new TrustedIssuer2
-                                {
-                                    Required = true,
-                                    Issuer = didId // DID use to create the oidc
-                                }
+                                Required = true,
+                                Issuer = didId // DID use to create the oidc
                             }
                         }
                     }
