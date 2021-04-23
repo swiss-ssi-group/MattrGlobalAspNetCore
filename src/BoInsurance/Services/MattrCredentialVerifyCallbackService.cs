@@ -59,17 +59,17 @@ namespace BoInsurance
             // Sign and Encode the Presentation Request body
             var signAndEncodePresentationRequestBody = SignAndEncodePresentationRequestBody();
 
-            // save to db
-            var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
-            {
-                DidId = template.DidId,
-                TemplateId = template.TemplateId,
-                CallbackUrl = callbackUrl,
-                InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
-                Did = JsonConvert.SerializeObject(did),
-                SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
-            };
-            await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
+            // save to db // TODO add this back once working
+            //var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
+            //{
+            //    DidId = template.DidId,
+            //    TemplateId = template.TemplateId,
+            //    CallbackUrl = callbackUrl,
+            //    InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
+            //    Did = JsonConvert.SerializeObject(did),
+            //    SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
+            //};
+            //await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
             var jws = "sometest";
             var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
