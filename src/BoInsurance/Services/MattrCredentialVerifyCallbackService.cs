@@ -108,7 +108,7 @@ namespace BoInsurance
                 TemplateId = templateId,
                 Challenge = challenge,
                 CallbackUrl = new Uri(callbackUrl),
-                ExpiresTime = 43200000.0 // 12 hrs for testing => prod deployment reduces to 5 mins
+                ExpiresTime = 1638836401000 // 10 mins
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
