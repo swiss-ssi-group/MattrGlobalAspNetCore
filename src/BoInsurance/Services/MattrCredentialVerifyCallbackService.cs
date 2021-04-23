@@ -159,7 +159,7 @@ namespace BoInsurance
 
             object didUrlArray;
             did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);
-            var didUrl = ((List<string>)didUrlArray)[0];
+            var didUrl = didUrlArray.ToString().Split("\"")[1];
             var payload = new MattrOpenApiClient.SignMessageRequest
             {
                 DidUrl = didUrl
