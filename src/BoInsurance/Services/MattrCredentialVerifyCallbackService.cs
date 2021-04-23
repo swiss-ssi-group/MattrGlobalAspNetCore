@@ -71,8 +71,10 @@ namespace BoInsurance
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            // Create string to scan
-            return v1PresentationTemplateResponse.Id;
+            var jws = "sometest";
+            var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
+
+            return qrCodeUrl;
         }
 
         private async Task<string> InvokePresentationRequest()
