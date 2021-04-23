@@ -3,11 +3,11 @@ using BoInsurance.MattrOpenApiClient;
 using BoInsurance.Services;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BoInsurance.Data;
+using System.Collections.Generic;
 
 namespace BoInsurance
 {
@@ -71,7 +71,8 @@ namespace BoInsurance
             V1_GetDidResponse did = await RequestDID(template.DidId, client);
 
             // Sign and Encode the Presentation Request body
-            var signAndEncodePresentationRequestBody = SignAndEncodePresentationRequestBody();
+            var signAndEncodePresentationRequestBodyResponse = await SignAndEncodePresentationRequestBody(
+                client, did, invokePresentationResponse);
 
             // save to db // TODO add this back once working
             var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
@@ -82,11 +83,11 @@ namespace BoInsurance
                 Challenge = challenge,
                 InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
                 Did = JsonConvert.SerializeObject(did),          
-                //SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
+                SignAndEncodePresentationRequestBody = signAndEncodePresentationRequestBodyResponse
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            var jws = "sometest";
+            var jws = signAndEncodePresentationRequestBodyResponse;
             var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
 
             return qrCodeUrl;
@@ -149,9 +150,37 @@ namespace BoInsurance
             return null;
         }
 
-        private async Task<string> SignAndEncodePresentationRequestBody()
+        private async Task<string> SignAndEncodePresentationRequestBody(
+            HttpClient client, 
+            V1_GetDidResponse did, 
+            V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
-            return string.Empty;
+            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/presentations/requests";
+
+            object didUrlArray;
+            did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);
+            var didUrl = ((List<string>)didUrlArray)[0];
+            var payload = new MattrOpenApiClient.SignMessageRequest
+            {
+                DidUrl = didUrl
+            };
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createDidUrl);
+
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var response = await client.PostAsync(uri, content);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+            }
+
+            return null;
         }
     }
 }
