@@ -91,7 +91,7 @@ namespace BoInsurance
                             new Example
                             {
                                 Context = new List<object>{ "https://schema.org" },
-                                Type = "nationaldrivinglicense",
+                                Type = "VerifiableCredential",
                                 TrustedIssuer = new List<TrustedIssuer2>
                                 { 
                                     new TrustedIssuer2
