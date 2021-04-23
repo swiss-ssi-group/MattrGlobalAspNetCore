@@ -48,6 +48,7 @@ namespace BoInsurance
             }
 
             var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
+            var challenge = Guid.NewGuid().ToString();
 
             HttpClient client = _clientFactory.CreateClient();
             var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
@@ -59,7 +60,12 @@ namespace BoInsurance
             var template = await _boInsuranceDbService.GetLastDriverLicensePrsentationTemplate();
 
             // Invoke the Presentation Request
-            var invokePresentationResponse = await InvokePresentationRequest();
+            var invokePresentationResponse = await InvokePresentationRequest(
+                client,
+                template.DidId,
+                template.TemplateId,
+                challenge,
+                callbackUrlFull);
 
             // Request DID 
             V1_GetDidResponse did = await RequestDID(template.DidId, client);
@@ -73,11 +79,12 @@ namespace BoInsurance
                 DidId = template.DidId,
                 TemplateId = template.TemplateId,
                 CallbackUrl = callbackUrlFull,
-                //InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
-                Did = JsonConvert.SerializeObject(did),
+                Challenge = challenge,
+                InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
+                Did = JsonConvert.SerializeObject(did),          
                 //SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
             };
-            //await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
+            await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
             var jws = "sometest";
             var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
@@ -85,9 +92,42 @@ namespace BoInsurance
             return qrCodeUrl;
         }
 
-        private async Task<string> InvokePresentationRequest()
+        private async Task<V1_CreatePresentationRequestResponse> InvokePresentationRequest(
+            HttpClient client, 
+            string didId,
+            string templateId,
+            string challenge,
+            string callbackUrl)
         {
-            return string.Empty;
+            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/presentations/requests";
+
+            var payload = new MattrOpenApiClient.V1_CreatePresentationRequestRequest
+            {
+                Did = didId,
+                TemplateId = templateId,
+                Challenge = challenge,
+                CallbackUrl = new Uri(callbackUrl),
+                ExpiresTime = 43200000.0 // 12 hrs for testing => prod deployment reduces to 5 mins
+            };
+            var payloadJson = JsonConvert.SerializeObject(payload);
+            var uri = new Uri(createDidUrl);
+
+            using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
+            {
+                var response = await client.PostAsync(uri, content);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    var v1CreatePresentationRequestResponse = JsonConvert.DeserializeObject<V1_CreatePresentationRequestResponse>(
+                            await response.Content.ReadAsStringAsync());
+
+                    return v1CreatePresentationRequestResponse;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+            }
+
+            return null;
         }
 
         private async Task<V1_GetDidResponse> RequestDID(string didId, HttpClient client)

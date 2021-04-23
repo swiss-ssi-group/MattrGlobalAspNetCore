@@ -13,5 +13,6 @@ namespace BoInsurance.Data
         public string InvokePresentationResponse { get; set; }
         public string Did { get; set; }
         public string SignAndEncodePresentationRequestBody { get; set; }
+        public string Challenge { get; internal set; }
     }
 }
