@@ -62,21 +62,21 @@ namespace BoInsurance
             var invokePresentationResponse = await InvokePresentationRequest();
 
             // Request DID 
-            var did = await RequestDID();
+            V1_GetDidResponse did = await RequestDID(template.DidId, client);
 
             // Sign and Encode the Presentation Request body
             var signAndEncodePresentationRequestBody = SignAndEncodePresentationRequestBody();
 
             // save to db // TODO add this back once working
-            //var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
-            //{
-            //    DidId = template.DidId,
-            //    TemplateId = template.TemplateId,
-            //    CallbackUrl = callbackUrl,
-            //    InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
-            //    Did = JsonConvert.SerializeObject(did),
-            //    SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
-            //};
+            var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
+            {
+                DidId = template.DidId,
+                TemplateId = template.TemplateId,
+                CallbackUrl = callbackUrlFull,
+                //InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
+                Did = JsonConvert.SerializeObject(did),
+                //SignAndEncodePresentationRequestBody = JsonConvert.SerializeObject(signAndEncodePresentationRequestBody)
+            };
             //await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
             var jws = "sometest";
@@ -90,9 +90,23 @@ namespace BoInsurance
             return string.Empty;
         }
 
-        private async Task<string> RequestDID()
+        private async Task<V1_GetDidResponse> RequestDID(string didId, HttpClient client)
         {
-            return string.Empty;
+            var requestUrl = $"{MATTR_DOMAIN}/core/v1/dids/{didId}";
+            var uri = new Uri(requestUrl);
+
+            var didResponse = await client.GetAsync(uri);
+
+            if (didResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var v1CreateDidResponse = JsonConvert.DeserializeObject<V1_GetDidResponse>(
+                        await didResponse.Content.ReadAsStringAsync());
+
+                return v1CreateDidResponse;
+            }
+
+            var error = await didResponse.Content.ReadAsStringAsync();
+            return null;
         }
 
         private async Task<string> SignAndEncodePresentationRequestBody()

@@ -138,7 +138,6 @@ namespace NationalDrivingLicense
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
 
-            var result = string.Empty;
             using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
             {
                 var tokenResponse = await client.PostAsync(uri, content);
