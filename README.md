@@ -77,6 +77,8 @@ https://gunnarpeipman.com/httpclient-remove-charset/
 
 https://www.lfph.io/wp-content/uploads/2021/02/Verifiable-Credentials-Flavors-Explained.pdf
 
+https://www.xtseminars.co.uk/post/introduction-to-the-future-of-identity-dids-vcs
+
 # Mattr.Global instructions 
 
 In order to obtain a Credential on the mobile wallet you will need to use the OIDC Bridge, so try following this tutorial.
