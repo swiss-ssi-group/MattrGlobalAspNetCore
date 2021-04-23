@@ -42,9 +42,10 @@ namespace BoInsurance
         /// <returns></returns>
         public async Task<string> CreateVerifyCallback(string callbackBaseUrl)
         {
-            if(!callbackBaseUrl.EndsWith('/'))
+            callbackBaseUrl = callbackBaseUrl.Trim();
+            if (!callbackBaseUrl.EndsWith('/'))
             {
-                callbackBaseUrl = $"{callbackBaseUrl}/";
+                callbackBaseUrl = $"{callbackBaseUrl.Trim()}/";
             }
 
             var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
@@ -162,7 +163,8 @@ namespace BoInsurance
             var didUrl = didUrlArray.ToString().Split("\"")[1];
             var payload = new MattrOpenApiClient.SignMessageRequest
             {
-                DidUrl = didUrl
+                DidUrl = didUrl,
+                // Payload = v1CreatePresentationRequestResponse TODO
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
