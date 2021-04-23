@@ -69,34 +69,41 @@ namespace BoInsurance
 
             var createPresentationsTemplatesUrl = $"https://{MATTR_SANDBOX}/v1/presentations/templates";
 
-            var domain = new Dictionary<string, object>();
-            domain.Add("domain", MATTR_SANDBOX);
-            var payload = new MattrOpenApiClient.V1_CreatePresentationQueryByExample
-            {
-                AdditionalProperties = domain,
-                Type = "QueryByExample", 
-                CredentialQuery = new List<CredentialQuery>
+            var additionalProperties = new Dictionary<string, object>();
+            additionalProperties.Add("type", "QueryByExample");
+            additionalProperties.Add("credentialQuery", new List<CredentialQuery> {
+                new CredentialQuery
                 {
-                    new CredentialQuery
+                    Reason = "Please provide your driving license",
+                    Required = true,
+                    Example = new List<Example>
                     {
-                        Reason = "Please provide your driving license",
-                        Required = true,
-                        Example = new List<Example>
+                        new Example
                         {
-                            new Example
+                            Context = new List<object>{ "https://schema.org" },
+                            Type = "VerifiableCredential",
+                            TrustedIssuer = new List<TrustedIssuer2>
                             {
-                                Context = new List<object>{ "https://schema.org" },
-                                Type = "VerifiableCredential",
-                                TrustedIssuer = new List<TrustedIssuer2>
-                                { 
-                                    new TrustedIssuer2
-                                    {
-                                        Required = true,
-                                        Issuer = didId // DID use to create the oidc
-                                    }
+                                new TrustedIssuer2
+                                {
+                                    Required = true,
+                                    Issuer = didId // DID use to create the oidc
                                 }
                             }
                         }
+                    }
+                } 
+            });
+
+            var payload = new MattrOpenApiClient.V1_CreatePresentationTemplate
+            {
+                Domain = MATTR_SANDBOX,
+                Name = "certificate-presentation",
+                Query = new List<Query>
+                {
+                    new Query
+                    {
+                        AdditionalProperties = additionalProperties
                     }
                 }
             };
