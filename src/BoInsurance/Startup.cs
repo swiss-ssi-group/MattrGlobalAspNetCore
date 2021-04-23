@@ -25,8 +25,8 @@ namespace BoInsurance
 
             services.Configure<MattrConfiguration>(Configuration.GetSection("MattrConfiguration"));
             services.AddScoped<MattrTokenApiService>();
-            services.AddScoped<MattrVerifyService>();
-            //services.AddScoped<DriverLicensePresentationTemplateService>();
+            services.AddScoped<MattrPresentationTemplateService>();
+            services.AddScoped<BoInsuranceDbService>();
 
             services.AddDbContext<BoInsuranceVerifyMattrContext>(options =>
                 options.UseSqlServer(

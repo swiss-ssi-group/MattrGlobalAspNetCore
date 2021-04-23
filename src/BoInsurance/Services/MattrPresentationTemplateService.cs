@@ -7,40 +7,48 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using BoInsurance.Data;
 
 namespace BoInsurance
 {
-    public class MattrVerifyService
+    public class MattrPresentationTemplateService
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
-
+        private readonly BoInsuranceDbService _boInsuranceDbService;
         public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
         public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
 
-        public MattrVerifyService(IConfiguration configuration,
+        public MattrPresentationTemplateService(IConfiguration configuration,
             IHttpClientFactory clientFactory,
-            MattrTokenApiService mattrTokenApiService)
+            MattrTokenApiService mattrTokenApiService,
+            BoInsuranceDbService boInsuranceDbService)
         {
             _configuration = configuration;
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
+            _boInsuranceDbService = boInsuranceDbService;
         }
 
-        public async Task<string> CreatePresentationTemplateUrl(string didId)
+        public async Task<string> CreatePresentationTemplateId(string didId)
         {
-            //// create a new one
-            await CreateMattrVerifier(didId);
-            //var driverLicenseCredentials = await CreateMattrDidAndCredentialIssuer();
-            //driverLicenseCredentials.Name = name;
-            //await _driverLicenseService.CreateDriverLicense(driverLicenseCredentials);
+            // create a new one
+            var v1PresentationTemplateResponse = await CreateMattrPresentationTemplate(didId);
 
-            //var callback = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
-            return string.Empty;
+            // save to db
+            var drivingLicensePresentationTemplate = new DrivingLicensePresentationTemplate
+            {
+                DidId = didId,
+                TemplateId = v1PresentationTemplateResponse.Id,
+                MattrPresentationTemplateReponse = JsonConvert.SerializeObject(v1PresentationTemplateResponse)
+            };
+            await _boInsuranceDbService.CreateDriverLicensePresentationTemplate(drivingLicensePresentationTemplate);
+
+            return v1PresentationTemplateResponse.Id;
         }
 
-        private async Task CreateMattrVerifier(string didId)
+        private async Task<V1_PresentationTemplateResponse> CreateMattrPresentationTemplate(string didId)
         {
             HttpClient client = _clientFactory.CreateClient();
             var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
@@ -50,22 +58,9 @@ namespace BoInsurance
             client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 
             var v1PresentationTemplateResponse = await CreateMattrPresentationTemplate(client, didId);
-            // Create 
-          
+            return v1PresentationTemplateResponse;
         }
 
-        /// <summary>
-        /// @context is the JSON-LD schema, which should match the schema as defined in the credential that is being 
-        /// requested.
-        /// 
-        /// type is the credential type that the Mobile Wallet will use to find matching credentials that it holds.
-        /// 
-        /// The issuer in trustedIssuer filters which Credentials will be acceptable.
-        /// An employer, for instance, might only accept the public DIDs of certain universities.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="didId">Did Id of the OIDC used to create the credential verifier</param>
-        /// <returns></returns>
         private async Task<V1_PresentationTemplateResponse> CreateMattrPresentationTemplate(
             HttpClient client, string didId)
         {
@@ -131,17 +126,5 @@ namespace BoInsurance
 
             throw new Exception("whoops something went wrong");
         }
-
-    }
-    public class MattrOptions
-    {
-        /// <summary>
-        /// The supported key types for the DIDs are ed25519 and bls12381g2. 
-        /// If the keyType is omitted, the default key type that will be used is ed25519.
-        /// 
-        /// If the keyType in options is set to bls12381g2 a DID will be created with 
-        /// a BLS key type which supports BBS+ signatures for issuing ZKP-enabled credentials.
-        /// </summary>
-        public string keyType { get; set; } = "ed25519";
     }
 }

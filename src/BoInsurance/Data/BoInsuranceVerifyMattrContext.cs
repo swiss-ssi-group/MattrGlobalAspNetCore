@@ -7,6 +7,6 @@ namespace BoInsurance.Data
         public BoInsuranceVerifyMattrContext(DbContextOptions<BoInsuranceVerifyMattrContext> options) : base(options)
         { }
 
-        public DbSet<DrvingLicensePresentationTemplate> DriverLicenseCredentials { get; set; }
+        public DbSet<DrivingLicensePresentationTemplate> DrivingLicensePresentationTemplates { get; set; }
     }
 }

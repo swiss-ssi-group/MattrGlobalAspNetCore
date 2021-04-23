@@ -7,13 +7,13 @@ namespace BoInsurance.Pages
 {
     public class CreatePresentationTemplateModel : PageModel
     {
-        private readonly MattrVerifyService _mattrVerifyService;
+        private readonly MattrPresentationTemplateService _mattrVerifyService;
         public bool CreatingPresentationTemplate { get; set; } = true;
-        public string Callback { get; set; }
+        public string TemplateId { get; set; }
 
         [BindProperty]
         public PresentationTemplate PresentationTemplate { get; set; }
-        public CreatePresentationTemplateModel(MattrVerifyService mattrVerifyService)
+        public CreatePresentationTemplateModel(MattrPresentationTemplateService mattrVerifyService)
         {
             _mattrVerifyService = mattrVerifyService;
         }
@@ -29,7 +29,7 @@ namespace BoInsurance.Pages
                 return Page();
             }
 
-            Callback = await _mattrVerifyService.CreatePresentationTemplateUrl(PresentationTemplate.DidId);
+            TemplateId = await _mattrVerifyService.CreatePresentationTemplateId(PresentationTemplate.DidId);
             CreatingPresentationTemplate = false;
             return Page();
         }
