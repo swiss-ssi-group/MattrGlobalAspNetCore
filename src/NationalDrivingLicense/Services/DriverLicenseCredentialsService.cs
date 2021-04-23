@@ -14,6 +14,23 @@ namespace NationalDrivingLicense
             _nationalDrivingLicenseMattrContext = nationalDrivingLicenseMattrContext;
         }
 
+        public async Task<(string Callback, string Template, string DidId)> GetLastDriverLicenseCredentialIssuer()
+        {
+            var driverLicenseCredentials = await _nationalDrivingLicenseMattrContext
+                .DriverLicenseCredentials
+                .OrderBy(u => u.Id)
+                .LastOrDefaultAsync();
+
+            if (driverLicenseCredentials != null)
+            {
+                var callback = $"https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
+
+                return (callback, "temp", "did:...");
+            }
+
+            return (string.Empty, string.Empty, string.Empty);
+        }
+
         public async Task<string> GetLastDriverLicenseCredentialIssuerUrl()
         {
             var driverLicense = await _nationalDrivingLicenseMattrContext
