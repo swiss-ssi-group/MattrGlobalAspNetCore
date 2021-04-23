@@ -93,3 +93,12 @@ Then you can setup your tenant to run the Verify flow, a quick way of doing that
 https://learn.mattr.global/tutorials/verify/using-callback/callback-intro
 
 Note: because you just have the 1 sandbox tenant, you will be issuing credentials and verifying them through the same instance, but Issuer and Verifier could easily be separate tenants on our platform or indeed any other interoperable platform.
+
+
+## Verifing a credential
+
+https://learn.mattr.global/tutorials/verify/using-callback/callback-local
+
+ngrok http http://localhost:5000
+
+https://learn.mattr.global/tutorials/verify/using-callback/callback-e-to-e

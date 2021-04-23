@@ -35,5 +35,11 @@ namespace BoInsurance
             _boInsuranceVerifyMattrContext.DrivingLicensePresentationTemplates.Add(driverLicenseTemplate);
             await _boInsuranceVerifyMattrContext.SaveChangesAsync();
         }
+
+        public async Task CreateDrivingLicensePresentationVerify(DrivingLicensePresentationVerify drivingLicensePresentationVerify)
+        {
+            _boInsuranceVerifyMattrContext.DrivingLicensePresentationVerifications.Add(drivingLicensePresentationVerify);
+            await _boInsuranceVerifyMattrContext.SaveChangesAsync();
+        }
     }
 }

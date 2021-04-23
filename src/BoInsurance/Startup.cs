@@ -26,6 +26,7 @@ namespace BoInsurance
             services.Configure<MattrConfiguration>(Configuration.GetSection("MattrConfiguration"));
             services.AddScoped<MattrTokenApiService>();
             services.AddScoped<MattrPresentationTemplateService>();
+            services.AddScoped<MattrCredentialVerifyCallbackService>();
             services.AddScoped<BoInsuranceDbService>();
 
             services.AddDbContext<BoInsuranceVerifyMattrContext>(options =>
@@ -53,7 +54,9 @@ namespace BoInsurance
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // we need to deacvtivate this so ngrok works
+            //app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

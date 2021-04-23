@@ -8,5 +8,9 @@ namespace BoInsurance.Data
         { }
 
         public DbSet<DrivingLicensePresentationTemplate> DrivingLicensePresentationTemplates { get; set; }
+
+        public DbSet<DrivingLicensePresentationVerify> DrivingLicensePresentationVerifications { get; set; }
+
+        
     }
 }
