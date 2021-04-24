@@ -172,7 +172,7 @@ namespace BoInsurance
             {
                 var response = await client.PostAsync(uri, content);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     return result;
