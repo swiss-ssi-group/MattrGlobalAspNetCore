@@ -74,6 +74,9 @@ namespace BoInsurance
             var signAndEncodePresentationRequestBodyResponse = await SignAndEncodePresentationRequestBody(
                 client, did, invokePresentationResponse);
 
+            // fix strange DTO
+            var jws = signAndEncodePresentationRequestBodyResponse.Replace("\"", "");
+
             // save to db // TODO add this back once working
             var drivingLicensePresentationVerify = new DrivingLicensePresentationVerify
             {
@@ -83,11 +86,10 @@ namespace BoInsurance
                 Challenge = challenge,
                 InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
                 Did = JsonConvert.SerializeObject(did),          
-                SignAndEncodePresentationRequestBody = signAndEncodePresentationRequestBodyResponse
+                SignAndEncodePresentationRequestBody = jws
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            var jws = signAndEncodePresentationRequestBodyResponse;
             var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
 
             return qrCodeUrl;
