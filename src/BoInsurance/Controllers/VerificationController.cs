@@ -37,7 +37,7 @@ namespace BoInsurance.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task <IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
+        public async Task<IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
         {
             // TODO Validate
             await _boInsuranceDbService.PersistVerification(body);

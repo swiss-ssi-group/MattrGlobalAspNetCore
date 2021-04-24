@@ -89,7 +89,7 @@ namespace BoInsurance
                             }
                         }
                     }
-                } 
+                }
             });
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationTemplate
@@ -116,7 +116,7 @@ namespace BoInsurance
 
                 if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-        
+
                     var v1PresentationTemplateResponse = JsonConvert
                             .DeserializeObject<MattrOpenApiClient.V1_PresentationTemplateResponse>(
                             await tokenResponse.Content.ReadAsStringAsync());

@@ -40,7 +40,7 @@ namespace NationalDrivingLicense
                 .OrderBy(u => u.Id)
                 .LastOrDefaultAsync();
 
-            if(driverLicense != null)
+            if (driverLicense != null)
             {
                 var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;

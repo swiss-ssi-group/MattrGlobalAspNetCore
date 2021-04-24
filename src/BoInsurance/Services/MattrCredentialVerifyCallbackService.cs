@@ -85,7 +85,7 @@ namespace BoInsurance
                 CallbackUrl = callbackUrlFull,
                 Challenge = challenge,
                 InvokePresentationResponse = JsonConvert.SerializeObject(invokePresentationResponse),
-                Did = JsonConvert.SerializeObject(did),          
+                Did = JsonConvert.SerializeObject(did),
                 SignAndEncodePresentationRequestBody = jws
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
@@ -96,7 +96,7 @@ namespace BoInsurance
         }
 
         private async Task<V1_CreatePresentationRequestResponse> InvokePresentationRequest(
-            HttpClient client, 
+            HttpClient client,
             string didId,
             string templateId,
             string challenge,
@@ -153,8 +153,8 @@ namespace BoInsurance
         }
 
         private async Task<string> SignAndEncodePresentationRequestBody(
-            HttpClient client, 
-            V1_GetDidResponse did, 
+            HttpClient client,
+            V1_GetDidResponse did,
             V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
             var createDidUrl = $"https://{MATTR_SANDBOX}/v1/messaging/sign";

@@ -12,6 +12,6 @@ namespace BoInsurance.Data
         public DbSet<DrivingLicensePresentationVerify> DrivingLicensePresentationVerifications { get; set; }
 
         public DbSet<VerifiedDriverLicense> VerifiedDriverLicenses { get; set; }
-        
+
     }
 }

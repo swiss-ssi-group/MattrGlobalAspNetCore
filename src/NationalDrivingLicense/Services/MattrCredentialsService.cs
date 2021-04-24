@@ -76,7 +76,7 @@ namespace NationalDrivingLicense
                 {
                     IssuerDid = did.Did,
                     Name = "NationalDrivingLicense",
-                    Context = new List<Uri> { 
+                    Context = new List<Uri> {
                          new Uri( "https://schema.org") // Only this is supported
                     },
                     Type = new List<string> { "nationaldrivinglicense" }
