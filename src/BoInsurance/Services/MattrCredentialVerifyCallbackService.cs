@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BoInsurance.Data;
-using System.Collections.Generic;
 
 namespace BoInsurance
 {
@@ -45,7 +44,7 @@ namespace BoInsurance
             callbackBaseUrl = callbackBaseUrl.Trim();
             if (!callbackBaseUrl.EndsWith('/'))
             {
-                callbackBaseUrl = $"{callbackBaseUrl.Trim()}/";
+                callbackBaseUrl = $"{callbackBaseUrl}/";
             }
 
             var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
@@ -156,7 +155,7 @@ namespace BoInsurance
             V1_GetDidResponse did, 
             V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
-            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/presentations/requests";
+            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/messaging/sign";
 
             object didUrlArray;
             did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);
@@ -164,7 +163,7 @@ namespace BoInsurance
             var payload = new MattrOpenApiClient.SignMessageRequest
             {
                 DidUrl = didUrl,
-                // Payload = v1CreatePresentationRequestResponse TODO
+                Payload = v1CreatePresentationRequestResponse
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
