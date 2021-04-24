@@ -1,5 +1,6 @@
 ﻿using BoInsurance.Data;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -36,16 +37,13 @@ namespace BoInsurance.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task <IActionResult> DrivingLicenseCallback([FromBody] object body)
+        public async Task <IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
         {
-            // api/Verification/DrivingLicenseCallback
-            Console.WriteLine(body);
 
-            var item = body as VerifiedDriverLicense;
-            // TODO verify using challenge
+            // TODO Validate
 
-            await _boInsuranceDbService.PersistVerification(item);
-            // TODO send event to update UI with the data and 
+            await _boInsuranceDbService.PersistVerification(body);
+            // TODO send event to update UI with the data 
             return Ok();
         }
     }

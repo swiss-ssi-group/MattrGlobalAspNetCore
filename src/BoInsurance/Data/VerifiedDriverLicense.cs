@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BoInsurance.Data
 {
@@ -18,20 +19,18 @@ namespace BoInsurance.Data
     /// }
     public class VerifiedDriverLicense
     {
-        public string presentationType { get; set; }
+        [JsonPropertyName("presentationType")]
+        public string PresentationType { get; set; }
         [Key]
-        public string challengeId { get; set; }
-        public VerifiedDriverLicenseClaims claims { get; set; }
-        public bool verified { get; set; }
-        public string holder { get; set; }
-    }
-    public class VerifiedDriverLicenseClaims
-    {
-        public string id { get; set; }
-        public string name { get; set; }
-        public bool firstName { get; set; }
-        public string licenseType { get; set; }
-        public string dateOfBirth { get; set; }
-        public string licenseIssuedAt { get; set; }
+        [JsonPropertyName("challengeId")]
+        public string ChallengeId { get; set; }
+
+        [JsonPropertyName("claims")]
+        public VerifiedDriverLicenseClaims Claims { get; set; } = new VerifiedDriverLicenseClaims();
+
+        [JsonPropertyName("verified")]
+        public bool Verified { get; set; }
+        [JsonPropertyName("holder")]
+        public string Holder { get; set; }
     }
 }
