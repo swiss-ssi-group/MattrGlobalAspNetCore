@@ -38,34 +38,29 @@
         <div class="col-sm">
             <div>
                 <img src="~/ndl_car_01.png" width="200" alt="Driver License">
-                <div>
-                    <b>Scan the QR Code</b>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-4">Driver Licence verification</dt>
-                        <dd class="col-sm-8">
-                            <div class="qr" id="qrCode"></div>
-                        </dd>
-                    </dl>
-                </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="qr" id="qrCode"></div>
         </div>
     </div>
 </div>
 
-
-@section scripts {
-    <script src="~/js/qrcode.min.js"></script>
-    <script type="text/javascript">
+    @section scripts {
+        <script src="~/js/qrcode.min.js"></script>
+        <script type="text/javascript">
         new QRCode(document.getElementById("qrCode"),
             {
                 text: "@Html.Raw(Model.QrCodeUrl)",
-                width: 300,
-                height: 300
+                width: 400,
+                height: 400,
+                correctLevel: QRCode.CorrectLevel.L
             });
 
     $(document).ready(() => {
     });
 
-    </script>
-}
+        </script>
+    }
