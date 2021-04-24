@@ -355,7 +355,7 @@ namespace BoInsurance.MattrOpenApiClient
     
         [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
-        public V1_CreatePresentationRequestResponse Payload { get; set; } = new V1_CreatePresentationRequestResponse();
+        public Request Payload { get; set; } = new Request();
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

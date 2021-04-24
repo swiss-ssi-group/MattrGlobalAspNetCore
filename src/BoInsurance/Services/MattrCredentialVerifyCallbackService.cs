@@ -165,7 +165,7 @@ namespace BoInsurance
             var payload = new MattrOpenApiClient.SignMessageRequest
             {
                 DidUrl = didUrl,
-                Payload = v1CreatePresentationRequestResponse
+                Payload = v1CreatePresentationRequestResponse.Request
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
