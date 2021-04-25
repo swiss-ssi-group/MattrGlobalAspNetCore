@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm">
             <div>
-                <img src="~/ndl_car_01.png" width="200" alt="Driver License">
+                <img src="~/ndl_car_01.png" width="100" alt="Driver License" />
                 <div>
                     <b>Verified Driver Licence for:@Html.DisplayFor(model => model.VerifiedDriverLicenseClaims.FirstName) @Html.DisplayFor(model => model.VerifiedDriverLicenseClaims.Name)</b>
                     <hr />
@@ -38,6 +38,15 @@
                     </dl>
                 </div>
             </div>
+        </div>
+       
+        <div class="col-sm">
+            <img src="~/ndl_insurance_01.png" />
+            <dl class="row">
+                <dt class="col-sm-12">Proceed to buy</dt>
+
+            </dl>
+            <button class="btn btn-outline-primary">Buy Insurance</button>
         </div>
     </div>
 </div>
