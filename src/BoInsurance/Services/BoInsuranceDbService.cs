@@ -47,5 +47,12 @@ namespace BoInsurance
             _boInsuranceVerifyMattrContext.VerifiedDriverLicenses.Add(item);
             await _boInsuranceVerifyMattrContext.SaveChangesAsync();
         }
+
+        public async Task<VerifiedDriverLicense> GetVerifiedUser(string challengeId)
+        {
+            return await _boInsuranceVerifyMattrContext
+                .VerifiedDriverLicenses
+                .FirstOrDefaultAsync(v => v.ChallengeId == challengeId);
+        }
     }
 }

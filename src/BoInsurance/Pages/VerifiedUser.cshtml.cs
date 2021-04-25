@@ -1,3 +1,4 @@
+using BoInsurance.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BoInsurance.Pages
@@ -12,10 +13,16 @@ namespace BoInsurance.Pages
         }
 
         public string ChallengeId { get; set; }
+        public VerifiedDriverLicenseClaims VerifiedDriverLicenseClaims { get; private set; }
 
-        public void OnGet(string challengeId)
+        public async System.Threading.Tasks.Task OnGetAsync(string challengeId)
         {
             // user query param to get challenge id and display data
+            if(challengeId != null)
+            {
+                var verifiedDriverLicenseUser = await _boInsuranceDbService.GetVerifiedUser(challengeId);
+                VerifiedDriverLicenseClaims = verifiedDriverLicenseUser.Claims;
+            }
         }
     }
 }
