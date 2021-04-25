@@ -92,7 +92,7 @@ namespace BoInsurance
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationTemplate
             {
-                Domain = Settings.MATTR_SANDBOX,
+                Domain = _mattrConfiguration.TenantSubdomain,
                 Name = "certificate-presentation",
                 Query = new List<Query>
                 {

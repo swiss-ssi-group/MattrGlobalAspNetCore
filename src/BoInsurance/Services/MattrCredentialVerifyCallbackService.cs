@@ -15,6 +15,13 @@ namespace BoInsurance
     /// </summary>
     public class MattrCredentialVerifyCallbackService
     {
+        private static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/DrivingLicenseCallback";
+
+        /// <summary>
+        /// TODO calculate this
+        /// </summary>
+        private static double MATTR_EPOCH_EXPIRES_TIME_VERIFIY = 1638836401000;
+
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
@@ -44,7 +51,7 @@ namespace BoInsurance
                 callbackBaseUrl = $"{callbackBaseUrl}/";
             }
 
-            var callbackUrlFull = $"{callbackBaseUrl}{Settings.MATTR_CALLBACK_VERIFY_PATH}";
+            var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
             var challenge = Guid.NewGuid().ToString();
 
             HttpClient client = _clientFactory.CreateClient();
@@ -107,7 +114,7 @@ namespace BoInsurance
                 TemplateId = templateId,
                 Challenge = challenge,
                 CallbackUrl = new Uri(callbackUrl),
-                ExpiresTime = Settings.MATTR_EPOCH_EXPIRES_TIME_VERIFIY // Epoch time
+                ExpiresTime = MATTR_EPOCH_EXPIRES_TIME_VERIFIY // Epoch time
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
