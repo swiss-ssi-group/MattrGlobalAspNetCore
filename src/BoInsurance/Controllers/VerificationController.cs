@@ -1,5 +1,4 @@
-﻿using BoInsurance.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Controllers

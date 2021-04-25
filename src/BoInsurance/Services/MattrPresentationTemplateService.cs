@@ -15,8 +15,6 @@ namespace BoInsurance
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
-        public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
-        public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
 
         public MattrPresentationTemplateService(IHttpClientFactory clientFactory,
             MattrTokenApiService mattrTokenApiService,
@@ -63,7 +61,7 @@ namespace BoInsurance
             // create presentation, post to presentations templates api
             // https://learn.mattr.global/tutorials/verify/presentation-request-template
 
-            var createPresentationsTemplatesUrl = $"https://{MATTR_SANDBOX}/v1/presentations/templates";
+            var createPresentationsTemplatesUrl = $"https://{Settings.MATTR_SANDBOX}/v1/presentations/templates";
 
             var additionalProperties = new Dictionary<string, object>();
             additionalProperties.Add("type", "QueryByExample");
@@ -90,7 +88,7 @@ namespace BoInsurance
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationTemplate
             {
-                Domain = MATTR_SANDBOX,
+                Domain = Settings.MATTR_SANDBOX,
                 Name = "certificate-presentation",
                 Query = new List<Query>
                 {

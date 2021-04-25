@@ -17,9 +17,6 @@ namespace BoInsurance
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
-        public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
-        public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
-        public static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/DrivingLicenseCallback";
 
         public MattrCredentialVerifyCallbackService(IHttpClientFactory clientFactory,
             MattrTokenApiService mattrTokenApiService,
@@ -43,7 +40,7 @@ namespace BoInsurance
                 callbackBaseUrl = $"{callbackBaseUrl}/";
             }
 
-            var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
+            var callbackUrlFull = $"{callbackBaseUrl}{Settings.MATTR_CALLBACK_VERIFY_PATH}";
             var challenge = Guid.NewGuid().ToString();
 
             HttpClient client = _clientFactory.CreateClient();
@@ -86,7 +83,7 @@ namespace BoInsurance
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            var qrCodeUrl = $"didcomm://{MATTR_DOMAIN}/?request={jws}";
+            var qrCodeUrl = $"didcomm://{Settings.MATTR_DOMAIN}/?request={jws}";
 
             return qrCodeUrl;
         }
@@ -98,7 +95,7 @@ namespace BoInsurance
             string challenge,
             string callbackUrl)
         {
-            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/presentations/requests";
+            var createDidUrl = $"https://{Settings.MATTR_SANDBOX}/v1/presentations/requests";
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationRequestRequest
             {
@@ -106,7 +103,7 @@ namespace BoInsurance
                 TemplateId = templateId,
                 Challenge = challenge,
                 CallbackUrl = new Uri(callbackUrl),
-                ExpiresTime = 1638836401000 // 10 mins
+                ExpiresTime = Settings.MATTR_EPOCH_EXPIRES_TIME_VERIFIY // Epoch time
             };
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
@@ -131,7 +128,7 @@ namespace BoInsurance
 
         private async Task<V1_GetDidResponse> RequestDID(string didId, HttpClient client)
         {
-            var requestUrl = $"{MATTR_DOMAIN}/core/v1/dids/{didId}";
+            var requestUrl = $"{Settings.MATTR_DOMAIN}/core/v1/dids/{didId}";
             var uri = new Uri(requestUrl);
 
             var didResponse = await client.GetAsync(uri);
@@ -153,7 +150,7 @@ namespace BoInsurance
             V1_GetDidResponse did,
             V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
-            var createDidUrl = $"https://{MATTR_SANDBOX}/v1/messaging/sign";
+            var createDidUrl = $"https://{Settings.MATTR_SANDBOX}/v1/messaging/sign";
 
             object didUrlArray;
             did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);
