@@ -55,7 +55,7 @@ namespace BoInsurance
                 app.UseHsts();
             }
 
-            // we need to deacvtivate this so ngrok works
+            // we need to diable this so ngrok works for local dev without a license
             //app.UseHttpsRedirection();
 
             app.UseStaticFiles();
