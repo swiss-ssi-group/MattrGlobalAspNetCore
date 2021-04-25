@@ -2,6 +2,9 @@
 
 namespace BoInsurance.Controllers
 {
+    /// <summary>
+    /// This class totally depends on the OIDC credential issuer claims
+    /// </summary>
     public class VerifiedDriverLicenseClaims
     {
         public string Id { get; set; }

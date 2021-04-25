@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
 using NationalDrivingLicense.MattrOpenApiClient;
+using NationalDrivingLicense.Services;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +12,13 @@ namespace NationalDrivingLicense
     public class DriverLicenseCredentialsService
     {
         private readonly NationalDrivingLicenseMattrContext _nationalDrivingLicenseMattrContext;
+        private readonly MattrConfiguration _mattrConfiguration;
 
-        public DriverLicenseCredentialsService(NationalDrivingLicenseMattrContext nationalDrivingLicenseMattrContext)
+        public DriverLicenseCredentialsService(NationalDrivingLicenseMattrContext nationalDrivingLicenseMattrContext,
+            IOptions<MattrConfiguration> mattrConfiguration)
         {
             _nationalDrivingLicenseMattrContext = nationalDrivingLicenseMattrContext;
+            _mattrConfiguration = mattrConfiguration.Value;
         }
 
         public async Task<(string Callback, string DidId)> GetLastDriverLicenseCredentialIssuer()
@@ -25,7 +30,7 @@ namespace NationalDrivingLicense
 
             if (driverLicenseCredentials != null)
             {
-                var callback = $"https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
+                var callback = $"https://{_mattrConfiguration.TenantSubdomain}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
                 var oidcCredentialIssuer = JsonConvert.DeserializeObject<V1_CreateOidcIssuerResponse>(driverLicenseCredentials.OidcIssuer);
                 return (callback, oidcCredentialIssuer.Credential.IssuerDid);
             }
@@ -42,7 +47,7 @@ namespace NationalDrivingLicense
 
             if (driverLicense != null)
             {
-                var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
+                var url = $"openid://discovery?issuer=https://{_mattrConfiguration.TenantSubdomain}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;
             }
 
@@ -57,7 +62,7 @@ namespace NationalDrivingLicense
 
             if (driverLicense != null)
             {
-                var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
+                var url = $"openid://discovery?issuer=https://{_mattrConfiguration.TenantSubdomain}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;
             }
 

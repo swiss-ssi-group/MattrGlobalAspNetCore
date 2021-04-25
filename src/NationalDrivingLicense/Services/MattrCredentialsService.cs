@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
 using NationalDrivingLicense.MattrOpenApiClient;
 using NationalDrivingLicense.Services;
@@ -17,19 +18,19 @@ namespace NationalDrivingLicense
         private readonly DriverLicenseCredentialsService _driverLicenseService;
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
-
-        public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
-        public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
+        private readonly MattrConfiguration _mattrConfiguration;
 
         public MattrCredentialsService(IConfiguration configuration,
             DriverLicenseCredentialsService driverLicenseService,
             IHttpClientFactory clientFactory,
+            IOptions<MattrConfiguration> mattrConfiguration,
             MattrTokenApiService mattrTokenApiService)
         {
             _configuration = configuration;
             _driverLicenseService = driverLicenseService;
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
+            _mattrConfiguration = mattrConfiguration.Value;
         }
 
         public async Task<string> CreateCredentialsAndCallback(string name)
@@ -39,7 +40,7 @@ namespace NationalDrivingLicense
             driverLicenseCredentials.Name = name;
             await _driverLicenseService.CreateDriverLicense(driverLicenseCredentials);
 
-            var callback = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
+            var callback = $"https://{_mattrConfiguration.TenantSubdomain}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
             return callback;
         }
 
@@ -68,7 +69,7 @@ namespace NationalDrivingLicense
             // create vc, post to credentials api
             // https://learn.mattr.global/tutorials/issue/oidc-bridge/setup-issuer
 
-            var createCredentialsUrl = $"https://{MATTR_SANDBOX}/ext/oidc/v1/issuers";
+            var createCredentialsUrl = $"https://{_mattrConfiguration.TenantSubdomain}/ext/oidc/v1/issuers";
 
             var payload = new MattrOpenApiClient.V1_CreateOidcIssuerRequest
             {
@@ -83,11 +84,11 @@ namespace NationalDrivingLicense
                 },
                 ClaimMappings = new List<ClaimMappings>
                 {
-                    new ClaimMappings{ JsonLdTerm="name", OidcClaim=$"{MATTR_DOMAIN}/name"},
-                    new ClaimMappings{ JsonLdTerm="firstName", OidcClaim=$"{MATTR_DOMAIN}/first_name"},
-                    new ClaimMappings{ JsonLdTerm="licenseType", OidcClaim=$"{MATTR_DOMAIN}/license_type"},
-                    new ClaimMappings{ JsonLdTerm="dateOfBirth", OidcClaim=$"{MATTR_DOMAIN}/date_of_birth"},
-                    new ClaimMappings{ JsonLdTerm="licenseIssuedAt", OidcClaim=$"{MATTR_DOMAIN}/license_issued_at"}
+                    new ClaimMappings{ JsonLdTerm="name", OidcClaim=$"https://{_mattrConfiguration.TenantSubdomain}/name"},
+                    new ClaimMappings{ JsonLdTerm="firstName", OidcClaim=$"https://{_mattrConfiguration.TenantSubdomain}/first_name"},
+                    new ClaimMappings{ JsonLdTerm="licenseType", OidcClaim=$"https://{_mattrConfiguration.TenantSubdomain}/license_type"},
+                    new ClaimMappings{ JsonLdTerm="dateOfBirth", OidcClaim=$"https://{_mattrConfiguration.TenantSubdomain}/date_of_birth"},
+                    new ClaimMappings{ JsonLdTerm="licenseIssuedAt", OidcClaim=$"https://{_mattrConfiguration.TenantSubdomain}/license_issued_at"}
                 },
                 FederatedProvider = new FederatedProvider
                 {
@@ -126,7 +127,7 @@ namespace NationalDrivingLicense
             // https://learn.mattr.global/api-ref/#operation/createDid
             // https://learn.mattr.global/tutorials/dids/use-did/
 
-            var createDidUrl = $"https://{MATTR_SANDBOX}/core/v1/dids";
+            var createDidUrl = $"https://{_mattrConfiguration.TenantSubdomain}/core/v1/dids";
 
             var payload = new MattrOpenApiClient.V1_CreateDidDocument
             {
