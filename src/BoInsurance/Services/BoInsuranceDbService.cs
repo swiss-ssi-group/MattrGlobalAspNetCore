@@ -2,6 +2,7 @@
 using BoInsurance.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using BoInsurance.Controllers;
 
 namespace BoInsurance
 {
@@ -44,11 +45,25 @@ namespace BoInsurance
 
         public async Task PersistVerification(VerifiedDriverLicense item)
         {
-            _boInsuranceVerifyMattrContext.VerifiedDriverLicenses.Add(item);
+            var data = new VerifiedDriverLicenseData
+            {
+                DateOfBirth = item.Claims.DateOfBirth,
+                ChallengeId = item.ChallengeId,
+                ClaimsId = item.Claims.Id,
+                FirstName = item.Claims.FirstName,
+                Holder = item.Holder,
+                LicenseIssuedAt = item.Claims.LicenseIssuedAt,
+                LicenseType = item.Claims.LicenseType,
+                Name = item.Claims.Name,
+                PresentationType = item.PresentationType,
+                Verified = item.Verified
+            };
+
+            _boInsuranceVerifyMattrContext.VerifiedDriverLicenses.Add(data);
             await _boInsuranceVerifyMattrContext.SaveChangesAsync();
         }
 
-        public async Task<VerifiedDriverLicense> GetVerifiedUser(string challengeId)
+        public async Task<VerifiedDriverLicenseData> GetVerifiedUser(string challengeId)
         {
             return await _boInsuranceVerifyMattrContext
                 .VerifiedDriverLicenses

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BoInsurance.Data
+namespace BoInsurance.Controllers
 {
     public class VerifiedDriverLicenseClaims
     {

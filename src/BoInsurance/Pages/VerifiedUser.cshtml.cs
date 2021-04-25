@@ -13,7 +13,7 @@ namespace BoInsurance.Pages
         }
 
         public string ChallengeId { get; set; }
-        public VerifiedDriverLicenseClaims VerifiedDriverLicenseClaims { get; private set; }
+        public DriverLicenseClaimsDto VerifiedDriverLicenseClaims { get; private set; }
 
         public async System.Threading.Tasks.Task OnGetAsync(string challengeId)
         {
@@ -21,8 +21,24 @@ namespace BoInsurance.Pages
             if (challengeId != null)
             {
                 var verifiedDriverLicenseUser = await _boInsuranceDbService.GetVerifiedUser(challengeId);
-                VerifiedDriverLicenseClaims = verifiedDriverLicenseUser.Claims;
+                VerifiedDriverLicenseClaims = new DriverLicenseClaimsDto
+                {
+                    DateOfBirth = verifiedDriverLicenseUser.DateOfBirth,
+                    Name = verifiedDriverLicenseUser.Name,
+                    LicenseType = verifiedDriverLicenseUser.LicenseType,
+                    FirstName = verifiedDriverLicenseUser.FirstName,
+                    LicenseIssuedAt = verifiedDriverLicenseUser.LicenseIssuedAt
+                };
             }
         }
+    }
+
+    public class DriverLicenseClaimsDto
+    {
+        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LicenseType { get; set; }
+        public string DateOfBirth { get; set; }
+        public string LicenseIssuedAt { get; set; }
     }
 }

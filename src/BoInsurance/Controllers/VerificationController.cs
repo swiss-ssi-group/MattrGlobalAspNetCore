@@ -1,7 +1,5 @@
 ﻿using BoInsurance.Data;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Controllers
