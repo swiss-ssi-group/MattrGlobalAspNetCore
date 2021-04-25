@@ -95,7 +95,7 @@ namespace BoInsurance
             string challenge,
             string callbackUrl)
         {
-            var createDidUrl = $"https://{Settings.MATTR_SANDBOX}/v1/presentations/requests";
+            var createDidUrl = $"{Settings.MATTR_DOMAIN}/v1/presentations/requests";
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationRequestRequest
             {
@@ -150,7 +150,7 @@ namespace BoInsurance
             V1_GetDidResponse did,
             V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
-            var createDidUrl = $"https://{Settings.MATTR_SANDBOX}/v1/messaging/sign";
+            var createDidUrl = $"{Settings.MATTR_DOMAIN}/v1/messaging/sign";
 
             object didUrlArray;
             did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);

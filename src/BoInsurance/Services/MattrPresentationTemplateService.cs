@@ -61,7 +61,7 @@ namespace BoInsurance
             // create presentation, post to presentations templates api
             // https://learn.mattr.global/tutorials/verify/presentation-request-template
 
-            var createPresentationsTemplatesUrl = $"https://{Settings.MATTR_SANDBOX}/v1/presentations/templates";
+            var createPresentationsTemplatesUrl = $"{Settings.MATTR_DOMAIN}/v1/presentations/templates";
 
             var additionalProperties = new Dictionary<string, object>();
             additionalProperties.Add("type", "QueryByExample");

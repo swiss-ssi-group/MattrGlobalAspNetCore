@@ -27,11 +27,11 @@ namespace NationalDrivingLicense.Pages
             //"date_of_birth": "1953-07-21"
 
             var identityHasDriverLicenseClaims = true;
-            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{MattrCredentialsService.MATTR_DOMAIN}/name");
-            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{MattrCredentialsService.MATTR_DOMAIN}/first_name");
-            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == $"{MattrCredentialsService.MATTR_DOMAIN}/license_type");
-            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == $"{MattrCredentialsService.MATTR_DOMAIN}/date_of_birth");
-            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == $"{MattrCredentialsService.MATTR_DOMAIN}/license_issued_at");
+            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/name");
+            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/first_name");
+            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/license_type");
+            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/date_of_birth");
+            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/license_issued_at");
 
             if (nameClaim == null
                 || firstNameClaim == null

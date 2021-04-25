@@ -25,7 +25,7 @@ namespace NationalDrivingLicense
 
             if (driverLicenseCredentials != null)
             {
-                var callback = $"https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
+                var callback = $"{Settings.MATTR_DOMAIN}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
                 var oidcCredentialIssuer = JsonConvert.DeserializeObject<V1_CreateOidcIssuerResponse>(driverLicenseCredentials.OidcIssuer);
                 return (callback, oidcCredentialIssuer.Credential.IssuerDid);
             }
@@ -42,7 +42,7 @@ namespace NationalDrivingLicense
 
             if (driverLicense != null)
             {
-                var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
+                var url = $"openid://discovery?issuer={Settings.MATTR_DOMAIN}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;
             }
 
@@ -57,7 +57,7 @@ namespace NationalDrivingLicense
 
             if (driverLicense != null)
             {
-                var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
+                var url = $"openid://discovery?issuer={Settings.MATTR_DOMAIN}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;
             }
 
