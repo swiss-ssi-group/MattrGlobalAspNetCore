@@ -36,10 +36,16 @@ namespace BoInsurance.Controllers
         [Route("[action]")]
         public async Task<IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
         {
-            // TODO Validate
-            await _boInsuranceDbService.PersistVerification(body);
-            // TODO send event to update UI with the data 
-            return Ok();
+            var exists = await _boInsuranceDbService.ChallengeExists(body.ChallengeId);
+
+            if(exists)
+            {
+                await _boInsuranceDbService.PersistVerification(body);
+                // TODO send event to update UI with the data 
+                return Ok();
+            }
+
+            return BadRequest("unknown");
         }
     }
 }

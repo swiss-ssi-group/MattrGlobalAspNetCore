@@ -37,6 +37,13 @@ namespace BoInsurance
             await _boInsuranceVerifyMattrContext.SaveChangesAsync();
         }
 
+        public async Task<bool> ChallengeExists(string challengeId)
+        {
+            return await _boInsuranceVerifyMattrContext
+                .DrivingLicensePresentationVerifications
+                .AnyAsync(d => d.Challenge == challengeId);
+        }
+
         public async Task CreateDrivingLicensePresentationVerify(DrivingLicensePresentationVerify drivingLicensePresentationVerify)
         {
             _boInsuranceVerifyMattrContext.DrivingLicensePresentationVerifications.Add(drivingLicensePresentationVerify);
