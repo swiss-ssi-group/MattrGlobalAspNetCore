@@ -13,19 +13,16 @@ namespace BoInsurance
 {
     public class MattrPresentationTemplateService
     {
-        private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
         public static string MATTR_SANDBOX = "damianbod-sandbox.vii.mattr.global";
         public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
 
-        public MattrPresentationTemplateService(IConfiguration configuration,
-            IHttpClientFactory clientFactory,
+        public MattrPresentationTemplateService(IHttpClientFactory clientFactory,
             MattrTokenApiService mattrTokenApiService,
             BoInsuranceDbService boInsuranceDbService)
         {
-            _configuration = configuration;
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
             _boInsuranceDbService = boInsuranceDbService;
@@ -109,22 +106,21 @@ namespace BoInsurance
 
             var uri = new Uri(createPresentationsTemplatesUrl);
 
-            var result = string.Empty;
             using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
             {
-                var tokenResponse = await client.PostAsync(uri, content);
+                var presentationTemplateResponse = await client.PostAsync(uri, content);
 
-                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                if (presentationTemplateResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
 
                     var v1PresentationTemplateResponse = JsonConvert
                             .DeserializeObject<MattrOpenApiClient.V1_PresentationTemplateResponse>(
-                            await tokenResponse.Content.ReadAsStringAsync());
+                            await presentationTemplateResponse.Content.ReadAsStringAsync());
 
                     return v1PresentationTemplateResponse;
                 }
 
-                var error = await tokenResponse.Content.ReadAsStringAsync();
+                var error = await presentationTemplateResponse.Content.ReadAsStringAsync();
 
             }
 
