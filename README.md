@@ -127,6 +127,9 @@ Note: because you just have the 1 sandbox tenant, you will be issuing credential
 
 https://learn.mattr.global/tutorials/verify/using-callback/callback-local
 
+```
 ngrok http http://localhost:5000
+```
+
 
 https://learn.mattr.global/tutorials/verify/using-callback/callback-e-to-e
