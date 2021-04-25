@@ -42,10 +42,13 @@ namespace BoInsurance.Controllers
             {
                 await _boInsuranceDbService.PersistVerification(body);
                 // TODO send event to update UI with the data 
+                // UI needs to switch to this page
+                //$"/VerifiedUser?challengeid={body.ChallengeId}"
+
                 return Ok();
             }
 
-            return BadRequest("unknown");
+            return BadRequest("unknown verify request");
         }
     }
 }
