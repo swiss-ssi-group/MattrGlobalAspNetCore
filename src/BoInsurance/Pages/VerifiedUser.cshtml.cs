@@ -18,7 +18,7 @@ namespace BoInsurance.Pages
         public async System.Threading.Tasks.Task OnGetAsync(string challengeId)
         {
             // user query param to get challenge id and display data
-            if(challengeId != null)
+            if (challengeId != null)
             {
                 var verifiedDriverLicenseUser = await _boInsuranceDbService.GetVerifiedUser(challengeId);
                 VerifiedDriverLicenseClaims = verifiedDriverLicenseUser.Claims;

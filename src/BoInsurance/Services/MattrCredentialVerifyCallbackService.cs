@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using BoInsurance.MattrOpenApiClient;
+﻿using BoInsurance.MattrOpenApiClient;
 using BoInsurance.Services;
 using Newtonsoft.Json;
 using System;
@@ -15,7 +14,6 @@ namespace BoInsurance
     /// </summary>
     public class MattrCredentialVerifyCallbackService
     {
-        private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
@@ -23,12 +21,10 @@ namespace BoInsurance
         public static string MATTR_DOMAIN = "https://damianbod-sandbox.vii.mattr.global";
         public static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/DrivingLicenseCallback";
 
-        public MattrCredentialVerifyCallbackService(IConfiguration configuration,
-            IHttpClientFactory clientFactory,
+        public MattrCredentialVerifyCallbackService(IHttpClientFactory clientFactory,
             MattrTokenApiService mattrTokenApiService,
             BoInsuranceDbService boInsuranceDbService)
         {
-            _configuration = configuration;
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
             _boInsuranceDbService = boInsuranceDbService;

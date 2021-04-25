@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using BoInsurance.MattrOpenApiClient;
+﻿using BoInsurance.MattrOpenApiClient;
 using BoInsurance.Services;
 using Newtonsoft.Json;
 using System;
