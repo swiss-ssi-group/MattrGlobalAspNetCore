@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BoInsurance.Data;
+using Microsoft.Extensions.Options;
 
 namespace BoInsurance
 {
@@ -17,14 +18,17 @@ namespace BoInsurance
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
+        private readonly MattrConfiguration _mattrConfiguration;
 
         public MattrCredentialVerifyCallbackService(IHttpClientFactory clientFactory,
+            IOptions<MattrConfiguration> mattrConfiguration,
             MattrTokenApiService mattrTokenApiService,
             BoInsuranceDbService boInsuranceDbService)
         {
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
             _boInsuranceDbService = boInsuranceDbService;
+            _mattrConfiguration = mattrConfiguration.Value;
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace BoInsurance
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            var qrCodeUrl = $"didcomm://{Settings.MATTR_DOMAIN}/?request={jws}";
+            var qrCodeUrl = $"didcomm://https://{_mattrConfiguration.TenantSubdomain}/?request={jws}";
 
             return qrCodeUrl;
         }
@@ -95,7 +99,7 @@ namespace BoInsurance
             string challenge,
             string callbackUrl)
         {
-            var createDidUrl = $"{Settings.MATTR_DOMAIN}/v1/presentations/requests";
+            var createDidUrl = $"https://{_mattrConfiguration.TenantSubdomain}/v1/presentations/requests";
 
             var payload = new MattrOpenApiClient.V1_CreatePresentationRequestRequest
             {
@@ -128,7 +132,7 @@ namespace BoInsurance
 
         private async Task<V1_GetDidResponse> RequestDID(string didId, HttpClient client)
         {
-            var requestUrl = $"{Settings.MATTR_DOMAIN}/core/v1/dids/{didId}";
+            var requestUrl = $"https://{_mattrConfiguration.TenantSubdomain}/core/v1/dids/{didId}";
             var uri = new Uri(requestUrl);
 
             var didResponse = await client.GetAsync(uri);
@@ -150,7 +154,7 @@ namespace BoInsurance
             V1_GetDidResponse did,
             V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
         {
-            var createDidUrl = $"{Settings.MATTR_DOMAIN}/v1/messaging/sign";
+            var createDidUrl = $"https://{_mattrConfiguration.TenantSubdomain}/v1/messaging/sign";
 
             object didUrlArray;
             did.DidDocument.AdditionalProperties.TryGetValue("authentication", out didUrlArray);

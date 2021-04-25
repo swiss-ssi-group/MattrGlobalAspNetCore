@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BoInsurance.Data;
+using Microsoft.Extensions.Options;
 
 namespace BoInsurance
 {
@@ -15,14 +16,17 @@ namespace BoInsurance
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
         private readonly BoInsuranceDbService _boInsuranceDbService;
+        private readonly MattrConfiguration _mattrConfiguration;
 
         public MattrPresentationTemplateService(IHttpClientFactory clientFactory,
+            IOptions<MattrConfiguration> mattrConfiguration,
             MattrTokenApiService mattrTokenApiService,
             BoInsuranceDbService boInsuranceDbService)
         {
             _clientFactory = clientFactory;
             _mattrTokenApiService = mattrTokenApiService;
             _boInsuranceDbService = boInsuranceDbService;
+            _mattrConfiguration = mattrConfiguration.Value;
         }
 
         public async Task<string> CreatePresentationTemplateId(string didId)
@@ -61,7 +65,7 @@ namespace BoInsurance
             // create presentation, post to presentations templates api
             // https://learn.mattr.global/tutorials/verify/presentation-request-template
 
-            var createPresentationsTemplatesUrl = $"{Settings.MATTR_DOMAIN}/v1/presentations/templates";
+            var createPresentationsTemplatesUrl = $"https://{_mattrConfiguration.TenantSubdomain}/v1/presentations/templates";
 
             var additionalProperties = new Dictionary<string, object>();
             additionalProperties.Add("type", "QueryByExample");

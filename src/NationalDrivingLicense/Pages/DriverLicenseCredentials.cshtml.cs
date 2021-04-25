@@ -1,22 +1,26 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using NationalDrivingLicense.Data;
+using NationalDrivingLicense.Services;
 
 namespace NationalDrivingLicense.Pages
 {
     public class DriverLicenseCredentialsModel : PageModel
     {
         private readonly DriverLicenseCredentialsService _driverLicenseCredentialsService;
+        private readonly MattrConfiguration _mattrConfiguration;
 
         public string DriverLicenseMessage { get; set; } = "Loading credentials";
         public bool HasDriverLicense { get; set; } = false;
         public DriverLicense DriverLicense { get; set; }
-
         public string CredentialOfferUrl { get; set; }
-        public DriverLicenseCredentialsModel(DriverLicenseCredentialsService driverLicenseCredentialsService)
+        public DriverLicenseCredentialsModel(DriverLicenseCredentialsService driverLicenseCredentialsService,
+            IOptions<MattrConfiguration> mattrConfiguration)
         {
             _driverLicenseCredentialsService = driverLicenseCredentialsService;
+            _mattrConfiguration = mattrConfiguration.Value;
         }
         public async Task OnGetAsync()
         {
@@ -27,11 +31,11 @@ namespace NationalDrivingLicense.Pages
             //"date_of_birth": "1953-07-21"
 
             var identityHasDriverLicenseClaims = true;
-            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/name");
-            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/first_name");
-            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/license_type");
-            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/date_of_birth");
-            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == $"{Settings.MATTR_DOMAIN}/license_issued_at");
+            var nameClaim = User.Claims.FirstOrDefault(t => t.Type == $"https://{_mattrConfiguration.TenantSubdomain}/name");
+            var firstNameClaim = User.Claims.FirstOrDefault(t => t.Type == $"https://{_mattrConfiguration.TenantSubdomain}/first_name");
+            var licenseTypeClaim = User.Claims.FirstOrDefault(t => t.Type == $"https://{_mattrConfiguration.TenantSubdomain}/license_type");
+            var dateOfBirthClaim = User.Claims.FirstOrDefault(t => t.Type == $"https://{_mattrConfiguration.TenantSubdomain}/date_of_birth");
+            var licenseIssuedAtClaim = User.Claims.FirstOrDefault(t => t.Type == $"https://{_mattrConfiguration.TenantSubdomain}/license_issued_at");
 
             if (nameClaim == null
                 || firstNameClaim == null
