@@ -15,10 +15,10 @@
  - Install ngrok for the verifier application (npm)
  - Add the secrets to your configuration
  - Initialize your database
- - Start applicaiton using for example http:localhost:5000
- - Start ngrok using **ngrok http localhost:5000**
+ - Start application using for example http:localhost:5000
+ - Start ngrok using **ngrok http localhost:5000** (like above)
  - Copy the DID for the OIDC Issuer Credentials from the NationalDrivingLicense UI
- - Create a presentation Template in the BoInsurance
+ - Create a presentation Template in the BoInsurance (Use copied DID)
  - Verify in the application
 
 ## secrets
