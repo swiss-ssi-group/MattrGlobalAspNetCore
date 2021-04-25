@@ -1,5 +1,26 @@
 # Mattr Global ASP.NET Core
 
+## Test run the applications
+
+## NationalDrivingLicense (OIDC Credential Issuer)
+
+ - Get an account from Mattr (see Mattr docs)
+ - Add the secrets to your configuration
+ - Initialize your database
+ - Install a Mattr Wallet on your phone
+ - start application 
+
+## BoInsurance (Verification using credentials from Wallet)
+
+ - Install ngrok for the verifier application (npm)
+ - Add the secrets to your configuration
+ - Initialize your database
+ - Start applicaiton using for example http:localhost:5000
+ - Start ngrok using **ngrok http localhost:5000**
+ - Copy the DID for the OIDC Issuer Credentials from the NationalDrivingLicense UI
+ - Create a presentation Template in the BoInsurance
+ - Verify in the application
+
 ## secrets
 
 ```
@@ -59,6 +80,7 @@ dotnet ef database update --context NationalDrivingLicenseMattrContext
 Update-Database 
 ```
 
+
 ## Links
 
 https://mattr.global/
@@ -77,6 +99,8 @@ https://gunnarpeipman.com/httpclient-remove-charset/
 
 https://www.lfph.io/wp-content/uploads/2021/02/Verifiable-Credentials-Flavors-Explained.pdf
 
+https://www.xtseminars.co.uk/post/introduction-to-the-future-of-identity-dids-vcs
+
 # Mattr.Global instructions 
 
 In order to obtain a Credential on the mobile wallet you will need to use the OIDC Bridge, so try following this tutorial.
@@ -93,3 +117,12 @@ Then you can setup your tenant to run the Verify flow, a quick way of doing that
 https://learn.mattr.global/tutorials/verify/using-callback/callback-intro
 
 Note: because you just have the 1 sandbox tenant, you will be issuing credentials and verifying them through the same instance, but Issuer and Verifier could easily be separate tenants on our platform or indeed any other interoperable platform.
+
+
+## Verifing a credential
+
+https://learn.mattr.global/tutorials/verify/using-callback/callback-local
+
+ngrok http http://localhost:5000
+
+https://learn.mattr.global/tutorials/verify/using-callback/callback-e-to-e

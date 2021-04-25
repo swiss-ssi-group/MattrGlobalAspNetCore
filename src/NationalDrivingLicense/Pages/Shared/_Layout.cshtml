@@ -55,8 +55,20 @@
                                 Add Driver License to Wallet
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin"
+                            <a class="nav-link text-dark" asp-area="" asp-page="/ViewCredentialsInfo"
+                               id="tooltip-car"
+                               data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="Create OIDC Credential Issuer">
+                                <i class="fa fa-car" aria-hidden="true"></i>
+                                View last Credentials Issuer
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/CreateIssuerCredentials"
                                id="tooltip-car"
                                data-toggle="tooltip"
                                data-placement="bottom"
@@ -65,6 +77,7 @@
                                 Create OIDC Credential Issuer
                             </a>
                         </li>
+
                     </ul>
                 </div>
             </div>

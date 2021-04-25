@@ -1,0 +1,58 @@
+﻿@page
+@model BoInsurance.Pages.CreatePresentationTemplateModel
+@{
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <form method="post">
+                <div>
+                    <div class="form-group">
+                        <label class="control-label">DID ID</label>
+                        <input asp-for="PresentationTemplate.DidId" class="form-control" />
+                        <span asp-validation-for="PresentationTemplate.DidId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        @if (Model.CreatingPresentationTemplate)
+                        {
+                            <input class="form-control"
+                                   type="submit" readonly="@Model.CreatingPresentationTemplate"
+                                   value="Create Presentation Template" />
+                        }
+
+                    </div>
+                    <div class="form-group">
+                        @if (!Model.CreatingPresentationTemplate)
+                        {
+                            <div class="alert alert-success">
+                                <strong>Mattr Presentation Template created</strong>
+                            </div>
+                        }
+
+                        
+                    </div>
+                </div>
+            </form>
+            <hr />
+            <p>When the templateId is created, you can use the template ID to verify</p>
+        </div>
+        <div class="col-sm">
+            <div>
+                <img src="~/ndl_car_01.png" width="200" alt="Driver License">
+                <div>
+                    <b>Driver Licence templateId from presentation template</b>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">templateId</dt>
+                        <dd class="col-sm-8">
+                            @Model.TemplateId
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -76,7 +76,7 @@ namespace NationalDrivingLicense
                 {
                     IssuerDid = did.Did,
                     Name = "NationalDrivingLicense",
-                    Context = new List<Uri> { 
+                    Context = new List<Uri> {
                          new Uri( "https://schema.org") // Only this is supported
                     },
                     Type = new List<string> { "nationaldrivinglicense" }
@@ -102,21 +102,19 @@ namespace NationalDrivingLicense
 
             var uri = new Uri(createCredentialsUrl);
 
-            var result = string.Empty;
             using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
             {
-                var tokenResponse = await client.PostAsync(uri, content);
+                var createOidcIssuerResponse = await client.PostAsync(uri, content);
 
-                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                if (createOidcIssuerResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     var v1CreateOidcIssuerResponse = JsonConvert.DeserializeObject<V1_CreateOidcIssuerResponse>(
-                            await tokenResponse.Content.ReadAsStringAsync());
+                            await createOidcIssuerResponse.Content.ReadAsStringAsync());
 
                     return v1CreateOidcIssuerResponse;
                 }
 
-                var error = await tokenResponse.Content.ReadAsStringAsync();
-
+                var error = await createOidcIssuerResponse.Content.ReadAsStringAsync();
             }
 
             throw new Exception("whoops something went wrong");
@@ -138,20 +136,19 @@ namespace NationalDrivingLicense
             var payloadJson = JsonConvert.SerializeObject(payload);
             var uri = new Uri(createDidUrl);
 
-            var result = string.Empty;
             using (var content = new StringContentWithoutCharset(payloadJson, "application/json"))
             {
-                var tokenResponse = await client.PostAsync(uri, content);
+                var createDidResponse = await client.PostAsync(uri, content);
 
-                if (tokenResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                if (createDidResponse.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     var v1CreateDidResponse = JsonConvert.DeserializeObject<V1_CreateDidResponse>(
-                            await tokenResponse.Content.ReadAsStringAsync());
+                            await createDidResponse.Content.ReadAsStringAsync());
 
                     return v1CreateDidResponse;
                 }
 
-                var error = await tokenResponse.Content.ReadAsStringAsync();
+                var error = await createDidResponse.Content.ReadAsStringAsync();
             }
 
             return null;

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NationalDrivingLicense.Data;
+using NationalDrivingLicense.MattrOpenApiClient;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +16,23 @@ namespace NationalDrivingLicense
             _nationalDrivingLicenseMattrContext = nationalDrivingLicenseMattrContext;
         }
 
+        public async Task<(string Callback, string DidId)> GetLastDriverLicenseCredentialIssuer()
+        {
+            var driverLicenseCredentials = await _nationalDrivingLicenseMattrContext
+                .DriverLicenseCredentials
+                .OrderBy(u => u.Id)
+                .LastOrDefaultAsync();
+
+            if (driverLicenseCredentials != null)
+            {
+                var callback = $"https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicenseCredentials.OidcIssuerId}/federated/callback";
+                var oidcCredentialIssuer = JsonConvert.DeserializeObject<V1_CreateOidcIssuerResponse>(driverLicenseCredentials.OidcIssuer);
+                return (callback, oidcCredentialIssuer.Credential.IssuerDid);
+            }
+
+            return (string.Empty, string.Empty);
+        }
+
         public async Task<string> GetLastDriverLicenseCredentialIssuerUrl()
         {
             var driverLicense = await _nationalDrivingLicenseMattrContext
@@ -21,7 +40,7 @@ namespace NationalDrivingLicense
                 .OrderBy(u => u.Id)
                 .LastOrDefaultAsync();
 
-            if(driverLicense != null)
+            if (driverLicense != null)
             {
                 var url = $"openid://discovery?issuer=https://{MattrCredentialsService.MATTR_SANDBOX}/ext/oidc/v1/issuers/{driverLicense.OidcIssuerId}";
                 return url;
