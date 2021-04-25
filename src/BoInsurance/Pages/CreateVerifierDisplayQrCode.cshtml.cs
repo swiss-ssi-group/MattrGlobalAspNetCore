@@ -20,6 +20,7 @@ namespace BoInsurance.Pages
         public void OnGet()
         {
             CallbackUrlDto = new CreateVerifierDisplayQrCodeCallbackUrl();
+            CallbackUrlDto.CallbackUrl = $"https://{HttpContext.Request.Host.Value}";
         }
 
         public async Task<IActionResult> OnPostAsync()

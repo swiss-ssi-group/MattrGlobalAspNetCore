@@ -1,4 +1,3 @@
-using BoInsurance.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BoInsurance.Pages
