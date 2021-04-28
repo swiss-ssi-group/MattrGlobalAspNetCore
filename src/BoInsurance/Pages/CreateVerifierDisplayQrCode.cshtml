@@ -1,7 +1,5 @@
 ﻿@page
 @model BoInsurance.Pages.CreateVerifierDisplayQrCodeModel
-@{
-}
 
 <div class="container-fluid">
     <div class="row">
@@ -52,7 +50,7 @@
 @section scripts {
 <script src="~/js/qrcode.min.js"></script>
 <script type="text/javascript">
-new QRCode(document.getElementById("qrCode"),
+    new QRCode(document.getElementById("qrCode"),
     {
         text: "@Html.Raw(Model.QrCodeUrl)",
         width: 400,
@@ -67,7 +65,7 @@ new QRCode(document.getElementById("qrCode"),
     var connection = new signalR.HubConnectionBuilder().withUrl("/mattrVerifiedSuccessHub").build();
 
     connection.on("MattrCallbackSuccess", function (challengeId) {
-        console.warn("received signalr:" + challengeId);
+        console.log("received verification:" + challengeId);
         window.location.href = "/VerifiedUser?challengeid=" + challengeId;
     });
 
@@ -85,6 +83,5 @@ new QRCode(document.getElementById("qrCode"),
     }).catch(function (err) {
         return console.error(err.toString());
     });
-
 </script>
 }
