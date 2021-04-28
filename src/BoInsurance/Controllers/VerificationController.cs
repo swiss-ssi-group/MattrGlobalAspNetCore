@@ -13,7 +13,7 @@ namespace BoInsurance.Controllers
 
         private readonly IHubContext<MattrVerifiedSuccessHub> _hubContext;
 
-        public VerificationController(BoInsuranceDbService boInsuranceDbService, 
+        public VerificationController(BoInsuranceDbService boInsuranceDbService,
             IHubContext<MattrVerifiedSuccessHub> hubContext)
         {
             _hubContext = hubContext;
@@ -56,8 +56,8 @@ namespace BoInsurance.Controllers
             {
                 await _boInsuranceDbService.PersistVerification(body);
 
-                if(found)
-                {   
+                if (found)
+                {
                     //$"/VerifiedUser?challengeid={body.ChallengeId}"
                     await _hubContext.Clients
                         .Client(connectionId)
