@@ -3,6 +3,7 @@
   "name": "asp.net",
   "private": true,
   "devDependencies": {
+    "@microsoft/signalr": "5.0.5",
     "bootstrap": "4.6.0",
     "jquery": "3.6.0",
     "jquery-ajax-unobtrusive": "3.2.6",

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BoInsurance.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Controllers
@@ -9,8 +11,12 @@ namespace BoInsurance.Controllers
     {
         private readonly BoInsuranceDbService _boInsuranceDbService;
 
-        public VerificationController(BoInsuranceDbService boInsuranceDbService)
+        private readonly IHubContext<MattrVerifiedSuccessHub> _hubContext;
+
+        public VerificationController(BoInsuranceDbService boInsuranceDbService, 
+            IHubContext<MattrVerifiedSuccessHub> hubContext)
         {
+            _hubContext = hubContext;
             _boInsuranceDbService = boInsuranceDbService;
         }
 
@@ -36,14 +42,27 @@ namespace BoInsurance.Controllers
         [Route("[action]")]
         public async Task<IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
         {
+            string connectionId;
+            var found = MattrVerifiedSuccessHub.Challenges
+                .TryGetValue(body.ChallengeId, out connectionId);
+
+            // test Signalr
+            //await _hubContext.Clients.Client(connectionId).SendAsync("MattrCallbackSuccess", $"{body.ChallengeId}");
+            //return Ok();
+
             var exists = await _boInsuranceDbService.ChallengeExists(body.ChallengeId);
 
-            if(exists)
+            if (exists)
             {
                 await _boInsuranceDbService.PersistVerification(body);
-                // TODO send event to update UI with the data 
-                // UI needs to switch to this page
-                //$"/VerifiedUser?challengeid={body.ChallengeId}"
+
+                if(found)
+                {   
+                    //$"/VerifiedUser?challengeid={body.ChallengeId}"
+                    await _hubContext.Clients
+                        .Client(connectionId)
+                        .SendAsync("MattrCallbackSuccess", $"{body.ChallengeId}");
+                }
 
                 return Ok();
             }

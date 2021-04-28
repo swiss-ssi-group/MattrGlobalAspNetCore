@@ -37,7 +37,8 @@
     "inputFiles": [
       "node_modules/jquery/dist/jquery.min.js",
       "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-      "node_modules/sweetalert2/dist/sweetalert2.all.min.js"
+      "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+      "node_modules/@microsoft/signalr/dist/browser/signalr.min.js"
     ],
     "minify": {
       "enabled": true,
