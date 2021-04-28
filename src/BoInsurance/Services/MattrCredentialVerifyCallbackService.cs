@@ -43,7 +43,7 @@ namespace BoInsurance
         /// </summary>
         /// <param name="callbackBaseUrl"></param>
         /// <returns></returns>
-        public async Task<string> CreateVerifyCallback(string callbackBaseUrl)
+        public async Task<(string QrCodeUrl, string ChallengeId)> CreateVerifyCallback(string callbackBaseUrl)
         {
             callbackBaseUrl = callbackBaseUrl.Trim();
             if (!callbackBaseUrl.EndsWith('/'))
@@ -96,7 +96,7 @@ namespace BoInsurance
 
             var qrCodeUrl = $"didcomm://https://{_mattrConfiguration.TenantSubdomain}/?request={jws}";
 
-            return qrCodeUrl;
+            return (qrCodeUrl, challenge);
         }
 
         private async Task<V1_CreatePresentationRequestResponse> InvokePresentationRequest(

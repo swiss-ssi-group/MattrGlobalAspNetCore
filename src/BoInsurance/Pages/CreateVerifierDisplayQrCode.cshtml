@@ -44,23 +44,47 @@
     <div class="row">
         <div class="col-sm">
             <div class="qr" id="qrCode"></div>
+            <input asp-for="ChallengeId" hidden/>
         </div>
     </div>
 </div>
 
-    @section scripts {
-        <script src="~/js/qrcode.min.js"></script>
-        <script type="text/javascript">
-        new QRCode(document.getElementById("qrCode"),
-            {
-                text: "@Html.Raw(Model.QrCodeUrl)",
-                width: 400,
-                height: 400,
-                correctLevel: QRCode.CorrectLevel.M
-            });
-
-    $(document).ready(() => {
+@section scripts {
+<script src="~/js/qrcode.min.js"></script>
+<script type="text/javascript">
+new QRCode(document.getElementById("qrCode"),
+    {
+        text: "@Html.Raw(Model.QrCodeUrl)",
+        width: 400,
+        height: 400,
+        correctLevel: QRCode.CorrectLevel.M
     });
 
-        </script>
-    }
+    $(document).ready(() => {
+ 
+    });
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/mattrVerifiedSuccessHub").build();
+
+    connection.on("MattrCallbackSuccess", function (challengeId) {
+        console.warn("received signalr:" + challengeId);
+        window.location.href = "/VerifiedUser?challengeid=" + challengeId;
+    });
+
+    connection.start().then(function () {
+        //console.log(connection.connectionId);
+        const challengeId = $("#ChallengeId").val();
+        
+        if (challengeId) {
+            console.log(challengeId);
+            // join message
+            connection.invoke("AddChallenge", challengeId, connection.connectionId).catch(function (err) {
+                return console.error(err.toString());
+            });
+        }
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+</script>
+}

@@ -36,6 +36,7 @@ namespace BoInsurance
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddRazorPages();
+            services.AddSignalR();
             services.AddControllers();
         }
 
@@ -67,6 +68,7 @@ namespace BoInsurance
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<MattrVerifiedSuccessHub>("/mattrVerifiedSuccessHub");
                 endpoints.MapControllers();
             });
         }
