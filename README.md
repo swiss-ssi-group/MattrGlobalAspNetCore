@@ -2,7 +2,8 @@
 
 ## Blogs
 
-**Create an OIDC credential Issuer with Mattr and ASP.NET Core**
+- [Getting started with Self Sovereign Identity SSI](https://damienbod.com/2021/03/29/getting-started-with-self-sovereign-identity-ssi/)
+- [Create an OIDC credential Issuer with Mattr and ASP.NET Core}(https://damienbod.com)
 
 ## Test run the applications
 
