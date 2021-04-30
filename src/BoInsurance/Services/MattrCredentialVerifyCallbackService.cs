@@ -7,6 +7,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BoInsurance.Data;
 using Microsoft.Extensions.Options;
+using System.Text.Encodings.Web;
+using System.Security.Cryptography;
 
 namespace BoInsurance
 {
@@ -52,7 +54,7 @@ namespace BoInsurance
             }
 
             var callbackUrlFull = $"{callbackBaseUrl}{MATTR_CALLBACK_VERIFY_PATH}";
-            var challenge = Guid.NewGuid().ToString();
+            var challenge = GetEncodedRandomString();
 
             HttpClient client = _clientFactory.CreateClient();
             var accessToken = await _mattrTokenApiService.GetApiToken(client, "mattrAccessToken");
@@ -188,6 +190,21 @@ namespace BoInsurance
             }
 
             return null;
+        }
+
+
+        private string GetEncodedRandomString()
+        {
+            var base64 = Convert.ToBase64String(GenerateRandomBytes(30));
+            return HtmlEncoder.Default.Encode(base64);
+        }
+
+        private byte[] GenerateRandomBytes(int length)
+        {
+            using var randonNumberGen = new RNGCryptoServiceProvider();
+            var byteArray = new byte[length];
+            randonNumberGen.GetBytes(byteArray);
+            return byteArray;
         }
     }
 }
