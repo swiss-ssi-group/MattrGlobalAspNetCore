@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace BoInsurance.Pages
 {
@@ -14,7 +15,7 @@ namespace BoInsurance.Pages
         public string ChallengeId { get; set; }
         public DriverLicenseClaimsDto VerifiedDriverLicenseClaims { get; private set; }
 
-        public async System.Threading.Tasks.Task OnGetAsync(string challengeId)
+        public async Task OnGetAsync(string challengeId)
         {
             // user query param to get challenge id and display data
             if (challengeId != null)
