@@ -3,7 +3,7 @@
 ## Blogs
 
 - [Getting started with Self Sovereign Identity SSI](https://damienbod.com/2021/03/29/getting-started-with-self-sovereign-identity-ssi/)
-- [Create an OIDC credential Issuer with Mattr and ASP.NET Core}(https://damienbod.com)
+- [Create an OIDC credential Issuer with Mattr and ASP.NET Core](https://damienbod.com)
 
 ## Test run the applications
 
@@ -20,11 +20,11 @@
  - Install ngrok for the verifier application (npm)
  - Add the secrets to your configuration
  - Initialize your database
- - Start application using for example http:localhost:5000
+ - Start application using for example http://localhost:5000
  - Start ngrok using **ngrok http localhost:5000** (like above)
  - Copy the DID for the OIDC Issuer Credentials from the NationalDrivingLicense UI
- - Create a presentation Template in the BoInsurance (Use copied DID)
- - Verify in the application
+ - Create a presentation template in the BoInsurance (Use copied DID)
+ - Verify using the wallet and the application
 
 ## secrets
 
