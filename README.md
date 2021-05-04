@@ -21,7 +21,7 @@
  - Add the secrets to your configuration
  - Initialize your database
  - Start application using for example http://localhost:5000
- - Start ngrok using **ngrok http localhost:5000** (like above)
+ - Start ngrok using **ngrok http http://localhost:5000** (like above)
  - Copy the DID for the OIDC Issuer Credentials from the NationalDrivingLicense UI
  - Create a presentation template in the BoInsurance (Use copied DID)
  - Verify using the wallet and the application
