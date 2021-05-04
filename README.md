@@ -9,10 +9,10 @@
 
 ## NationalDrivingLicense (OIDC Credential Issuer)
 
- - Get an account from Mattr (see Mattr docs)
+ - Get an account from Mattr (see MATTR docs)
  - Add the secrets to your configuration
  - Initialize your database
- - Install a Mattr Wallet on your phone
+ - Install a MATTR Wallet on your phone
  - start application 
 
 ## BoInsurance (Verification using credentials from Wallet)
