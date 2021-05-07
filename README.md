@@ -4,6 +4,7 @@
 
 - [Getting started with Self Sovereign Identity SSI](https://damienbod.com/2021/03/29/getting-started-with-self-sovereign-identity-ssi/)
 - [Create an OIDC credential Issuer with MATTR and ASP.NET Core](https://damienbod.com/2021/05/03/create-an-oidc-credential-issuer-with-mattr-and-asp-net-core/)
+- [Present and Verify Verifiable Credentials in ASP.NET Core using Decentralized Identities and MATTR](https://damienbod.com)
 
 ## Test run the applications
 
