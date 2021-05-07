@@ -201,9 +201,9 @@ namespace BoInsurance
 
         private byte[] GenerateRandomBytes(int length)
         {
-            using var randonNumberGen = new RNGCryptoServiceProvider();
+            var item = RandomNumberGenerator.Create();
             var byteArray = new byte[length];
-            randonNumberGen.GetBytes(byteArray);
+            item.GetBytes(byteArray);
             return byteArray;
         }
     }
