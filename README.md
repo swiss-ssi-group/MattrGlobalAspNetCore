@@ -1,18 +1,18 @@
-# Mattr Global ASP.NET Core
+# MATTR Global ASP.NET Core
 
 ## Blogs
 
 - [Getting started with Self Sovereign Identity SSI](https://damienbod.com/2021/03/29/getting-started-with-self-sovereign-identity-ssi/)
-- [Create an OIDC credential Issuer with Mattr and ASP.NET Core](https://damienbod.com/2021/05/03/create-an-oidc-credential-issuer-with-mattr-and-asp-net-core/)
+- [Create an OIDC credential Issuer with MATTR and ASP.NET Core](https://damienbod.com/2021/05/03/create-an-oidc-credential-issuer-with-mattr-and-asp-net-core/)
 
 ## Test run the applications
 
 ## NationalDrivingLicense (OIDC Credential Issuer)
 
- - Get an account from Mattr (see Mattr docs)
+ - Get an account from MATTR (see MATTR docs)
  - Add the secrets to your configuration
  - Initialize your database
- - Install a Mattr Wallet on your phone
+ - Install a MATTR Wallet on your phone
  - start application 
 
 ## BoInsurance (Verification using credentials from Wallet)
@@ -21,7 +21,7 @@
  - Add the secrets to your configuration
  - Initialize your database
  - Start application using for example http://localhost:5000
- - Start ngrok using **ngrok http localhost:5000** (like above)
+ - Start ngrok using **ngrok http http://localhost:5000** (like above)
  - Copy the DID for the OIDC Issuer Credentials from the NationalDrivingLicense UI
  - Create a presentation template in the BoInsurance (Use copied DID)
  - Verify using the wallet and the application
