@@ -1,6 +1,7 @@
 ﻿using BoInsurance.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Controllers
@@ -40,8 +41,11 @@ namespace BoInsurance.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
+        public async Task<IActionResult> VerificationDataCallback()
         {
+            string content = await new System.IO.StreamReader(Request.Body).ReadToEndAsync();
+            var body = JsonSerializer.Deserialize<VerifiedDriverLicense>(content);
+
             string connectionId;
             var found = MattrVerifiedSuccessHub.Challenges
                 .TryGetValue(body.ChallengeId, out connectionId);

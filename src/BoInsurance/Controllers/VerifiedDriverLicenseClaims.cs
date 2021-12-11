@@ -7,6 +7,7 @@ namespace BoInsurance.Controllers
     /// </summary>
     public class VerifiedDriverLicenseClaims
     {
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         [JsonPropertyName("http://schema.org/name")]

@@ -17,7 +17,7 @@ namespace BoInsurance
     /// </summary>
     public class MattrCredentialVerifyCallbackService
     {
-        private static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/DrivingLicenseCallback";
+        private static string MATTR_CALLBACK_VERIFY_PATH = "api/Verification/VerificationDataCallback";
 
         /// <summary>
         /// TODO calculate this
