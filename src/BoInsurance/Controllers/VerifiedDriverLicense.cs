@@ -21,6 +21,7 @@ namespace BoInsurance.Controllers
     {
         [JsonPropertyName("presentationType")]
         public string PresentationType { get; set; }
+
         [Key]
         [JsonPropertyName("challengeId")]
         public string ChallengeId { get; set; }
@@ -30,6 +31,7 @@ namespace BoInsurance.Controllers
 
         [JsonPropertyName("verified")]
         public bool Verified { get; set; }
+
         [JsonPropertyName("holder")]
         public string Holder { get; set; }
     }

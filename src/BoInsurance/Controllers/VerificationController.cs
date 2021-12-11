@@ -1,6 +1,9 @@
 ﻿using BoInsurance.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Controllers
@@ -40,11 +43,17 @@ namespace BoInsurance.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> DrivingLicenseCallback([FromBody] VerifiedDriverLicense body)
+        public async Task<IActionResult> VerificationDataCallback()
         {
+            string content = await new System.IO.StreamReader(Request.Body).ReadToEndAsync();
+            var body = JsonSerializer.Deserialize<VerifiedDriverLicense>(content);
+
+            var valueBytes = Encoding.UTF8.GetBytes(body.ChallengeId);
+            var base64ChallengeId = Convert.ToBase64String(valueBytes);
+
             string connectionId;
             var found = MattrVerifiedSuccessHub.Challenges
-                .TryGetValue(body.ChallengeId, out connectionId);
+                .TryGetValue(base64ChallengeId, out connectionId);
 
             // test Signalr
             //await _hubContext.Clients.Client(connectionId).SendAsync("MattrCallbackSuccess", $"{body.ChallengeId}");
@@ -61,7 +70,7 @@ namespace BoInsurance.Controllers
                     //$"/VerifiedUser?challengeid={body.ChallengeId}"
                     await _hubContext.Clients
                         .Client(connectionId)
-                        .SendAsync("MattrCallbackSuccess", $"{body.ChallengeId}");
+                        .SendAsync("MattrCallbackSuccess", $"{base64ChallengeId}");
                 }
 
                 return Ok();

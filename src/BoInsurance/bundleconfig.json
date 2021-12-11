@@ -41,8 +41,8 @@
       "node_modules/@microsoft/signalr/dist/browser/signalr.min.js"
     ],
     "minify": {
-      "enabled": true,
-      "renameLocals": true
+      "enabled": false,
+      "renameLocals": false
     },
     "sourceMap": false
   },

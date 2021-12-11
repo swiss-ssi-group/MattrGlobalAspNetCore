@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BoInsurance.Pages
@@ -12,23 +14,30 @@ namespace BoInsurance.Pages
             _boInsuranceDbService = boInsuranceDbService;
         }
 
-        public string ChallengeId { get; set; }
         public DriverLicenseClaimsDto VerifiedDriverLicenseClaims { get; private set; }
 
-        public async Task OnGetAsync(string challengeId)
+        public string Base64ChallengeId { get; set; }
+
+        public async Task OnGetAsync(string base64ChallengeId)
         {
             // user query param to get challenge id and display data
-            if (challengeId != null)
+            if (base64ChallengeId != null)
             {
-                var verifiedDriverLicenseUser = await _boInsuranceDbService.GetVerifiedUser(challengeId);
-                VerifiedDriverLicenseClaims = new DriverLicenseClaimsDto
+                var valueBytes = Convert.FromBase64String(base64ChallengeId);
+                var challengeId = Encoding.UTF8.GetString(valueBytes);
+                // user query param to get challenge id and display data
+                if (challengeId != null)
                 {
-                    DateOfBirth = verifiedDriverLicenseUser.DateOfBirth,
-                    Name = verifiedDriverLicenseUser.Name,
-                    LicenseType = verifiedDriverLicenseUser.LicenseType,
-                    FirstName = verifiedDriverLicenseUser.FirstName,
-                    LicenseIssuedAt = verifiedDriverLicenseUser.LicenseIssuedAt
-                };
+                    var verifiedDriverLicenseUser = await _boInsuranceDbService.GetVerifiedUser(challengeId);
+                    VerifiedDriverLicenseClaims = new DriverLicenseClaimsDto
+                    {
+                        DateOfBirth = verifiedDriverLicenseUser.DateOfBirth,
+                        Name = verifiedDriverLicenseUser.Name,
+                        LicenseType = verifiedDriverLicenseUser.LicenseType,
+                        FirstName = verifiedDriverLicenseUser.FirstName,
+                        LicenseIssuedAt = verifiedDriverLicenseUser.LicenseIssuedAt
+                    };
+                }
             }
         }
     }

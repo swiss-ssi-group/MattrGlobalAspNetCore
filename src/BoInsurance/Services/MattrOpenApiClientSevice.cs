@@ -355,7 +355,7 @@ namespace BoInsurance.MattrOpenApiClient
     
         [Newtonsoft.Json.JsonProperty("payload", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
-        public Request Payload { get; set; } = new Request();
+        public VerifyMyPresentationRequest Payload { get; set; } = new VerifyMyPresentationRequest();
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     
@@ -1441,7 +1441,33 @@ namespace BoInsurance.MattrOpenApiClient
     
     
     }
-    
+
+    public partial class VerifyRequestResponse
+    {
+        /// <summary>Presentation Request id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        /// <summary>Endpoint that will receive the Verifiable Presentation</summary>
+        [Newtonsoft.Json.JsonProperty("callbackUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri CallbackUrl { get; set; }
+
+        /// <summary>Presentation Request Details</summary>
+        [Newtonsoft.Json.JsonProperty("request", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public VerifyMyPresentationRequest Request { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class V1_CreatePresentationTemplate 
     {
@@ -1492,7 +1518,28 @@ namespace BoInsurance.MattrOpenApiClient
     
     
     }
-    
+
+    public partial class VerifyPresentationBodyPresentationTemplateResponse
+    {
+        [Newtonsoft.Json.JsonProperty("domain", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Domain { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("query", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Query2> Query { get; set; } = new System.Collections.ObjectModel.Collection<Query2>();
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+
+    }
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class V1_PresentationTemplateResponse 
     {
@@ -2163,7 +2210,52 @@ namespace BoInsurance.MattrOpenApiClient
     
     
     }
-    
+
+    public partial class VerifyMyPresentationRequest
+    {
+        /// <summary>Presentation Request id</summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+
+        /// <summary>Presentation Request schema</summary>
+        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Uri Type { get; set; }
+
+        /// <summary>Verifier DID</summary>
+        [Newtonsoft.Json.JsonProperty("from", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string From { get; set; }
+
+        /// <summary>Creation time</summary>
+        [Newtonsoft.Json.JsonProperty("created_time", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Created_time { get; set; }
+
+        /// <summary>Expiry time</summary>
+        [Newtonsoft.Json.JsonProperty("expires_time", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Expires_time { get; set; }
+
+        /// <summary>Endpoint that will receive the Verifiable Presentation</summary>
+        [Newtonsoft.Json.JsonProperty("reply_url", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Reply_url { get; set; }
+
+        /// <summary>Verifier DID</summary>
+        [Newtonsoft.Json.JsonProperty("reply_to", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Reply_to { get; set; }
+
+        /// <summary>Definition of what type of Credential is being requested</summary>
+        [Newtonsoft.Json.JsonProperty("body", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public VerifyPresentationBody Body { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+
+    }
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Request 
     {
@@ -2362,9 +2454,9 @@ namespace BoInsurance.MattrOpenApiClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Type { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("credentialSubject", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        public CredentialSubject2 CredentialSubject { get; set; } = new CredentialSubject2();
+        //[Newtonsoft.Json.JsonProperty("credentialSubject", Required = Newtonsoft.Json.Required.Always)]
+        //[System.ComponentModel.DataAnnotations.Required]
+        //public CredentialSubject2 CredentialSubject { get; set; } = new CredentialSubject2();
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     
@@ -2399,13 +2491,30 @@ namespace BoInsurance.MattrOpenApiClient
     
     
     }
-    
+
+    public partial class VerifyPresentationBody : VerifyPresentationBodyPresentationTemplateResponse
+    {
+        /// <summary>Challenge to match the response to a request</summary>
+        [Newtonsoft.Json.JsonProperty("challenge", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Challenge { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+
+    }
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.3.11.0 (Newtonsoft.Json v12.0.0.0)")]
     public partial class Body6 : V1_PresentationTemplateResponse
     {
         /// <summary>Challenge to match the response to a request</summary>
         [Newtonsoft.Json.JsonProperty("challenge", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Challenge { get; set; }
+        public string Challenge { get; set; }
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     
