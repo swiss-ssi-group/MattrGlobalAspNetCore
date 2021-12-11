@@ -53,7 +53,7 @@ namespace BoInsurance.Controllers
 
             string connectionId;
             var found = MattrVerifiedSuccessHub.Challenges
-                .TryGetValue(body.ChallengeId, out connectionId);
+                .TryGetValue(base64ChallengeId, out connectionId);
 
             // test Signalr
             //await _hubContext.Clients.Client(connectionId).SendAsync("MattrCallbackSuccess", $"{body.ChallengeId}");
