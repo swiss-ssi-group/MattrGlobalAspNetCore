@@ -22,7 +22,7 @@ namespace BoInsurance
         /// <summary>
         /// TODO calculate this
         /// </summary>
-        private static double MATTR_EPOCH_EXPIRES_TIME_VERIFIY = 1638836401000;
+        private static double MATTR_EPOCH_EXPIRES_TIME_VERIFIY = 1699836401000;
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly MattrTokenApiService _mattrTokenApiService;
@@ -45,7 +45,7 @@ namespace BoInsurance
         /// </summary>
         /// <param name="callbackBaseUrl"></param>
         /// <returns></returns>
-        public async Task<(string QrCodeUrl, string ChallengeId)> CreateVerifyCallback(string callbackBaseUrl)
+        public async Task<(string WalletUrl, string ChallengeId)> CreateVerifyCallback(string callbackBaseUrl)
         {
             callbackBaseUrl = callbackBaseUrl.Trim();
             if (!callbackBaseUrl.EndsWith('/'))
@@ -96,12 +96,12 @@ namespace BoInsurance
             };
             await _boInsuranceDbService.CreateDrivingLicensePresentationVerify(drivingLicensePresentationVerify);
 
-            var qrCodeUrl = $"didcomm://https://{_mattrConfiguration.TenantSubdomain}/?request={jws}";
+            var walletUrl = $"https://{_mattrConfiguration.TenantSubdomain}/?request={jws}";
 
-            return (qrCodeUrl, challenge);
+            return (walletUrl, challenge);
         }
 
-        private async Task<V1_CreatePresentationRequestResponse> InvokePresentationRequest(
+        private async Task<VerifyRequestResponse> InvokePresentationRequest(
             HttpClient client,
             string didId,
             string templateId,
@@ -127,7 +127,7 @@ namespace BoInsurance
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    var v1CreatePresentationRequestResponse = JsonConvert.DeserializeObject<V1_CreatePresentationRequestResponse>(
+                    var v1CreatePresentationRequestResponse = JsonConvert.DeserializeObject<VerifyRequestResponse>(
                             await response.Content.ReadAsStringAsync());
 
                     return v1CreatePresentationRequestResponse;
@@ -161,7 +161,7 @@ namespace BoInsurance
         private async Task<string> SignAndEncodePresentationRequestBody(
             HttpClient client,
             V1_GetDidResponse did,
-            V1_CreatePresentationRequestResponse v1CreatePresentationRequestResponse)
+            VerifyRequestResponse v1CreatePresentationRequestResponse)
         {
             var createDidUrl = $"https://{_mattrConfiguration.TenantSubdomain}/v1/messaging/sign";
 

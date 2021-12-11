@@ -1,5 +1,8 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using System.Threading.Tasks;
+using BoInsurance.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,6 +16,9 @@ namespace BoInsurance.Pages
 
         [BindProperty]
         public string ChallengeId { get; set; }
+
+        [BindProperty]
+        public string Base64ChallengeId { get; set; }
 
         [BindProperty]
         public CreateVerifierDisplayQrCodeCallbackUrl CallbackUrlDto { get; set; }
@@ -34,10 +40,11 @@ namespace BoInsurance.Pages
             }
 
             // Test the QR code
-            //var jws = "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3FvSDNFQlNDUHlIWHJ5Qmdnd0J1bWFrN1YxTDlCUUg3VDRpNXNwWERwbVM2I3o2TWtxb0gzRUJTQ1B5SFhyeUJnZ3dCdW1hazdWMUw5QlFIN1Q0aTVzcFhEcG1TNiJ9.eyJpZCI6ImNhMGJiMTNkLWY2OTMtNDdmYS1hZTMzLWY5MzVlYmEwOWE2OSIsInR5cGUiOiJodHRwczovL21hdHRyLmdsb2JhbC9zY2hlbWFzL3ZlcmlmaWFibGUtcHJlc2VudGF0aW9uL3JlcXVlc3QvUXVlcnlCeUV4YW1wbGUiLCJmcm9tIjoiZGlkOmtleTp6Nk1rcW9IM0VCU0NQeUhYcnlCZ2d3QnVtYWs3VjFMOUJRSDdUNGk1c3BYRHBtUzYiLCJjcmVhdGVkX3RpbWUiOjE2MTkyNzUxMTgxNTgsImV4cGlyZXNfdGltZSI6MTYzODgzNjQwMTAwMCwicmVwbHlfdXJsIjoiaHR0cHM6Ly9kYW1pYW5ib2Qtc2FuZGJveC52aWkubWF0dHIuZ2xvYmFsL2NvcmUvdjEvcHJlc2VudGF0aW9ucy9yZXNwb25zZSIsInJlcGx5X3RvIjpbImRpZDprZXk6ejZNa3FvSDNFQlNDUHlIWHJ5Qmdnd0J1bWFrN1YxTDlCUUg3VDRpNXNwWERwbVM2Il0sImJvZHkiOnsiY2hhbGxlbmdlIjoiOTljNTQ3NmItZTg0Yi00Njg4LWI1Y2ItMWMwMzc0Yjc1N2JiIiwiaWQiOiJkYTA1NTI3YS1mNDc1LTRhNjMtYTc3Yi1lNTNlZmEwMzM1MmMiLCJkb21haW4iOiJkYW1pYW5ib2Qtc2FuZGJveC52aWkubWF0dHIuZ2xvYmFsIiwibmFtZSI6ImNlcnRpZmljYXRlLXByZXNlbnRhdGlvbiIsInF1ZXJ5IjpbeyJ0eXBlIjoiUXVlcnlCeUV4YW1wbGUiLCJjcmVkZW50aWFsUXVlcnkiOlt7InJlYXNvbiI6IlBsZWFzZSBwcm92aWRlIHlvdXIgZHJpdmluZyBsaWNlbnNlIiwiZXhhbXBsZSI6eyJ0eXBlIjoiVmVyaWZpYWJsZUNyZWRlbnRpYWwiLCJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS5vcmciXSwidHJ1c3RlZElzc3VlciI6W3siaXNzdWVyIjoiZGlkOmtleTp6Nk1rcW9IM0VCU0NQeUhYcnlCZ2d3QnVtYWs3VjFMOUJRSDdUNGk1c3BYRHBtUzYiLCJyZXF1aXJlZCI6dHJ1ZX1dfSwicmVxdWlyZWQiOnRydWV9XX1dfX0.3pgkqBnK2NmNSDVd-bD1RP9P9AAzXzEn3AJ-ANkz3CtWhCHSjT8ddIspjO77U1JWOrp9Zu4hdJN9BW-o_KSYBA";
-            //var qrCodeUrl = $"didcomm://https://dameinbod.com/?request={jws}";
-            //QrCodeUrl = qrCodeUrl;
-            //ChallengeId = "6385bf81-bd38-4c61-9e86-4ef8568fa9c4";
+            //var jws = "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2ozdFVxUlNad01SOUJlWDZ2eHltYnk1VmVlbjdSekFvQlFqdEFER3ZZZjhUI3o2TWtqM3RVcVJTWndNUjlCZVg2dnh5bWJ5NVZlZW43UnpBb0JRanRBREd2WWY4VCJ9.eyJpZCI6ImYxYWE2MWJhLWEyNjAtNDg5NC05M2ZiLTVhYzRkY2M2NDU5NiIsInR5cGUiOiJodHRwczovL21hdHRyLmdsb2JhbC9zY2hlbWFzL3ZlcmlmaWFibGUtcHJlc2VudGF0aW9uL3JlcXVlc3QvUXVlcnlCeUZyYW1lIiwiZnJvbSI6ImRpZDprZXk6elVDN0xrcFd3ZDc2VUJUZlJKaVB3eHRHQzZ4UFh3M2txWjVkbkRra1pWcXVISzJNN1R0ZUN0VjROM0xvZGJGZmhTTkdlQVNGdEdEUmREb3N5MXVjZW00Q2RYM1VrVFVXV2JiV0p3enFXc2IydWZlU2dSeUE1RWtQZ1BiY1U1Tm5vdFlBa2VyIiwiY3JlYXRlZF90aW1lIjoxNjIxNjkyOTY3MDM0LCJleHBpcmVzX3RpbWUiOjE2Mzg4MzY0MDEwMDAsInJlcGx5X3VybCI6Imh0dHBzOi8vZGFtaWFuYm9kLXNhbmRib3gudmlpLm1hdHRyLmdsb2JhbC9jb3JlL3YxL3ByZXNlbnRhdGlvbnMvcmVzcG9uc2UiLCJyZXBseV90byI6WyJkaWQ6a2V5OnpVQzdMa3BXd2Q3NlVCVGZSSmlQd3h0R0M2eFBYdzNrcVo1ZG5Ea2taVnF1SEsyTTdUdGVDdFY0TjNMb2RiRmZoU05HZUFTRnRHRFJkRG9zeTF1Y2VtNENkWDNVa1RVV1diYldKd3pxV3NiMnVmZVNnUnlBNUVrUGdQYmNVNU5ub3RZQWtlciJdLCJib2R5Ijp7ImNoYWxsZW5nZSI6IlVlcEpNcVVMa0haZTVOaUlidWlhMU00czNMVVNQNDdIYUZJTmFvajMiLCJpZCI6ImZiODI1MjAyLWEwNmMtNGRmZi1iODliLWM5NjAzYzI2NDE3YiIsImRvbWFpbiI6ImRhbWlhbmJvZC1zYW5kYm94LnZpaS5tYXR0ci5nbG9iYWwiLCJuYW1lIjoiemtwLWNlcnRpZmljYXRlLXByZXNlbnRhdGlvbi0yIiwicXVlcnkiOlt7InR5cGUiOiJRdWVyeUJ5RnJhbWUiLCJjcmVkZW50aWFsUXVlcnkiOlt7ImZyYW1lIjp7InR5cGUiOiJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIiwiaHR0cHM6Ly93M2lkLm9yZy92Yy1yZXZvY2F0aW9uLWxpc3QtMjAyMC92MSIsImh0dHBzOi8vdzNjLWNjZy5naXRodWIuaW8vbGRwLWJiczIwMjAvY29udGV4dC92MSIsImh0dHBzOi8vc2NoZW1hLm9yZyJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJAZXhwbGljaXQiOnRydWUsImdpdmVuX25hbWUiOnt9LCJmYW1pbHlfbmFtZSI6e30sImRhdGVfb2ZfYmlydGgiOnt9LCJudW1iZXJfb2ZfZG9zZXMiOnt9LCJ2YWNjaW5hdGlvbl9kYXRlIjp7fSwidG90YWxfbnVtYmVyX29mX2Rvc2VzIjp7fSwiY291bnRyeV9vZl92YWNjaW5hdGlvbiI6e30sIm1lZGljaW5hbF9wcm9kdWN0X2NvZGUiOnt9fX0sInJlYXNvbiI6IlBsZWFzZSBwcm92aWRlIHlvdXIgdmFjY2luYXRpb24gZGF0YSIsInJlcXVpcmVkIjp0cnVlLCJ0cnVzdGVkSXNzdWVyIjpbeyJpc3N1ZXIiOiJkaWQ6a2V5OnpVQzdMa3BXd2Q3NlVCVGZSSmlQd3h0R0M2eFBYdzNrcVo1ZG5Ea2taVnF1SEsyTTdUdGVDdFY0TjNMb2RiRmZoU05HZUFTRnRHRFJkRG9zeTF1Y2VtNENkWDNVa1RVV1diYldKd3pxV3NiMnVmZVNnUnlBNUVrUGdQYmNVNU5ub3RZQWtlciIsInJlcXVpcmVkIjp0cnVlfV19XX1dfX0.PHA0YGhAT6mfIwQYdM3wSlORcInAWdTy0vmM7FYLokaVRW3bxdchBgS - Ru_onglTT3O8FjfFYyL1Kg4JQFWQDw";
+            //var challenge = "RhOtpTa8vNh1EId6sJ7AVD3prerMMDSkfWZrUPzt";
+            //var qrCodeUrl = $"didcomm://https://damianbod-sandbox.vii.mattr.global/?request={jws}";
+            //QrCodeUrl = qrCodeUrl.Trim();
+            //ChallengeId = challenge;
             //return Page();
 
             var result = await _mattrCredentialVerifyCallbackService
@@ -45,8 +52,17 @@ namespace BoInsurance.Pages
 
             CreatingVerifier = false;
 
-            QrCodeUrl = result.QrCodeUrl;
+            var walletUrl = result.WalletUrl.Trim();
             ChallengeId = result.ChallengeId;
+            var valueBytes = Encoding.UTF8.GetBytes(ChallengeId);
+            Base64ChallengeId = Convert.ToBase64String(valueBytes);
+
+            VerificationRedirectController.WalletUrls.Add(Base64ChallengeId, walletUrl);
+
+            // https://learn.mattr.global/tutorials/verify/using-callback/callback-e-to-e#redirect-urls
+            //var qrCodeUrl = $"didcomm://{walletUrl}";
+
+            QrCodeUrl = $"didcomm://https://{HttpContext.Request.Host.Value}/VerificationRedirect/{Base64ChallengeId}";
             return Page();
         }
     }

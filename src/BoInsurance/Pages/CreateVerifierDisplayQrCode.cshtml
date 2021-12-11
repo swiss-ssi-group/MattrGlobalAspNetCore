@@ -43,45 +43,47 @@
         <div class="col-sm">
             <div class="qr" id="qrCode"></div>
             <input asp-for="ChallengeId" hidden/>
+            <input asp-for="Base64ChallengeId" hidden />
         </div>
     </div>
 </div>
 
 @section scripts {
-<script src="~/js/qrcode.min.js"></script>
-<script type="text/javascript">
+    <script src="~/js/qrcode.min.js"></script>
+    <script type="text/javascript">
     new QRCode(document.getElementById("qrCode"),
     {
         text: "@Html.Raw(Model.QrCodeUrl)",
-        width: 400,
-        height: 400,
-        correctLevel: QRCode.CorrectLevel.M
+        width: 300,
+        height: 300,
+        correctLevel: QRCode.CorrectLevel.L
     });
 
     $(document).ready(() => {
- 
+
     });
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/mattrVerifiedSuccessHub").build();
 
-    connection.on("MattrCallbackSuccess", function (challengeId) {
-        console.log("received verification:" + challengeId);
-        window.location.href = "/VerifiedUser?challengeid=" + challengeId;
+    connection.on("MattrCallbackSuccess", function (base64ChallengeId) {
+        console.log("received verification:" + base64ChallengeId);
+        window.location.href = "/VerifiedUser?base64ChallengeId=" + base64ChallengeId;
     });
 
     connection.start().then(function () {
-        //console.log(connection.connectionId);
-        const challengeId = $("#ChallengeId").val();
-        
-        if (challengeId) {
-            console.log(challengeId);
+        console.log(connection.connectionId);
+        const base64ChallengeId = $("#Base64ChallengeId").val();
+        console.warn("base64ChallengeId: " + base64ChallengeId);
+
+        if (base64ChallengeId) {
+            console.log(base64ChallengeId);
             // join message
-            connection.invoke("AddChallenge", challengeId, connection.connectionId).catch(function (err) {
+            connection.invoke("AddChallenge", base64ChallengeId, connection.connectionId).catch(function (err) {
                 return console.error(err.toString());
             });
         }
     }).catch(function (err) {
         return console.error(err.toString());
     });
-</script>
+    </script>
 }
