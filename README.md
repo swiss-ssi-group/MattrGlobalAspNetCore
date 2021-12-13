@@ -1,6 +1,6 @@
 [![.NET](https://github.com/swiss-ssi-group/MattrGlobalAspNetCore/actions/workflows/dotnet.yml/badge.svg)](https://github.com/swiss-ssi-group/MattrGlobalAspNetCore/actions/workflows/dotnet.yml)
 
-# MATTR Global ASP.NET Core
+# MATTR Basic verifiable credential ASP.NET Core
 
 ## Blogs
 
